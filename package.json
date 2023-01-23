@@ -1,0 +1,22 @@
+{
+  "name": "am-parser",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest --run -u"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.34.1",
+    "eslint": "^8.32.0",
+    "typescript": "^4.9.4",
+    "vitest": "^0.27.2"
+  },
+  "eslintConfig": {
+    "extends": "@antfu"
+  }
+}
