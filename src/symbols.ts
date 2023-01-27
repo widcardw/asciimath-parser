@@ -261,6 +261,7 @@ const SYMBOLMAP: Map<string, {
   ['!-=', { type: TokenTypes.Const, tex: '\\not\\equiv' }],
   ['!|', { type: TokenTypes.Const, tex: '\u2224' }],
   ['!', { type: TokenTypes.OperatorAO, tex: '!' }],
+  ['!!', { type: TokenTypes.OperatorAO, tex: '!!' }],
   ['!sube', { type: TokenTypes.Const, tex: '\\not\\sube' }],
   ['!supe', { type: TokenTypes.Const, tex: '\\not\\supe' }],
   ['subne', { type: TokenTypes.Const, tex: '\u228A' }],

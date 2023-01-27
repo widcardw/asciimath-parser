@@ -564,6 +564,7 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
       throw new Error(`Unmatched token in walk ${token.value}`)
     }
   }
+  // watch next token
   if (current < tokens.length) {
     const nextToken = tokens[current]
     switch (nextToken.type) {

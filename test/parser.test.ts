@@ -83,3 +83,23 @@ describe.skip('parse operator `op a b`', () => {
     expect(parser(trie.tryParsingAll('frac(a + b^2)(b)'))).toMatchSnapshot()
   })
 })
+
+describe('parse operator A op B', () => {
+  const trie = createTrie()
+  it('should parse `/`', () => {
+    expect(parser(trie.tryParsingAll('a/b'))).toMatchSnapshot()
+    expect(parser(trie.tryParsingAll('a + a/b + c'))).toMatchSnapshot()
+  })
+
+  it('should parse more `/`', () => {
+    expect(parser(trie.tryParsingAll('(a + c)/(b * d)'))).toMatchSnapshot()
+    expect(parser(trie.tryParsingAll('(a + c)/(b ^ d)'))).toMatchSnapshot()
+    expect(parser(trie.tryParsingAll('(a + c)/(b / d)'))).toMatchSnapshot()
+    expect(parser(trie.tryParsingAll('(a + c)/(b / d + e)'))).toMatchSnapshot()
+  })
+
+  it('should parse `!`', () => {
+    expect(parser(trie.tryParsingAll('n!!m!'))).toMatchSnapshot()
+    expect(parser(trie.tryParsingAll('1/n!'))).toMatchSnapshot()
+  })
+})
