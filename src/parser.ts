@@ -564,6 +564,30 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
       throw new Error(`Unmatched token in walk ${token.value}`)
     }
   }
+  if (current < tokens.length) {
+    const nextToken = tokens[current]
+    switch (nextToken.type) {
+      case TokenTypes.OperatorAOB: {
+        current++
+        const newNode = createParamTwoNode()
+        newNode.tex = nextToken.tex
+        newNode.params[0] = node
+        const walkRes = walk(tokens, current)
+        current = walkRes.current
+        newNode.params[1] = walkRes.node
+        node = newNode
+        break
+      }
+      case TokenTypes.OperatorAO: {
+        current++
+        const newNode = createParamOneNode()
+        newNode.tex = nextToken.tex
+        newNode.params = node
+        node = newNode
+        break
+      }
+    }
+  }
   return { node, current }
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
