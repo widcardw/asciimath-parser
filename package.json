@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "vitest --run -u"
+    "test": "vitest --run"
   },
   "keywords": [],
   "author": "",

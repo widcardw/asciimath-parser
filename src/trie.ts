@@ -1,6 +1,6 @@
 import { SYMBOLMAP, TokenTypes } from './symbols'
 
-interface ParsedValue {
+interface TokenizedValue {
   value: string
   isKeyWord: boolean
   current: number
@@ -15,6 +15,10 @@ class Trie {
   private _root: TrieNode
   private _char_to_index: Map<string, number> = new Map()
   private _n: number
+  // public MAP: Map<string, {
+  //   type: TokenTypes
+  //   tex: string
+  // }> = new Map()
 
   public constructor(nodes: string[]) {
     if (nodes.length === 0)
@@ -81,7 +85,7 @@ class Trie {
    * @returns value: matched keyword
    * current: the string cursor
    */
-  public tryParsing(word: string, start = 0): ParsedValue {
+  public tryParsing(word: string, start = 0): TokenizedValue {
     let value = ''
     let root = this._root
     let isKeyWord = false
@@ -118,7 +122,7 @@ class Trie {
     return { value, isKeyWord, current, ...ret }
   }
 
-  public tryParsingNumber(word: string, current: number): ParsedValue {
+  public tryParsingNumber(word: string, current: number): TokenizedValue {
     let ch = word[current]
     let value = ''
     while (NUMBERPATTERN.test(ch) && current < word.length) {
@@ -128,17 +132,20 @@ class Trie {
     return { value, isKeyWord: false, current, tex: value, type: TokenTypes.NumberLiteral }
   }
 
-  public tryParsingString(word: string, current: number): ParsedValue {
+  public tryParsingString(word: string, current: number): TokenizedValue {
     let ch = word[current]
     let value = ''
     while (STRINGPATTERN.test(ch) && current < word.length) {
+      const idx = this.c2i(ch)
+      if (typeof idx !== 'undefined' && this._root._nextNode[idx] !== null)
+        break
       value += ch
       ch = word[++current]
     }
     return { value, isKeyWord: false, current, tex: value, type: TokenTypes.StringLiteral }
   }
 
-  public tryParsingNewLines(word: string, current: number): ParsedValue {
+  public tryParsingNewLines(word: string, current: number): TokenizedValue {
     let ch = word[current]
     let value = ''
     while (/\n/.test(ch) && current < word.length) {
@@ -151,7 +158,7 @@ class Trie {
       return { value: '', isKeyWord: false, current, tex: '', type: TokenTypes.None }
   }
 
-  public tryParsingText(word: string, current: number): ParsedValue {
+  public tryParsingText(word: string, current: number): TokenizedValue {
     let ch = word[current]
     if (ch === '"') {
       ch = word[++current]
@@ -170,7 +177,7 @@ class Trie {
 
   public tryParsingAll(word: string) {
     let current = 0
-    const tokens: ParsedValue[] = []
+    const tokens: TokenizedValue[] = []
     let counter = 0
     while (current < word.length) {
       {
@@ -236,7 +243,29 @@ class TrieNode {
   }
 }
 
+function createTrie(config: {
+  extConst?: Array<[string, string]>
+} = {}) {
+  const charset: Set<string> = new Set([])
+  config.extConst?.forEach(([k, v]) => {
+    SYMBOLMAP.set(k, { type: TokenTypes.Const, tex: v })
+  })
+  for (const k of SYMBOLMAP.keys())
+    k.split('').forEach(i => charset.add(i))
+  const chars = Array.from(charset)
+  chars.push(' ')
+
+  const trie = new Trie(chars)
+  for (const k of SYMBOLMAP.keys())
+    trie.insert(k)
+
+  // trie.MAP = SYMBOLMAP
+  return trie
+}
+
 export {
   Trie,
   TrieNode,
+  createTrie,
+  TokenizedValue,
 }
