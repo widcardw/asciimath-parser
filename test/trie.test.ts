@@ -5,7 +5,7 @@ const MULTILINE_AM = `sum_(n=1)^(+oo)&=(pi^2/6)
 
 f(x)&=x^2`
 
-describe.skip('trie', () => {
+describe('trie', () => {
   it('should build trie', () => {
     const keys = Array.from({ length: 26 }, (_, i) => String.fromCharCode(i + 97))
     keys.push(' ')
@@ -18,7 +18,7 @@ describe.skip('trie', () => {
     expect(trie).toMatchSnapshot()
     expect(trie.search('ban')).toBe(true)
     expect(trie.search('aaaa')).toBe(false)
-    // 直接搜索到关键词
+    // directly search keyword
     expect(trie.tryParsing('banana')).toMatchInlineSnapshot(`
       {
         "current": 6,
@@ -26,7 +26,7 @@ describe.skip('trie', () => {
         "value": "banana",
       }
     `)
-    // 当前单词比最长关键词长，那么到最长的关键词就结束
+    // match the longest keyword and return the keyword
     expect(trie.tryParsing('bananan')).toMatchInlineSnapshot(`
       {
         "current": 6,
@@ -34,6 +34,7 @@ describe.skip('trie', () => {
         "value": "banana",
       }
     `)
+    // it does not match any keyword
     expect(trie.tryParsing('bab')).toMatchInlineSnapshot(`
       {
         "current": 2,
@@ -43,7 +44,7 @@ describe.skip('trie', () => {
         "value": "ba",
       }
     `)
-    // 遇到空格跳过
+    // skip when meeting a space
     expect(trie.tryParsing('ab cfdgerafw')).toMatchInlineSnapshot(`
       {
         "current": 2,
@@ -53,7 +54,7 @@ describe.skip('trie', () => {
         "value": "ab",
       }
     `)
-    // 与关键字有相同的前缀
+    // maybe it is somewhat strange...
     expect(trie.tryParsing('bana')).toMatchInlineSnapshot(`
       {
         "current": 4,
@@ -66,7 +67,7 @@ describe.skip('trie', () => {
   })
 })
 
-describe.skip('asciimath cases', () => {
+describe('asciimath matrix', () => {
   const trie = createTrie()
   it('should build the symbol trie', () => {
     expect(trie.tryParsingAll(MULTILINE_AM)).toMatchSnapshot()

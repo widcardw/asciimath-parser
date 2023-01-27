@@ -281,9 +281,9 @@ const SYMBOLMAP: Map<string, {
   [':)', { type: TokenTypes.RParen, tex: '\\rangle' }],
   ['{:', { type: TokenTypes.LParen, tex: '.' }],
   [':}', { type: TokenTypes.RParen, tex: '.' }],
-  // 可以作为单独使用，也可作为配对使用
+  // can be used as det or a single bar
   ['|', { type: TokenTypes.Paren, tex: '|' }],
-  // 需要配对使用
+
   // ['"', { type: TokenTypes.Paren, tex: '\\text{ $1 }' }],
 
   ['&', { type: TokenTypes.Align, tex: '&' }],

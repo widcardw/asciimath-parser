@@ -4,30 +4,30 @@ import { createTrie } from '../src/trie'
 
 describe.skip('parser', () => {
   const trie = createTrie()
-  it.skip('should parse a const token', () => {
+  it('should parse a const token', () => {
     expect(parser(trie.tryParsingAll('sum otherwise'))).toMatchSnapshot()
   })
-  it.skip('should parse a flat matrix', () => {
+  it('should parse a flat matrix', () => {
     expect(parser(trie.tryParsingAll('[a,b,c;d,e;f]'))).toMatchSnapshot()
   })
-  it.skip('should parse inline array', () => {
+  it('should parse inline array', () => {
     expect(parser(trie.tryParsingAll('A=[a,b,c,d]'))).toMatchSnapshot()
   })
-  it.skip('should parse a recursive matirx', () => {
+  it('should parse a recursive matirx', () => {
     expect(parser(trie.tryParsingAll('B = [[a,b],c;d,e]'))).toMatchSnapshot()
   })
-  it.skip('should parse unfinished matrix', () => {
+  it('should parse unfinished matrix', () => {
     expect(parser(trie.tryParsingAll('[a,b,c;d,e;f'))).toMatchSnapshot()
   })
-  it.skip('should parse a divided matrix', () => {
+  it('should parse a divided matrix', () => {
     expect(parser(trie.tryParsingAll('[a,b|c;d,e|f]'))).toMatchSnapshot()
   })
 })
 
-describe.skip('cases matrix', () => {
+describe('cases matrix', () => {
   const trie = createTrie()
-  it.skip('should parse cases', () => {
-    expect(parser(trie.tryParsingAll('f(x)={x2, if x>0; x, otherwise:}'))).toMatchSnapshot()
+  it('should parse cases', () => {
+    expect(parser(trie.tryParsingAll('f(x)={x^2, if x>0; x, otherwise:}'))).toMatchSnapshot()
   })
 })
 

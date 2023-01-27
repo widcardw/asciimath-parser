@@ -503,6 +503,19 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
   throw new Error(`Unmatched token in \`readBarStartedExpressions\`, ${token.value}`)
 }
 
+function removeParenOfFlatExpr(node: FlatNode): FlatNode {
+  const first = node.body[0]
+  const last = node.body[node.body.length - 1]
+  if (first.type === NodeTypes.Const
+    && last.type === NodeTypes.Const
+    && (first as ConstNode).value === '('
+    && (last as ConstNode).value === ')') {
+    node.body.pop()
+    node.body.shift()
+  }
+  return node
+}
+
 function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; current: number } {
   const token = tokens[current]
   let node: ChildNode
@@ -534,6 +547,8 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
       // recursion
       const walkRes = walk(tokens, current)
       current = walkRes.current
+      if (walkRes.node.type === NodeTypes.Flat)
+        walkRes.node = removeParenOfFlatExpr(walkRes.node as FlatNode)
       node.params = walkRes.node
       break
     }
@@ -543,9 +558,13 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
       current++
       const param0 = walk(tokens, current)
       current = param0.current
+      if (param0.node.type === NodeTypes.Flat)
+        param0.node = removeParenOfFlatExpr(param0.node as FlatNode)
       node.params[0] = param0.node
       const param1 = walk(tokens, current)
       current = param1.current
+      if (param1.node.type === NodeTypes.Flat)
+        param1.node = removeParenOfFlatExpr(param1.node as FlatNode)
       node.params[1] = param1.node
       break
     }
@@ -571,10 +590,15 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
       case TokenTypes.OperatorAOB: {
         current++
         const newNode = createParamTwoNode()
+        if (node.type === NodeTypes.Flat)
+          node = removeParenOfFlatExpr(node as FlatNode)
         newNode.tex = nextToken.tex
         newNode.params[0] = node
+
         const walkRes = walk(tokens, current)
         current = walkRes.current
+        if (walkRes.node.type === NodeTypes.Flat)
+          walkRes.node = removeParenOfFlatExpr(walkRes.node as FlatNode)
         newNode.params[1] = walkRes.node
         node = newNode
         break
@@ -617,9 +641,6 @@ function processAligned(tokens: TokenizedValue[]) {
 }
 
 function parser(tokens: TokenizedValue[]) {
-  // if (tokens.find(i => i.type === TokenTypes.Align && i.value === '&'))
-  //   return processAligned(tokens)
-
   const root = createRootNode()
   let current = 0
 
