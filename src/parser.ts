@@ -505,32 +505,40 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
 
 function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; current: number } {
   const token = tokens[current]
+  let node: ChildNode
   switch (token.type) {
     case TokenTypes.Const:
     case TokenTypes.Text:
     case TokenTypes.NumberLiteral:
     case TokenTypes.StringLiteral: {
       current++
-      return { node: createConstNode(token), current }
+      node = createConstNode(token)
+      break
     }
     case TokenTypes.LParen: {
-      return readParenedExpression2(tokens, current)
+      const res = readParenedExpression2(tokens, current)
+      node = res.node
+      current = res.current
+      break
     }
     case TokenTypes.Paren: {
-      return readBarStartedExpressions(tokens, current)
+      const res = readBarStartedExpressions(tokens, current)
+      node = res.node
+      current = res.current
+      break
     }
     case TokenTypes.OperatorA: {
-      const node = createParamOneNode()
+      node = createParamOneNode()
       node.tex = token.tex
       current++
       // recursion
       const walkRes = walk(tokens, current)
       current = walkRes.current
       node.params = walkRes.node
-      return { node, current }
+      break
     }
     case TokenTypes.OperatorOAB: {
-      const node = createParamTwoNode()
+      node = createParamTwoNode()
       node.tex = token.tex
       current++
       const param0 = walk(tokens, current)
@@ -539,17 +547,25 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
       const param1 = walk(tokens, current)
       current = param1.current
       node.params[1] = param1.node
-      return { node, current }
+      break
     }
     case TokenTypes.Split:
     case TokenTypes.Align: {
       current++
-      return { node: createConstNode(token), current }
+      node = createConstNode(token)
+      break
+    }
+    case TokenTypes.RParen: {
+      current++
+      node = createConstNode(token)
+      break
+    }
+    default: {
+      throw new Error(`Unmatched token in walk ${token.value}`)
     }
   }
-  throw new Error(`Unmatched token in walk ${token.value}`)
+  return { node, current }
 }
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function processAligned(tokens: TokenizedValue[]) {
   const root = createAlignedNode()
