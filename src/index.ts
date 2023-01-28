@@ -54,17 +54,22 @@ class AsciiMath {
   }
 
   toTex(code: string): string {
-    code = this.replaceLaws.reduce((prev, curLaw) => {
+    try {
+      code = this.replaceLaws.reduce((prev, curLaw) => {
       // in fact the judgement is no use...
-      if (typeof curLaw[1] === 'function')
-        return prev.replace(curLaw[0], curLaw[1])
-      else
-        return prev.replace(curLaw[0], curLaw[1])
-    }, code)
-    let res = codegen(parser(this.trie.tryParsingAll(code)))
-    if (this.display)
-      res = `\\displaystyle{ ${res} }`
-    return res
+        if (typeof curLaw[1] === 'function')
+          return prev.replace(curLaw[0], curLaw[1])
+        else
+          return prev.replace(curLaw[0], curLaw[1])
+      }, code)
+      let res = codegen(parser(this.trie.tryParsingAll(code)))
+      if (this.display)
+        res = `\\displaystyle{ ${res} }`
+      return res
+    }
+    catch (e) {
+      throw new Error(e)
+    }
   }
 }
 

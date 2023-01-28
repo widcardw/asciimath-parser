@@ -12,3 +12,13 @@ describe('asciimath', () => {
     expect(am.toTex('part^3 f (x y^2) = 2x^2 y')).toMatchSnapshot()
   })
 })
+
+describe('codegen xlongequal', () => {
+  const am = new AsciiMath()
+  it('should generate xlongequal', () => {
+    expect(am.toTex('==_(123)^456')).toMatchSnapshot()
+    expect(am.toTex('==_(123)')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\xlongequal[ 123 ]{  } }"')
+    expect(am.toTex('==^(123)')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\xlongequal[  ]{ 123 } }"')
+    expect(am.toTex('==')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\xlongequal }"')
+  })
+})

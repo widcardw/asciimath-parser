@@ -125,5 +125,5 @@ export const updown = [
   'overset("bala")(x)',
   'overbrace(12345)^n',
   'underbrace(12345)_n',
-  '==(123)(456)',
+  '==_(123)^(456)',
 ]

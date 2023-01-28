@@ -64,10 +64,17 @@ function createRootNode(): RootNode {
     body: [],
   }
 }
-
+function createConstNode(): ConstNode
 function createConstNode(tex: string): ConstNode
 function createConstNode(token: TokenizedValue): ConstNode
-function createConstNode(arg: TokenizedValue | string) {
+function createConstNode(arg?: TokenizedValue | string) {
+  if (typeof arg === 'undefined') {
+    return {
+      type: NodeTypes.Const,
+      value: '',
+      tex: '',
+    }
+  }
   if (typeof arg === 'string') {
     return {
       type: NodeTypes.Const,
@@ -179,6 +186,10 @@ function readParenedExpression2(tokens: TokenizedValue[], current: number): {
       token = tokens[current]
       current++
       node.body.push(createParenOfFlatNodeFrom(token, false))
+      if ((node.body[0] as ConstNode).value === '{:' && (node.body[node.body.length - 1] as ConstNode).value === ':}') {
+        (node.body[0] as ConstNode).tex = '{'
+        ;(node.body[node.body.length - 1] as ConstNode).tex = '}'
+      }
       return { node, current }
     }
     else {
@@ -414,7 +425,7 @@ function removeParenOfFlatExpr(node: FlatNode): FlatNode {
 
 function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; current: number } {
   if (current >= tokens.length)
-    return { node: createConstNode(''), current }
+    return { node: createConstNode(), current }
   const token = tokens[current]
   let node: ChildNode
   switch (token.type) {
@@ -446,7 +457,7 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
       const walkRes = walk(tokens, current)
       current = walkRes.current
       if (walkRes.node.type === NodeTypes.Flat)
-        walkRes.node = removeParenOfFlatExpr(walkRes.node as FlatNode)
+        walkRes.node = removeParenOfFlatExpr(walkRes.node)
       node.params = walkRes.node
       break
     }
@@ -457,13 +468,65 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
       const param0 = walk(tokens, current)
       current = param0.current
       if (param0.node.type === NodeTypes.Flat)
-        param0.node = removeParenOfFlatExpr(param0.node as FlatNode)
+        param0.node = removeParenOfFlatExpr(param0.node)
       node.params[0] = param0.node
       const param1 = walk(tokens, current)
       current = param1.current
       if (param1.node.type === NodeTypes.Flat)
-        param1.node = removeParenOfFlatExpr(param1.node as FlatNode)
+        param1.node = removeParenOfFlatExpr(param1.node)
       node.params[1] = param1.node
+      break
+    }
+    case TokenTypes.OperatorO2: {
+      current++
+      if (current >= tokens.length)
+        return { node: createConstNode(`${token.tex.replace(/[\{\[] \$\d+ [\}\]]/g, '')}{}`), current }
+
+      // detect next token
+      let nextToken = tokens[current]
+      let p1: ChildNode = createConstNode()
+      let nextShouldBe = ''
+      let p1Status = ''
+      let p2Status = ''
+      if (nextToken.value === '^' || nextToken.value === '_') {
+        nextShouldBe = nextToken.value === '^' ? '_' : '^'
+        p1Status = nextToken.value
+        current++
+        const walkRes = walk(tokens, current)
+        if (walkRes.node.type === NodeTypes.Flat)
+          walkRes.node = removeParenOfFlatExpr(walkRes.node)
+        p1 = walkRes.node
+        current = walkRes.current
+      }
+      let p2: ChildNode = createConstNode()
+      if (current < tokens.length) {
+        nextToken = tokens[current]
+        if (nextToken.value === nextShouldBe) {
+          p2Status = nextToken.value
+          current++
+          const walkRes = walk(tokens, current)
+          if (walkRes.node.type === NodeTypes.Flat)
+            walkRes.node = removeParenOfFlatExpr(walkRes.node)
+          p2 = walkRes.node
+          current = walkRes.current
+        }
+      }
+      node = createParamTwoNode()
+      node.tex = token.tex
+      node.params[0] = (() => {
+        if (p1Status === '^')
+          return p1
+        if (p2Status === '^')
+          return p2
+        return createConstNode()
+      })()
+      node.params[1] = (() => {
+        if (p1Status === '_')
+          return p1
+        if (p2Status === '_')
+          return p2
+        return createConstNode()
+      })()
       break
     }
     case TokenTypes.Split:
@@ -489,14 +552,14 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
         current++
         const newNode = createParamTwoNode()
         if (node.type === NodeTypes.Flat)
-          node = removeParenOfFlatExpr(node as FlatNode)
+          node = removeParenOfFlatExpr(node)
         newNode.tex = nextToken.tex
         newNode.params[0] = node
 
         const walkRes = walk(tokens, current)
         current = walkRes.current
         if (walkRes.node.type === NodeTypes.Flat)
-          walkRes.node = removeParenOfFlatExpr(walkRes.node as FlatNode)
+          walkRes.node = removeParenOfFlatExpr(walkRes.node)
         newNode.params[1] = walkRes.node
         node = newNode
         break
