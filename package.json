@@ -1,18 +1,20 @@
 {
-  "name": "am-parser",
-  "version": "1.0.0",
+  "name": "asciimath-parser",
+  "version": "0.0.0",
   "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "vitest --run",
-    "build": "tsup ./src/index.ts --format cjs,esm --dts"
+    "build": "tsup ./src/index.ts --format cjs,esm --dts",
+    "release": "bumpp && npm publish"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.1",
+    "bumpp": "^8.2.1",
     "eslint": "^8.32.0",
     "tsup": "^6.5.0",
     "typescript": "^4.9.4",

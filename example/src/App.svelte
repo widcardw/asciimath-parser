@@ -1,4 +1,5 @@
 <script lang="ts">
+    import CarbonLogoGithub from "./assets/CarbonLogoGithub.svelte";
 import CardList from "./lib/CardList.svelte";
 import { createAsciiMath } from "./lib/createAsciiMath";
 import ExampleTable from "./lib/ExampleTable.svelte";
@@ -35,6 +36,9 @@ const am = createAsciiMath()
   <SymbolTable {am} symbols={subp} />
   <h3>上下叠合</h3>
   <SymbolTable {am} symbols={updown} cols={2} />
+  <div class="fc p-8">
+    <a href="https://github.com/widcardw/asciimath-parser" target="_blank" rel="noreferrer"><CarbonLogoGithub /></a>
+  </div>
 </main>
 
 <style>
@@ -42,5 +46,13 @@ const am = createAsciiMath()
     max-width: 800px;
     margin: 0 auto;
     padding: 1rem;
+  }
+  .fc {
+    display: flex;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+  .p-8 {
+    padding: 2rem;
   }
 </style>

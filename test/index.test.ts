@@ -19,6 +19,6 @@ describe('codegen xlongequal', () => {
     expect(am.toTex('==_(123)^456')).toMatchSnapshot()
     expect(am.toTex('==_(123)')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\xlongequal[ 123 ]{  } }"')
     expect(am.toTex('==^(123)')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\xlongequal[  ]{ 123 } }"')
-    expect(am.toTex('==')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\xlongequal }"')
+    expect(am.toTex('==')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\xlongequal{} }"')
   })
 })
