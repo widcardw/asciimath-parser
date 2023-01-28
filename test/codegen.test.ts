@@ -32,3 +32,13 @@ describe('codegen align', () => {
     expect(codegen(parser(trie.tryParsingAll('varphi(x) & = Phi\'(x) \n\n & = 1/(sqrt(2pi) sigma) "e"^(- ((x-mu)^2)/(2sigma^2))')))).toMatchSnapshot()
   })
 })
+
+describe('codegen superfluous `^`', () => {
+  const trie = createTrie()
+  it('should not generate secondary sup', () => {
+    expect(codegen(parser(trie.tryParsingAll('x^2^3')))).toMatchSnapshot()
+  })
+  it('should generate correct sup and sub', () => {
+    expect(codegen(parser(trie.tryParsingAll('sum_(n=1)^(+oo) 1/(n^2) = (pi^2)/6')))).toMatchSnapshot()
+  })
+})
