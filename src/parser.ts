@@ -7,7 +7,6 @@ enum NodeTypes {
   ParamOne = 'ParamOne', // expression with one param
   ParamTwo = 'ParamTwo', // expression with two params
   Matrix = 'Matrix', // in fact it represents all braced expressions
-  Aligned = 'Aligned', // aligned environment
   Flat = 'Flat',
 }
 
@@ -57,11 +56,6 @@ interface MatrixNode extends Node {
   dividerIndices: number[]
 }
 
-interface AlignedNode extends Node {
-  type: NodeTypes.Aligned
-  params: ChildNode[]
-}
-
 type ChildNode = ConstNode | MatrixNode | ParamOneNode | ParamTwoNode | FlatNode
 
 function createRootNode(): RootNode {
@@ -92,13 +86,6 @@ function createFlatNode(): FlatNode {
   return {
     type: NodeTypes.Flat,
     body: [],
-  }
-}
-
-function createAlignedNode(): AlignedNode {
-  return {
-    type: NodeTypes.Aligned,
-    params: [],
   }
 }
 
@@ -621,30 +608,6 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
     }
   }
   return { node, current }
-}
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function processAligned(tokens: TokenizedValue[]) {
-  const root = createAlignedNode()
-  let current = 0
-  let token = tokens[current]
-  while (current < tokens.length) {
-    const node = createFlatNode()
-    // read a whole line of expression to a flat node
-    while (current < tokens.length && !(token.type === TokenTypes.Align && token.tex === '\\\\')) {
-      const walkRes = walk(tokens, current)
-      current = walkRes.current
-      token = tokens[current]
-      node.body.push(walkRes.node)
-    }
-    // in this case token[current] must be `\\`
-    if (current < tokens.length) {
-      node.body.push(createConstNode('\\\\'))
-      current++
-    }
-
-    root.params.push(node)
-  }
-  return root
 }
 
 function parser(tokens: TokenizedValue[]) {
