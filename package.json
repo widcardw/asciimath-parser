@@ -3,15 +3,44 @@
   "version": "0.1.0",
   "type": "module",
   "description": "",
-  "main": "index.js",
+  "author": "widcardw",
+  "license": "MIT",
+  "homepage": "https://github.com/widcardw/asciimath-parser#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/widcardw/asciimath-parser.git"
+  },
+  "bugs": "https://github.com/widcardw/asciimath-parser/issues",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "vitest --run",
     "build": "tsup ./src/index.ts --format cjs,esm --dts",
-    "release": "bumpp && npm publish"
+    "release": "nr build && bumpp && npm publish"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "asciimath",
+    "LaTeX"
+  ],
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.1",
     "bumpp": "^8.2.1",
