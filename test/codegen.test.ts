@@ -42,3 +42,18 @@ describe('codegen superfluous `^`', () => {
     expect(codegen(parser(trie.tryParsingAll('sum_(n=1)^(+oo) 1/(n^2) = (pi^2)/6')))).toMatchSnapshot()
   })
 })
+
+describe('codegen {: any :}', () => {
+  const trie = createTrie()
+  it('should generate { abc }', () => {
+    expect(codegen(parser(trie.tryParsingAll('{: abc :}')))).toMatchInlineSnapshot('"{ ab c }"')
+  })
+
+  it('should generate { \\text{d}x }', () => {
+    expect(codegen(parser(trie.tryParsingAll('{: "d"x :}')))).toMatchInlineSnapshot('"{ \\\\text{d} x }"')
+  })
+
+  it('should generate {: ... ]', () => {
+    expect(codegen(parser(trie.tryParsingAll('{: 1,2;3,4]')))).toMatchInlineSnapshot('"\\\\left. \\\\begin{matrix}  1&2\\\\\\\\3&4  \\\\end{matrix} \\\\right]"')
+  })
+})

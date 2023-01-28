@@ -116,6 +116,14 @@ function createParamTwoNode(): ParamTwoNode {
   }
 }
 
+function createParenOfFlatNodeFrom(token: TokenizedValue, left: boolean): ConstNode {
+  if (token.value === '{:')
+    return { type: NodeTypes.Const, value: token.value, tex: '{' }
+  if (token.value === ':}')
+    return { type: NodeTypes.Const, value: token.value, tex: '}' }
+  return { type: NodeTypes.Const, value: token.value, tex: `\\${left ? 'left' : 'right'}${token.tex}` }
+}
+
 function readParenedExpression2(tokens: TokenizedValue[], current: number): {
   node: MatrixNode | FlatNode
   current: number
@@ -165,7 +173,7 @@ function readParenedExpression2(tokens: TokenizedValue[], current: number): {
     if (semiIndex === -1) {
       // process the expression as an array
       const node = createFlatNode()
-      node.body.push({ type: NodeTypes.Const, value: token.value, tex: `\\left${token.tex}` } as ConstNode)
+      node.body.push(createParenOfFlatNodeFrom(token, true))
       current++
       while (current < closingIndex) {
         const walkRes = walk(tokens, current)
@@ -174,7 +182,7 @@ function readParenedExpression2(tokens: TokenizedValue[], current: number): {
       }
       token = tokens[current]
       current++
-      node.body.push({ type: NodeTypes.Const, value: token.value, tex: `\\right${token.tex}` } as ConstNode)
+      node.body.push(createParenOfFlatNodeFrom(token, false))
       return { node, current }
     }
     else {
@@ -252,108 +260,6 @@ function readParenedExpression2(tokens: TokenizedValue[], current: number): {
       return { node, current }
     }
   }
-}
-
-// 逻辑有点错了，并不能直接匆匆忙忙的就去通过逗号之类的直接分割成矩阵
-/**
- * @deprecated
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function readParenedExpression(tokens: TokenizedValue[], current: number): { node: MatrixNode; current: number } {
-  const node = createMatrixNode()
-
-  let token = tokens[current]
-  const dividerIndices = new Set<number>()
-  if (token.type === TokenTypes.LParen) {
-    node.lparen = `\\left${token.tex}`
-    token = tokens[++current]
-    let tempArr: ChildNode[] = []
-    let tempNode: ChildNode | null = null
-    // the cursor should be at first
-    while (current < tokens.length
-      && token.type !== TokenTypes.RParen
-      // `|` should be used as matrix divider
-      // && token.type !== TokenTypes.Paren
-    ) {
-      if (token.type === TokenTypes.Split) {
-        switch (token.value) {
-          case ',': {
-            if (tempNode) {
-              tempArr.push(tempNode)
-              tempNode = null
-            }
-            break
-          }
-          case ';': {
-            if (tempNode) {
-              // the ownership of `tempNode` is passed to `tempArr`
-              tempArr.push(tempNode)
-              tempNode = null
-            }
-            // the ownership of `tempArr` is passed to `node.params`
-            node.params.push(tempArr)
-            tempArr = []
-            break
-          }
-        }
-        token = tokens[++current]
-        continue
-      }
-      else if (token.type === TokenTypes.Paren) {
-        if (tempNode) {
-          tempArr.push(tempNode)
-          tempNode = null
-        }
-        dividerIndices.add(tempArr.length)
-        token = tokens[++current]
-        continue
-      }
-      tempNode = createMatrixNode()
-      token = tokens[current]
-      while (current < tokens.length
-        && token.type !== TokenTypes.Split
-        && token.type !== TokenTypes.RParen
-        && token.type !== TokenTypes.Paren) {
-        const walkRes = walk(tokens, current)
-        current = walkRes.current
-        if (tempNode.params.length === 0)
-          tempNode.params.push([])
-
-        tempNode.params[0].push(walkRes.node)
-        token = tokens[current]
-      }
-    }
-    // for those cases that the matrix only contains one line
-    // or the last line of the matrix does not contains a semicolon
-    if (tempNode) {
-      tempArr.push(tempNode)
-      tempNode = null
-    }
-    if (tempArr.length > 0) {
-      node.params.push(tempArr)
-      tempArr = []
-    }
-    // set dividerIndices
-    node.dividerIndices = Array.from(dividerIndices)
-    // process the right paren
-    token = tokens[current]
-    if (current < tokens.length) {
-      current++
-      node.rparen = `\\right${token.tex}`
-      if (token.value === ':}')
-        node.alignment = AlignDirection.Left
-    }
-    else {
-      // no right paren
-      node.rparen = '\\right.'
-    }
-  }
-  // TODO
-  // The matrix with only one element should be considered as Const.
-  // However, the aim of `MatrixNode` is to represent all types of expressions,
-  // so it's ok here.
-  // But the braced `()` of a matrix with only one element should be hidden.
-  return { node, current }
 }
 
 function findTargetIndices(arr: TokenizedValue[], start: number, end: number): {
@@ -511,6 +417,8 @@ function removeParenOfFlatExpr(node: FlatNode): FlatNode {
 }
 
 function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; current: number } {
+  if (current >= tokens.length)
+    return { node: createConstNode(''), current }
   const token = tokens[current]
   let node: ChildNode
   switch (token.type) {

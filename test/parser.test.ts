@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { parser } from '../src/parser'
 import { createTrie } from '../src/trie'
 
-describe.skip('parser', () => {
+describe('parser', () => {
   const trie = createTrie()
   it('should parse a const token', () => {
     expect(parser(trie.tryParsingAll('sum otherwise'))).toMatchSnapshot()
@@ -31,7 +31,7 @@ describe('cases matrix', () => {
   })
 })
 
-describe.skip('parse det', () => {
+describe('parse det', () => {
   const trie = createTrie()
   it('should parse a simple det', () => {
     expect(parser(trie.tryParsingAll('|1,2;3,4|'))).toMatchSnapshot()
@@ -49,14 +49,14 @@ describe.skip('parse det', () => {
 
 const CODE = 'x & |-> "e"x\n\nf(x) & -> g(x)'
 
-describe.skip('parse aligned expressions', () => {
+describe('parse aligned expressions', () => {
   const trie = createTrie()
   it('should parse an aligend expression of 2 lines', () => {
     expect(parser(trie.tryParsingAll(CODE))).toMatchSnapshot()
   })
 })
 
-describe.skip('parse expression like sup and sub', () => {
+describe('parse expression like sup and sub', () => {
   const trie = createTrie()
   it('should parse e^x', () => {
     expect(parser(trie.tryParsingAll('"e"^x'))).toMatchSnapshot()
@@ -77,7 +77,7 @@ describe.skip('parse expression like sup and sub', () => {
   })
 })
 
-describe.skip('parse operator `op a b`', () => {
+describe('parse operator `op a b`', () => {
   const trie = createTrie()
   it('should parse frac', () => {
     expect(parser(trie.tryParsingAll('frac(a + b^2)(b)'))).toMatchSnapshot()
