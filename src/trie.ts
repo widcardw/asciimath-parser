@@ -48,8 +48,7 @@ class Trie {
 
     let root = this._root
 
-    for (let i = 0; i < key.length; i++) {
-      const ch = key[i]
+    ;([...key]).forEach((ch, i) => {
       const idx = this.c2i(ch)
       if (typeof idx === 'undefined')
         throw new Error(`key \`${ch}\` not in key set`)
@@ -58,7 +57,7 @@ class Trie {
       root = root._nextNode[idx]!
       if (i === key.length - 1)
         root._end = true
-    }
+    })
   }
 
   public search(word: string): boolean {
