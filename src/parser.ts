@@ -423,6 +423,54 @@ function removeParenOfFlatExpr(node: FlatNode): FlatNode {
   return node
 }
 
+function lookForwardOperatorOptionalTwoParams(tokens: TokenizedValue[], current: number, token: TokenizedValue) {
+  let nextToken = tokens[current]
+  let p1: ChildNode = createConstNode()
+  let nextShouldBe = ''
+  let p1Status = ''
+  let p2Status = ''
+  if (nextToken.value === '^' || nextToken.value === '_') {
+    nextShouldBe = nextToken.value === '^' ? '_' : '^'
+    p1Status = nextToken.value
+    current++
+    const walkRes = walk(tokens, current)
+    if (walkRes.node.type === NodeTypes.Flat)
+      walkRes.node = removeParenOfFlatExpr(walkRes.node)
+    p1 = walkRes.node
+    current = walkRes.current
+  }
+  let p2: ChildNode = createConstNode()
+  if (current < tokens.length) {
+    nextToken = tokens[current]
+    if (nextToken.value === nextShouldBe) {
+      p2Status = nextToken.value
+      current++
+      const walkRes = walk(tokens, current)
+      if (walkRes.node.type === NodeTypes.Flat)
+        walkRes.node = removeParenOfFlatExpr(walkRes.node)
+      p2 = walkRes.node
+      current = walkRes.current
+    }
+  }
+  const node = createParamTwoNode()
+  node.tex = token.tex
+  node.params[0] = (() => {
+    if (p1Status === '^')
+      return p1
+    if (p2Status === '^')
+      return p2
+    return createConstNode()
+  })()
+  node.params[1] = (() => {
+    if (p1Status === '_')
+      return p1
+    if (p2Status === '_')
+      return p2
+    return createConstNode()
+  })()
+  return { node, current }
+}
+
 function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; current: number } {
   if (current >= tokens.length)
     return { node: createConstNode(), current }
@@ -479,54 +527,15 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
     }
     case TokenTypes.OperatorO2: {
       current++
-      if (current >= tokens.length)
-        return { node: createConstNode(`${token.tex.replace(/[\{\[] \$\d+ [\}\]]/g, '')}{}`), current }
+      if (current >= tokens.length) {
+        node = createConstNode(`${token.tex.replace(/[\{\[] \$\d+ [\}\]]/g, '')}{}`)
+        break
+      }
 
       // detect next token
-      let nextToken = tokens[current]
-      let p1: ChildNode = createConstNode()
-      let nextShouldBe = ''
-      let p1Status = ''
-      let p2Status = ''
-      if (nextToken.value === '^' || nextToken.value === '_') {
-        nextShouldBe = nextToken.value === '^' ? '_' : '^'
-        p1Status = nextToken.value
-        current++
-        const walkRes = walk(tokens, current)
-        if (walkRes.node.type === NodeTypes.Flat)
-          walkRes.node = removeParenOfFlatExpr(walkRes.node)
-        p1 = walkRes.node
-        current = walkRes.current
-      }
-      let p2: ChildNode = createConstNode()
-      if (current < tokens.length) {
-        nextToken = tokens[current]
-        if (nextToken.value === nextShouldBe) {
-          p2Status = nextToken.value
-          current++
-          const walkRes = walk(tokens, current)
-          if (walkRes.node.type === NodeTypes.Flat)
-            walkRes.node = removeParenOfFlatExpr(walkRes.node)
-          p2 = walkRes.node
-          current = walkRes.current
-        }
-      }
-      node = createParamTwoNode()
-      node.tex = token.tex
-      node.params[0] = (() => {
-        if (p1Status === '^')
-          return p1
-        if (p2Status === '^')
-          return p2
-        return createConstNode()
-      })()
-      node.params[1] = (() => {
-        if (p1Status === '_')
-          return p1
-        if (p2Status === '_')
-          return p2
-        return createConstNode()
-      })()
+      const res = lookForwardOperatorOptionalTwoParams(tokens, current, token)
+      current = res.current
+      node = res.node
       break
     }
     case TokenTypes.Split:
