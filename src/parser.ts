@@ -21,29 +21,35 @@ interface Node {
 }
 
 interface ConstNode extends Node {
+  type: NodeTypes.Const
   value: string
   tex: string
 }
 
 interface RootNode extends Node {
+  type: NodeTypes.Root
   body: ChildNode[]
 }
 
 interface FlatNode extends Node {
+  type: NodeTypes.Flat
   body: ChildNode[]
 }
 
 interface ParamOneNode extends Node {
+  type: NodeTypes.ParamOne
   params: ChildNode
   tex: string
 }
 
 interface ParamTwoNode extends Node {
+  type: NodeTypes.ParamTwo
   params: [ChildNode, ChildNode]
   tex: string
 }
 
 interface MatrixNode extends Node {
+  type: NodeTypes.Matrix
   params: ChildNode[][]
   lparen: string
   rparen: string
@@ -52,6 +58,7 @@ interface MatrixNode extends Node {
 }
 
 interface AlignedNode extends Node {
+  type: NodeTypes.Aligned
   params: ChildNode[]
 }
 
@@ -242,7 +249,7 @@ function readParenedExpression2(tokens: TokenizedValue[], current: number): {
         tempArr = []
       }
       // set dividerIndices
-      node.dividerIndices = Array.from(dividerIndices)
+      node.dividerIndices = Array.from(dividerIndices).sort((a, b) => a - b)
       // process the right paren
       token = tokens[current]
       if (current < tokens.length) {
@@ -655,6 +662,10 @@ function parser(tokens: TokenizedValue[]) {
 
 export {
   NodeTypes,
+  Node,
+  ChildNode,
+  RootNode,
   AlignDirection,
+  MatrixNode,
   parser,
 }
