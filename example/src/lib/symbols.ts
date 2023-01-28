@@ -75,10 +75,10 @@ export const rela = [
   '=', '!=', '-=', '!-=',
   '~=', '~~', 'lt', 'gt',
   'ge', 'le', '<=', '>=',
-  '-<', '>-', 'in', '~in',
+  '-<', '>-', 'in', '!in',
   'sub', 'sup', 'sube', 'supe',
   '!sube', 'subne', 'normal', 'rnormal',
-  'lhd', 'rhd', 'S=', 'S~', 'prop',
+  'lhd', 'rhd', 'S~', 'prop',
 ]
 
 export const logic = [
@@ -117,7 +117,12 @@ export const fonts = [
 
 export const subp = [
   'hat x', 'bar x', 'ul x', 'vec x',
-  'dot x', 'ddot x', 'arc 123', 'overset("bala")(x)',
+  'dot x', 'ddot x', 'arc 123',
+
+]
+
+export const updown = [
+  'overset("bala")(x)',
   'overbrace(12345)^n',
   'underbrace(12345)_n',
   '==(123)(456)',

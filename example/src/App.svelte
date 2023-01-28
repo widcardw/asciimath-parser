@@ -2,7 +2,7 @@
 import CardList from "./lib/CardList.svelte";
 import { createAsciiMath } from "./lib/createAsciiMath";
 import ExampleTable from "./lib/ExampleTable.svelte";
-import { arrows, fonts, logic, mathFn, operators, others, parens, rela, subp, xila } from "./lib/symbols";
+import { arrows, fonts, logic, mathFn, operators, others, parens, rela, subp, updown, xila } from "./lib/symbols";
 import SymbolTable from "./lib/SymbolTable.svelte";
 const am = createAsciiMath()
 </script>
@@ -33,6 +33,8 @@ const am = createAsciiMath()
   <SymbolTable {am} symbols={fonts} />
   <h3>注音符号</h3>
   <SymbolTable {am} symbols={subp} />
+  <h3>上下叠合</h3>
+  <SymbolTable {am} symbols={updown} cols={2} />
 </main>
 
 <style>

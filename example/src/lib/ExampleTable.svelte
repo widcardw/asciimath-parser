@@ -1,8 +1,6 @@
 <script lang="ts">
 import type { AsciiMath } from "../../../src";
-import katex from 'katex'
-    import { renderTex } from "./renderTex";
-
+import { renderTex } from "./renderTex";
 
 let tb = [
     { label: '上下标', code: 'a_1^2 + b_1^2 = c_1^2' },

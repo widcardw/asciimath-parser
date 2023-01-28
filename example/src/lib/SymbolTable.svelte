@@ -1,15 +1,16 @@
 <script lang="ts">
 import type { AsciiMath } from "../../../src";
-    import { renderTex } from "./renderTex";
+import { renderTex } from "./renderTex";
 export let am: AsciiMath
 export let symbols: string[]
+export let cols: number = 4
 
 let symbolMatrix = (() => {
     let temp: string[] = []
     let res: string[][] = []
     for (let i = 0; i < symbols.length; i++) {
         temp.push(symbols[i])
-        if (temp.length === 4) {
+        if (temp.length === cols) {
             res.push(temp)
             temp = []
         }

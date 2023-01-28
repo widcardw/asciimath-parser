@@ -9,7 +9,7 @@ let tex = ''
 
 function renderKatex() {
     tex = am.toTex(amStr)
-    kHtml = katex.renderToString(tex, { displayMode: true })
+    kHtml = katex.renderToString(tex, { displayMode: true, throwOnError: false })
 }
 
 function throttle(fn: (...arg: any[]) => any, delay: number){

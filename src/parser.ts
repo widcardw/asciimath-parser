@@ -117,10 +117,6 @@ function createParamTwoNode(): ParamTwoNode {
 }
 
 function createParenOfFlatNodeFrom(token: TokenizedValue, left: boolean): ConstNode {
-  if (token.value === '{:')
-    return { type: NodeTypes.Const, value: token.value, tex: '{' }
-  if (token.value === ':}')
-    return { type: NodeTypes.Const, value: token.value, tex: '}' }
   return { type: NodeTypes.Const, value: token.value, tex: `\\${left ? 'left' : 'right'}${token.tex}` }
 }
 
