@@ -22,3 +22,17 @@ describe('codegen xlongequal', () => {
     expect(am.toTex('==')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\xlongequal{} }"')
   })
 })
+
+describe('sup and div', () => {
+  const am = new AsciiMath()
+  it('should render sup first', () => {
+    expect(am.toTex('pi^2/6')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\frac{ \\\\pi ^{ 2 } }{ 6 } }"')
+  })
+})
+
+describe('`op A` and `sup`', () => {
+  const am = new AsciiMath()
+  it('should render `op A` first', () => {
+    expect(am.toTex('abs(a)^3')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\left|a\\\\right| ^{ 3 } }"')
+  })
+})

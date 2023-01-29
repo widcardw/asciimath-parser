@@ -433,7 +433,7 @@ function lookForwardOperatorOptionalTwoParams(tokens: TokenizedValue[], current:
     nextShouldBe = nextToken.value === '^' ? '_' : '^'
     p1Status = nextToken.value
     current++
-    const walkRes = walk(tokens, current)
+    const walkRes = walk(tokens, current, false)
     if (walkRes.node.type === NodeTypes.Flat)
       walkRes.node = removeParenOfFlatExpr(walkRes.node)
     p1 = walkRes.node
@@ -445,7 +445,7 @@ function lookForwardOperatorOptionalTwoParams(tokens: TokenizedValue[], current:
     if (nextToken.value === nextShouldBe) {
       p2Status = nextToken.value
       current++
-      const walkRes = walk(tokens, current)
+      const walkRes = walk(tokens, current, false)
       if (walkRes.node.type === NodeTypes.Flat)
         walkRes.node = removeParenOfFlatExpr(walkRes.node)
       p2 = walkRes.node
@@ -471,7 +471,7 @@ function lookForwardOperatorOptionalTwoParams(tokens: TokenizedValue[], current:
   return { node, current }
 }
 
-function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; current: number } {
+function walk(tokens: TokenizedValue[], current: number, watchNext = true): { node: ChildNode; current: number } {
   if (current >= tokens.length)
     return { node: createConstNode(), current }
   const token = tokens[current]
@@ -502,7 +502,7 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
       node.tex = token.tex
       current++
       // recursion
-      const walkRes = walk(tokens, current)
+      const walkRes = walk(tokens, current, false)
       current = walkRes.current
       if (walkRes.node.type === NodeTypes.Flat)
         walkRes.node = removeParenOfFlatExpr(walkRes.node)
@@ -554,32 +554,59 @@ function walk(tokens: TokenizedValue[], current: number): { node: ChildNode; cur
     }
   }
   // watch next token
-  if (current < tokens.length) {
-    const nextToken = tokens[current]
-    switch (nextToken.type) {
-      case TokenTypes.OperatorAOB: {
-        current++
-        const newNode = createParamTwoNode()
-        if (node.type === NodeTypes.Flat)
-          node = removeParenOfFlatExpr(node)
-        newNode.tex = nextToken.tex
-        newNode.params[0] = node
+  if (current < tokens.length && watchNext) {
+    let matched = true
+    while (matched && current < tokens.length) {
+      const nextToken = tokens[current]
+      switch (nextToken.type) {
+        case TokenTypes.OperatorAOB: {
+          current++
+          const newNode = createParamTwoNode()
+          if (node.type === NodeTypes.Flat)
+            node = removeParenOfFlatExpr(node)
+          newNode.tex = nextToken.tex
+          newNode.params[0] = node
 
-        const walkRes = walk(tokens, current)
-        current = walkRes.current
-        if (walkRes.node.type === NodeTypes.Flat)
-          walkRes.node = removeParenOfFlatExpr(walkRes.node)
-        newNode.params[1] = walkRes.node
-        node = newNode
-        break
-      }
-      case TokenTypes.OperatorAO: {
-        current++
-        const newNode = createParamOneNode()
-        newNode.tex = nextToken.tex
-        newNode.params = node
-        node = newNode
-        break
+          const walkRes = walk(tokens, current)
+          current = walkRes.current
+          if (walkRes.node.type === NodeTypes.Flat)
+            walkRes.node = removeParenOfFlatExpr(walkRes.node)
+          newNode.params[1] = walkRes.node
+          node = newNode
+          break
+        }
+        case TokenTypes.OperatorAO: {
+          current++
+          const newNode = createFlatNode()
+          if (node.type === NodeTypes.Flat)
+            newNode.body.push(...(node.body))
+          else
+            newNode.body.push(node)
+          newNode.body.push(createConstNode(nextToken))
+          node = newNode
+          break
+        }
+        case TokenTypes.OperatorSup: {
+          current++
+          const newNode = createFlatNode()
+          if (node.type === NodeTypes.Flat)
+            newNode.body.push(...(node.body))
+          else
+            newNode.body.push(node)
+          const supNode = createParamOneNode()
+          supNode.tex = nextToken.tex
+          const walkRes = walk(tokens, current, false)
+          current = walkRes.current
+          if (walkRes.node.type === NodeTypes.Flat)
+            walkRes.node = removeParenOfFlatExpr(walkRes.node)
+          supNode.params = walkRes.node
+          newNode.body.push(supNode)
+          node = newNode
+          break
+        }
+        default: {
+          matched = false
+        }
       }
     }
   }
