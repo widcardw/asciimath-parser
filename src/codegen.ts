@@ -36,7 +36,7 @@ function codegen(node: ChildNode | RootNode): string {
       return node.tex
     }
     case NodeTypes.Root: {
-      let res = node.body.map(codegen).join('')
+      let res = node.body.map(codegen).join(' ')
       if (node.body.find(n => n.type === NodeTypes.Const && n.value === '&'))
         res = `\\begin{aligned}${res}\\end{aligned}`
       return res
