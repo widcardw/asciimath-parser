@@ -14,7 +14,7 @@
     { label: "偏微分", code: "(del f)/(del x), (del^3 f)/(del x del y^2)" },
     { label: "偏微分 (试验)", code: "part f x, part^3 f (x y^2), part {::} x" },
     { label: "矩阵", code: "[a, b; c, d], [a, b | c; d, e | f]" },
-    { label: "分段函数", code: "|x| = { x, if > 0; -x, otherwise :}" },
+    { label: "分段函数", code: "|x| = { x, if x > 0; -x, otherwise :}" },
   ];
   export let am: AsciiMath;
 </script>
