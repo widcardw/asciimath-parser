@@ -208,6 +208,9 @@ function readParenedExpression2(tokens: TokenizedValue[], current: number): {
               tempArr.push(tempNode)
               tempNode = null
             }
+            else {
+              tempArr.push(createConstNode())
+            }
           }
           else if (token.value === ';') {
             if (tempNode) {

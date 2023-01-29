@@ -11,11 +11,17 @@ function getMatrixBoundary(node: MatrixNode) {
 function getArrayBoundary(node: MatrixNode) {
   const div = node.dividerIndices
   if (div.length) {
+    for (let i = div.length - 1; i >= 1; i--)
+      div[i] -= div[i - 1]
+
     let beginArray = '\\begin{array}{'
     for (let i = 0; i < div.length; i++)
-      beginArray += `${''.padEnd(div[i] - i, 'c')}|`
+      beginArray += `${''.padEnd(div[i], 'c')}|`
 
-    beginArray += '}'
+    // MathJax would complain if the array env arg
+    // is not consistent with the elements of the matrix.
+    const maxCol = Math.max(...node.params.map(i => i.length))
+    beginArray += `${''.padEnd(maxCol - div[div.length - 1], 'c')}}`
     return [
       beginArray,
       '\\end{array}',
