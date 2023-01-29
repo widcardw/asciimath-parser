@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Jetbrains+Mono&display=swap');
+
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -76,4 +78,23 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+td {
+  padding: 0.5rem;
+  white-space: nowrap;
+}
+
+table {
+  width: 100%;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+}
+
+.tc {
+  text-align: center;
+}
+
+.tex {
+  background-color: #7f7f7f33;
 }
