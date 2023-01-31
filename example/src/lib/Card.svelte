@@ -52,7 +52,7 @@
   .input-area {
     width: 100%;
     min-height: 4rem;
-    font-family: "Jetbrains Mono";
+    font-family: "Jetbrains Mono", "JetBrains Mono";
     border: none;
     background: transparent;
     overflow: auto;
@@ -65,7 +65,7 @@
   .tex-code {
     padding: 1rem;
     margin: 0;
-    font-family: "Jetbrains Mono";
+    font-family: "Jetbrains Mono", "JetBrains Mono";
     border-top: 1px solid #7f7f7f33;
     border-bottom: 1px solid #7f7f7f33;
   }

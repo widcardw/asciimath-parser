@@ -6,7 +6,7 @@ enum NodeTypes {
   Const = 'Const',
   ParamOne = 'ParamOne', // expression with one param
   ParamTwo = 'ParamTwo', // expression with two params
-  Matrix = 'Matrix', // in fact it represents all braced expressions
+  Matrix = 'Matrix',
   Flat = 'Flat',
 }
 
@@ -131,7 +131,127 @@ function readParenedExpression2(tokens: TokenizedValue[], current: number): {
   node: MatrixNode | FlatNode
   current: number
 } {
+  const { closingIndex, semiIndex } = findPairedClosingParen(current, tokens)
+  if (closingIndex === -1) {
+    return parenStartedNoClosingNode(tokens, current)
+  }
+  else {
+    if (semiIndex === -1) {
+      // process the expression as an array
+      return parenedArrayNode(tokens, current, closingIndex)
+    }
+    else {
+      // process the expression as a matrix
+      return generateMatrixNode(tokens, current, closingIndex)
+    }
+  }
+}
+
+function generateMatrixNode(tokens: TokenizedValue[], current: number, end: number) {
   let token = tokens[current]
+  const node = createMatrixNode()
+  const dividerIndices = new Set<number>()
+  node.lparen = `\\left${token.tex}`
+  token = tokens[++current]
+  let tempArr: ChildNode[] = []
+  let tempNode: ChildNode | null = null
+  // inside a matrix
+  while (current < end) {
+    if (token.type === TokenTypes.Split) {
+      if (token.value === ',') {
+        if (tempNode) {
+          tempArr.push(tempNode)
+          tempNode = null
+        }
+        else {
+          tempArr.push(createConstNode())
+        }
+      }
+      else if (token.value === ';') {
+        if (tempNode) {
+          tempArr.push(tempNode)
+          tempNode = null
+        }
+        node.params.push(tempArr)
+        tempArr = []
+      }
+      token = tokens[++current]
+      continue
+    }
+    else if (token.type === TokenTypes.Paren /* && token.value === '|' */) {
+      if (tempNode) {
+        tempArr.push(tempNode)
+        tempNode = null
+      }
+      dividerIndices.add(tempArr.length)
+      token = tokens[++current]
+      continue
+    }
+    tempNode = createFlatNode()
+    token = tokens[current]
+    while (current < end
+      && token.type !== TokenTypes.Split
+      && token.type !== TokenTypes.Paren) {
+      const walkRes = walk(tokens, current)
+      current = walkRes.current
+      tempNode.body.push(walkRes.node)
+      token = tokens[current]
+    }
+  }
+  // for those cases that the matrix only contains one line
+  // or the last line of the matrix does not contains a semicolon
+  if (tempNode) {
+    tempArr.push(tempNode)
+    tempNode = null
+  }
+  if (tempArr.length > 0) {
+    node.params.push(tempArr)
+    tempArr = []
+  }
+  // set dividerIndices
+  node.dividerIndices = Array.from(dividerIndices).sort((a, b) => a - b)
+  // process the right paren
+  token = tokens[current]
+  if (current < tokens.length) {
+    current++
+    node.rparen = `\\right${token.tex}`
+    if (token.value === ':}')
+      node.alignment = AlignDirection.Left
+  }
+  else {
+    // no right paren
+    node.rparen = '\\right.'
+  }
+  return { node, current }
+}
+
+function parenedArrayNode(tokens: TokenizedValue[], current: number, closingIndex: number) {
+  let token = tokens[current]
+  const node = createFlatNode()
+  node.body.push(createParenOfFlatNodeFrom(token, true))
+  current = readTokensToFlatNode(current + 1, closingIndex, tokens, node)
+  token = tokens[current]
+  current++
+  node.body.push(createParenOfFlatNodeFrom(token, false))
+  if ((node.body[0] as ConstNode).value === '{:' && (node.body[node.body.length - 1] as ConstNode).value === ':}') {
+    (node.body[0] as ConstNode).tex = '{';
+    (node.body[node.body.length - 1] as ConstNode).tex = '}'
+  }
+  return { node, current }
+}
+
+function parenStartedNoClosingNode(tokens: TokenizedValue[], current: number) {
+  const token = tokens[current]
+  // just process the expression as flat one
+  const node = createFlatNode()
+  node.body.push({ type: NodeTypes.Const, value: token.value, tex: `\\left${token.tex}` } as ConstNode)
+  current = readTokensToFlatNode(current + 1, tokens.length, tokens, node)
+  // maybe it's better to add a hidden closing bracket
+  node.body.push({ type: NodeTypes.Const, value: token.value, tex: '\\right.' } as ConstNode)
+  return { node, current }
+}
+
+function findPairedClosingParen(current: number, tokens: TokenizedValue[]) {
   let semiIndex = -1
   let closingIndex = -1
   const stack: string[] = []
@@ -158,121 +278,10 @@ function readParenedExpression2(tokens: TokenizedValue[], current: number): {
         stack.pop()
     }
   }
-  if (closingIndex === -1) {
-    // just process the expression as flat one
-    // maybe it's better to add a hidden closing bracket
-    const node = createFlatNode()
-    node.body.push({ type: NodeTypes.Const, value: token.value, tex: `\\left${token.tex}` } as ConstNode)
-    current++
-    while (current < tokens.length) {
-      const walkRes = walk(tokens, current)
-      current = walkRes.current
-      node.body.push(walkRes.node)
-    }
-    node.body.push({ type: NodeTypes.Const, value: token.value, tex: '\\right.' } as ConstNode)
-    return { node, current }
-  }
-  else {
-    if (semiIndex === -1) {
-      // process the expression as an array
-      const node = createFlatNode()
-      node.body.push(createParenOfFlatNodeFrom(token, true))
-      current++
-      while (current < closingIndex) {
-        const walkRes = walk(tokens, current)
-        current = walkRes.current
-        node.body.push(walkRes.node)
-      }
-      token = tokens[current]
-      current++
-      node.body.push(createParenOfFlatNodeFrom(token, false))
-      if ((node.body[0] as ConstNode).value === '{:' && (node.body[node.body.length - 1] as ConstNode).value === ':}') {
-        (node.body[0] as ConstNode).tex = '{'
-        ;(node.body[node.body.length - 1] as ConstNode).tex = '}'
-      }
-      return { node, current }
-    }
-    else {
-      // process the expression as a matrix
-      const node = createMatrixNode()
-      const dividerIndices = new Set<number>()
-      node.lparen = `\\left${token.tex}`
-      token = tokens[++current]
-      let tempArr: ChildNode[] = []
-      let tempNode: ChildNode | null = null
-      // inside a matrix
-      while (current < closingIndex) {
-        if (token.type === TokenTypes.Split) {
-          if (token.value === ',') {
-            if (tempNode) {
-              tempArr.push(tempNode)
-              tempNode = null
-            }
-            else {
-              tempArr.push(createConstNode())
-            }
-          }
-          else if (token.value === ';') {
-            if (tempNode) {
-              tempArr.push(tempNode)
-              tempNode = null
-            }
-            node.params.push(tempArr)
-            tempArr = []
-          }
-          token = tokens[++current]
-          continue
-        }
-        else if (token.type === TokenTypes.Paren /* && token.value === '|' */) {
-          if (tempNode) {
-            tempArr.push(tempNode)
-            tempNode = null
-          }
-          dividerIndices.add(tempArr.length)
-          token = tokens[++current]
-          continue
-        }
-        tempNode = createFlatNode()
-        token = tokens[current]
-        while (current < closingIndex
-          && token.type !== TokenTypes.Split
-          && token.type !== TokenTypes.Paren) {
-          const walkRes = walk(tokens, current)
-          current = walkRes.current
-          tempNode.body.push(walkRes.node)
-          token = tokens[current]
-        }
-      }
-      // for those cases that the matrix only contains one line
-      // or the last line of the matrix does not contains a semicolon
-      if (tempNode) {
-        tempArr.push(tempNode)
-        tempNode = null
-      }
-      if (tempArr.length > 0) {
-        node.params.push(tempArr)
-        tempArr = []
-      }
-      // set dividerIndices
-      node.dividerIndices = Array.from(dividerIndices).sort((a, b) => a - b)
-      // process the right paren
-      token = tokens[current]
-      if (current < tokens.length) {
-        current++
-        node.rparen = `\\right${token.tex}`
-        if (token.value === ':}')
-          node.alignment = AlignDirection.Left
-      }
-      else {
-      // no right paren
-        node.rparen = '\\right.'
-      }
-      return { node, current }
-    }
-  }
+  return { closingIndex, semiIndex }
 }
 
-function findTargetIndices(arr: TokenizedValue[], start: number, end: number): {
+function findPairedBar(arr: TokenizedValue[], start: number, end: number): {
   semiIndex: number
   barIndex: number
 } {
@@ -313,33 +322,22 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
   let token = tokens[current]
   // in fact only `|` matches `TokenTypes.Paren`
   if (token.type === TokenTypes.Paren) {
-    const { semiIndex, barIndex } = findTargetIndices(tokens, current + 1, tokens.length)
+    const { semiIndex, barIndex } = findPairedBar(tokens, current + 1, tokens.length)
 
     /**
      * case 1: not matrix
      * there isn't any `;` split pattern before a Paren or a RParen
      * for example `{ (x, y) | x^2 + y^2 <= 1 }`
      */
-    if (barIndex === -1) {
-      return {
-        current: current + 1,
-        node: {
-          type: NodeTypes.Const,
-          value: '|',
-          tex: '\\mid',
-        },
-      }
-    }
+    if (barIndex === -1)
+      return createSingleBarNode(current)
+
     // used as `abs`
     if (semiIndex === -1 || semiIndex > barIndex) {
       const node = createFlatNode()
       current++
       node.body.push(createConstNode('\\left|'))
-      while (current < barIndex) {
-        const walkRes = walk(tokens, current)
-        current = walkRes.current
-        node.body.push(walkRes.node)
-      }
+      current = readTokensToFlatNode(current, barIndex, tokens, node)
       node.body.push(createConstNode('\\right|'))
       current = barIndex + 1
       return { current, node }
@@ -413,6 +411,26 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
   throw new Error(`Unmatched token in \`readBarStartedExpressions\`, ${token.value}`)
 }
 
+function readTokensToFlatNode(current: number, end: number, tokens: TokenizedValue[], node: FlatNode) {
+  while (current < end) {
+    const walkRes = walk(tokens, current)
+    current = walkRes.current
+    node.body.push(walkRes.node)
+  }
+  return current
+}
+
+function createSingleBarNode(current: number): { node: ChildNode; current: number } {
+  return {
+    current: current + 1,
+    node: {
+      type: NodeTypes.Const,
+      value: '|',
+      tex: '\\mid',
+    },
+  }
+}
+
 function removeParenOfFlatExpr(node: FlatNode): FlatNode {
   const first = node.body[0]
   const last = node.body[node.body.length - 1]
@@ -436,6 +454,8 @@ function lookForwardOperatorOptionalTwoParams(tokens: TokenizedValue[], current:
     nextShouldBe = nextToken.value === '^' ? '_' : '^'
     p1Status = nextToken.value
     current++
+    // do not look forward
+    // do not receive other sup or sub in recursion
     const walkRes = walk(tokens, current, false)
     if (walkRes.node.type === NodeTypes.Flat)
       walkRes.node = removeParenOfFlatExpr(walkRes.node)
@@ -448,6 +468,8 @@ function lookForwardOperatorOptionalTwoParams(tokens: TokenizedValue[], current:
     if (nextToken.value === nextShouldBe) {
       p2Status = nextToken.value
       current++
+      // do not look forward
+      // do not receive other sup or sub in recursion
       const walkRes = walk(tokens, current, false)
       if (walkRes.node.type === NodeTypes.Flat)
         walkRes.node = removeParenOfFlatExpr(walkRes.node)
@@ -474,6 +496,57 @@ function lookForwardOperatorOptionalTwoParams(tokens: TokenizedValue[], current:
   return { node, current }
 }
 
+function preProcessOperatorSup(node: ChildNode, operator: TokenizedValue, tokens: TokenizedValue[], current: number) {
+  let newNode: FlatNode
+  if (node.type === NodeTypes.Flat) {
+    newNode = node
+  }
+  else {
+    newNode = createFlatNode()
+    newNode.body.push(node)
+  }
+  const supNode = createParamOneNode()
+  supNode.tex = operator.tex
+  // do not look forward
+  // avoid receiving fractions or other nodes as sup node
+  const walkRes = walk(tokens, current, false)
+  current = walkRes.current
+  if (walkRes.node.type === NodeTypes.Flat)
+    walkRes.node = removeParenOfFlatExpr(walkRes.node)
+  supNode.params = walkRes.node
+  newNode.body.push(supNode)
+  node = newNode
+  return { node, current }
+}
+
+function preProcessOperatorAO(node: ChildNode, nextToken: TokenizedValue) {
+  const newNode = createFlatNode()
+  if (node.type === NodeTypes.Flat)
+    newNode.body.push(...(node.body))
+
+  else
+    newNode.body.push(node)
+  newNode.body.push(createConstNode(nextToken))
+  node = newNode
+  return node
+}
+
+function preProcessOperatorAOB(node: ChildNode, operator: TokenizedValue, tokens: TokenizedValue[], current: number) {
+  const newNode = createParamTwoNode()
+  if (node.type === NodeTypes.Flat)
+    node = removeParenOfFlatExpr(node)
+  newNode.tex = operator.tex
+  newNode.params[0] = node
+
+  const walkRes = walk(tokens, current)
+  current = walkRes.current
+  if (walkRes.node.type === NodeTypes.Flat)
+    walkRes.node = removeParenOfFlatExpr(walkRes.node)
+  newNode.params[1] = walkRes.node
+  node = newNode
+  return { node, current }
+}
+
 function walk(tokens: TokenizedValue[], current: number, watchNext = true): { node: ChildNode; current: number } {
   if (current >= tokens.length)
     return { node: createConstNode(), current }
@@ -489,22 +562,19 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): { no
       break
     }
     case TokenTypes.LParen: {
-      const res = readParenedExpression2(tokens, current)
-      node = res.node
-      current = res.current
+      ({ node, current } = readParenedExpression2(tokens, current))
       break
     }
     case TokenTypes.Paren: {
-      const res = readBarStartedExpressions(tokens, current)
-      node = res.node
-      current = res.current
+      ({ node, current } = readBarStartedExpressions(tokens, current))
       break
     }
+    case TokenTypes.OperatorSup:
     case TokenTypes.OperatorA: {
       node = createParamOneNode()
       node.tex = token.tex
       current++
-      // recursion
+      // high priority, do not look forward
       const walkRes = walk(tokens, current, false)
       current = walkRes.current
       if (walkRes.node.type === NodeTypes.Flat)
@@ -536,9 +606,7 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): { no
       }
 
       // detect next token
-      const res = lookForwardOperatorOptionalTwoParams(tokens, current, token)
-      current = res.current
-      node = res.node
+      ({ node, current } = lookForwardOperatorOptionalTwoParams(tokens, current, token))
       break
     }
     case TokenTypes.Split:
@@ -563,48 +631,16 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): { no
       const nextToken = tokens[current]
       switch (nextToken.type) {
         case TokenTypes.OperatorAOB: {
-          current++
-          const newNode = createParamTwoNode()
-          if (node.type === NodeTypes.Flat)
-            node = removeParenOfFlatExpr(node)
-          newNode.tex = nextToken.tex
-          newNode.params[0] = node
-
-          const walkRes = walk(tokens, current)
-          current = walkRes.current
-          if (walkRes.node.type === NodeTypes.Flat)
-            walkRes.node = removeParenOfFlatExpr(walkRes.node)
-          newNode.params[1] = walkRes.node
-          node = newNode
+          ({ node, current } = preProcessOperatorAOB(node, nextToken, tokens, current + 1))
           break
         }
         case TokenTypes.OperatorAO: {
+          node = preProcessOperatorAO(node, nextToken)
           current++
-          const newNode = createFlatNode()
-          if (node.type === NodeTypes.Flat)
-            newNode.body.push(...(node.body))
-          else
-            newNode.body.push(node)
-          newNode.body.push(createConstNode(nextToken))
-          node = newNode
           break
         }
         case TokenTypes.OperatorSup: {
-          current++
-          const newNode = createFlatNode()
-          if (node.type === NodeTypes.Flat)
-            newNode.body.push(...(node.body))
-          else
-            newNode.body.push(node)
-          const supNode = createParamOneNode()
-          supNode.tex = nextToken.tex
-          const walkRes = walk(tokens, current, false)
-          current = walkRes.current
-          if (walkRes.node.type === NodeTypes.Flat)
-            walkRes.node = removeParenOfFlatExpr(walkRes.node)
-          supNode.params = walkRes.node
-          newNode.body.push(supNode)
-          node = newNode
+          ({ node, current } = preProcessOperatorSup(node, nextToken, tokens, current + 1))
           break
         }
         default: {
