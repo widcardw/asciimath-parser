@@ -67,3 +67,10 @@ const cfg: AsciiMathConfig = {
 }
 const am = new AsciiMath(cfg)
 ```
+
+#### CLI
+
+```sh
+npx am-parse -i input_file.txt
+# This will parse delimitered asciimath formulas into LaTeX formulas.
+```

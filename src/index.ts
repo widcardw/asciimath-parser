@@ -59,7 +59,7 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
       ],
     ],
   }
-  if (config?.display)
+  if (typeof config?.display !== 'undefined')
     defaultConfig.display = config?.display
   if (config?.extConst?.length)
     defaultConfig.extConst.push(...config.extConst)
