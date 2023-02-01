@@ -1,7 +1,7 @@
 {
   "name": "asciimath-parser-monorepo",
   "private": true,
-  "version": "0.3.1",
+  "version": "0.3.2",
   "type": "module",
   "description": "Transform asciimath to LaTeX",
   "author": "widcardw",
