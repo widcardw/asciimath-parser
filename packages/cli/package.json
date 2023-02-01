@@ -1,6 +1,5 @@
 {
-  "name": "asciimath-parser-monorepo",
-  "private": true,
+  "name": "asciimath-parser-cli",
   "version": "0.3.0",
   "type": "module",
   "description": "Transform asciimath to LaTeX",
@@ -12,18 +11,24 @@
     "url": "git+https://github.com/widcardw/asciimath-parser.git"
   },
   "bugs": "https://github.com/widcardw/asciimath-parser/issues",
+  "main": "./dist/cli.js",
+  "bin": {
+    "am-parse": "./dist/cli.cjs"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public"
+    "build": "tsup"
   },
   "keywords": [
     "asciimath",
     "LaTeX"
   ],
   "devDependencies": {
-    "@antfu/eslint-config": "^0.34.1",
     "bumpp": "^8.2.1",
-    "eslint": "^8.32.0",
-    "typescript": "^4.9.4"
+    "cac": "^6.7.14",
+    "tsup": "^6.5.0"
   },
   "eslintConfig": {
     "extends": "@antfu"

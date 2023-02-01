@@ -3,21 +3,12 @@
 import fs from 'fs/promises'
 import path from 'path'
 import { cac } from 'cac'
-import prompts from 'prompts'
-import { AsciiMath } from '.'
-
-function toArray(a: string | string[]) {
-  if (typeof a === 'undefined')
-    return []
-  if (Array.isArray(a))
-    return a
-  return [a]
-}
+import { AsciiMath } from '../core/src'
 
 const cli = cac('am-parse')
 
 cli
-  .option('-i <input_file>', 'Choose input file')
+  .command('[...input_files]', 'Input files')
   .option('-d <delimiter>', 'Specify a delimiter', { default: '`' })
   .option('--display <display_mode>', 'Whether to enable display mode in inline formula', { default: false })
 
@@ -25,30 +16,11 @@ cli.help()
 
 const parsed = cli.parse()
 
-const inputFiles = toArray(parsed.options.i)
-
-if (parsed.args.length) {
-  const { args } = parsed
-  const singleOrMulti = args.length > 1 ? 'all these files' : 'the file'
-  const etc = args.length > 1 ? ' etc.' : ''
-  console.log(`Oops, maybe you missed the \`-i\` option.\nThe program will parse ${singleOrMulti} (\`${args.slice(0, 1)}\`${etc}) with default configuration.`)
-  prompts({
-    type: 'confirm',
-    message: 'Are you sure to continue?',
-    name: 'sureToContinue',
-    initial: true,
-  })
-    .then(async ({ sureToContinue }) => {
-      if (sureToContinue)
-        await processFiles(args)
-    })
-}
-else if (inputFiles.length === 0 && !parsed.options.h) {
+if (parsed.args.length === 0 && !parsed.options.h)
   cli.outputHelp()
-}
-else {
-  processFiles(inputFiles)
-}
+
+else
+  processFiles(parsed.args)
 
 async function processFiles(files: readonly string[]) {
   const delimiter = parsed.options.d as string

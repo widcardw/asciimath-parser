@@ -1,4 +1,4 @@
-import { AsciiMath } from '../../../src/index'
+import { AsciiMath } from '../../../packages/core/src/index'
 
 function createAsciiMath() {
   return new AsciiMath()

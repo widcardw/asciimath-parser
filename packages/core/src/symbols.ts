@@ -250,6 +250,7 @@ const SYMBOLMAP: Map<string, {
   ['fr', { type: TokenTypes.OperatorA, tex: '\\mathfrak{ $1 }' }],
   ['bm', { type: TokenTypes.OperatorA, tex: '\\boldsymbol{ $1 }' }],
   ['rm', { type: TokenTypes.OperatorA, tex: '\\mathrm{ $1 }' }],
+  ['scr', { type: TokenTypes.OperatorA, tex: '\\mathscr{ $1 }' }],
 
   ['iint', { type: TokenTypes.Const, tex: '\\iint' }],
   ['iiint', { type: TokenTypes.Const, tex: '\\iiint' }],

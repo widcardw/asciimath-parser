@@ -1,26 +1,40 @@
 lockfileVersion: 5.4
 
-specifiers:
-  '@antfu/eslint-config': ^0.34.1
-  '@types/prompts': ^2.4.2
-  bumpp: ^8.2.1
-  cac: ^6.7.14
-  eslint: ^8.32.0
-  prompts: ^2.4.2
-  tsup: ^6.5.0
-  typescript: ^4.9.4
-  vitest: ^0.27.2
+importers:
 
-devDependencies:
-  '@antfu/eslint-config': 0.34.1_7uibuqfxkfaozanbtbziikiqje
-  '@types/prompts': 2.4.2
-  bumpp: 8.2.1
-  cac: 6.7.14
-  eslint: 8.32.0
-  prompts: 2.4.2
-  tsup: 6.5.0_typescript@4.9.4
-  typescript: 4.9.4
-  vitest: 0.27.2
+  .:
+    specifiers:
+      '@antfu/eslint-config': ^0.34.1
+      bumpp: ^8.2.1
+      eslint: ^8.32.0
+      typescript: ^4.9.4
+    devDependencies:
+      '@antfu/eslint-config': 0.34.1_7uibuqfxkfaozanbtbziikiqje
+      bumpp: 8.2.1
+      eslint: 8.32.0
+      typescript: 4.9.4
+
+  packages/cli:
+    specifiers:
+      bumpp: ^8.2.1
+      cac: ^6.7.14
+      tsup: ^6.5.0
+    devDependencies:
+      bumpp: 8.2.1
+      cac: 6.7.14
+      tsup: 6.5.0
+
+  packages/core:
+    specifiers:
+      '@types/prompts': ^2.4.2
+      bumpp: ^8.2.1
+      tsup: ^6.5.0
+      vitest: ^0.27.2
+    devDependencies:
+      '@types/prompts': 2.4.2
+      bumpp: 8.2.1
+      tsup: 6.5.0
+      vitest: 0.27.2
 
 packages:
 
@@ -3072,7 +3086,7 @@ packages:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
     dev: true
 
-  /tsup/6.5.0_typescript@4.9.4:
+  /tsup/6.5.0:
     resolution: {integrity: sha512-36u82r7rYqRHFkD15R20Cd4ercPkbYmuvRkz3Q1LCm5BsiFNUgpo36zbjVhCOgvjyxNBWNKHsaD5Rl8SykfzNA==}
     engines: {node: '>=14'}
     hasBin: true
@@ -3102,7 +3116,6 @@ packages:
       source-map: 0.8.0-beta.0
       sucrase: 3.29.0
       tree-kill: 1.2.2
-      typescript: 4.9.4
     transitivePeerDependencies:
       - supports-color
       - ts-node
