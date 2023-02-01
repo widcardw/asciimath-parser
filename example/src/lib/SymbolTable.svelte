@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AsciiMath } from "../../../src";
+  import type { AsciiMath } from "../../../packages/core/src";
   import { renderTex } from "./renderTex";
   export let am: AsciiMath;
   export let symbols: string[];

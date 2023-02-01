@@ -34,7 +34,8 @@
   ],
   "scripts": {
     "test": "vitest --run",
-    "build": "tsup"
+    "build": "tsup",
+    "cov": "vitest --run --coverage"
   },
   "keywords": [
     "asciimath",
@@ -42,6 +43,7 @@
   ],
   "devDependencies": {
     "@types/prompts": "^2.4.2",
+    "@vitest/coverage-c8": "^0.28.3",
     "bumpp": "^8.2.1",
     "tsup": "^6.5.0",
     "vitest": "^0.27.2"

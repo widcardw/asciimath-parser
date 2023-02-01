@@ -22,6 +22,12 @@ describe('parser', () => {
   it('should parse a divided matrix', () => {
     expect(parser(trie.tryParsingAll('[a,b|c;d,e|f]'))).toMatchSnapshot()
   })
+  it('should parse an upper triangle mat', () => {
+    expect(parser(trie.tryParsingAll('[a,b;,d]'))).toMatchSnapshot()
+  })
+  it('should parse a mat without right paren', () => {
+    expect(parser(trie.tryParsingAll('[a,b;c'))).toMatchSnapshot()
+  })
 })
 
 describe('cases matrix', () => {
@@ -44,6 +50,9 @@ describe('parse det', () => {
   })
   it('should parse a set expression', () => {
     expect(parser(trie.tryParsingAll('{(x,y)|x2+y2<=1}'))).toMatchSnapshot()
+  })
+  it('should parse a det with inner parens', () => {
+    expect(parser(trie.tryParsingAll('|1,2;(3 + 4)^7,4|'))).toMatchSnapshot()
   })
 })
 
@@ -101,5 +110,10 @@ describe('parse operator A op B', () => {
   it('should parse `!`', () => {
     expect(parser(trie.tryParsingAll('n!!m!'))).toMatchSnapshot()
     expect(parser(trie.tryParsingAll('1/n!'))).toMatchSnapshot()
+    expect(parser(trie.tryParsingAll('(n+m)!'))).toMatchSnapshot()
+  })
+
+  it('should parse single right paren', () => {
+    expect(parser(trie.tryParsingAll(')'))).toMatchSnapshot()
   })
 })

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AsciiMath } from "../../../src";
+  import type { AsciiMath } from "../../../packages/core";
   import katex from "katex";
 
   export let am: AsciiMath;
@@ -9,7 +9,7 @@
 
   function renderKatex() {
     tex = am.toTex(amStr);
-    kHtml = katex.renderToString(tex, {
+    kHtml = tex.includes('Error:') ? '' : katex.renderToString(tex, {
       displayMode: true,
       throwOnError: false,
     });

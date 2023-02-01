@@ -225,11 +225,16 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
   return { node, current }
 }
 
+class ParenError extends Error {}
+
 function parenedArrayNode(tokens: TokenizedValue[], current: number, closingIndex: number) {
   let token = tokens[current]
   const node = createFlatNode()
   node.body.push(createParenOfFlatNodeFrom(token, true))
   current = readTokensToFlatNode(current + 1, closingIndex, tokens, node)
+  if (current >= tokens.length)
+    throw new ParenError(`Read index out of range, index: ${tokens[tokens.length - 1].current}`)
+
   token = tokens[current]
   current++
   node.body.push(createParenOfFlatNodeFrom(token, false))

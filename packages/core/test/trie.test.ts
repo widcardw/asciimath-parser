@@ -5,7 +5,18 @@ const MULTILINE_AM = `sum_(n=1)^(+oo)&=(pi^2/6)
 
 f(x)&=x^2`
 
-describe('trie', () => {
+describe('trie fail', () => {
+  it.fails('could not create Trie with no chars', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const trie = new Trie([])
+  })
+  it.fails('could not insert keyword that contains character that greater than \\uffff', () => {
+    const trie = new Trie(['🤤', ...Array.from({ length: 26 }, (_, i) => i).map(i => String.fromCharCode(65 + i))])
+    trie.insert('🤤')
+  })
+})
+
+describe('trie success', () => {
   it('should build trie', () => {
     const keys = Array.from({ length: 26 }, (_, i) => String.fromCharCode(i + 97))
     keys.push(' ')
@@ -18,6 +29,7 @@ describe('trie', () => {
     expect(trie).toMatchSnapshot()
     expect(trie.search('ban')).toBe(true)
     expect(trie.search('aaaa')).toBe(false)
+    expect(trie.search('bananan')).toBe(false)
     // directly search keyword
     expect(trie.tryParsing('banana')).toMatchInlineSnapshot(`
       {

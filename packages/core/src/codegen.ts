@@ -11,6 +11,7 @@ function getMatrixBoundary(node: MatrixNode) {
 function getArrayBoundary(node: MatrixNode) {
   const div = node.dividerIndices
   if (div.length) {
+    const divMax = div[div.length - 1]
     for (let i = div.length - 1; i >= 1; i--)
       div[i] -= div[i - 1]
 
@@ -21,7 +22,7 @@ function getArrayBoundary(node: MatrixNode) {
     // MathJax would complain if the array env arg
     // is not consistent with the elements of the matrix.
     const maxCol = Math.max(...node.params.map(i => i.length))
-    beginArray += `${''.padEnd(maxCol - div[div.length - 1], 'c')}}`
+    beginArray += `${''.padEnd(maxCol - divMax, 'c')}}`
     return [
       beginArray,
       '\\end{array}',

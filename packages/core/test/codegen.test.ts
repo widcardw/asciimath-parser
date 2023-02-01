@@ -11,6 +11,7 @@ describe('codegen matrix', () => {
 
   it('should generate divided matrix', () => {
     expect(codegen(parser(trie.tryParsingAll('[a,b|c;d,e|f]')))).toMatchSnapshot()
+    expect(codegen(parser(trie.tryParsingAll('[a,b|c,d|e;f,g|h,i|j]')))).toMatchSnapshot()
   })
 
   it('should generate det', () => {

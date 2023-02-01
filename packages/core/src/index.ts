@@ -95,8 +95,7 @@ class AsciiMath {
       return res
     }
     catch (e) {
-      console.error(e)
-      return ''
+      return String(e)
     }
   }
 }
