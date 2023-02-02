@@ -95,7 +95,7 @@ class AsciiMath {
       return res
     }
     catch (e) {
-      return String(e)
+      return `\\text{${String(e)}}`
     }
   }
 }

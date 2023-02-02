@@ -67,6 +67,6 @@ describe('replace special chars', () => {
 describe('error expression', () => {
   const am = new AsciiMath()
   it('unmatched paren', () => {
-    expect(am.toTex('(1^)')).toMatchInlineSnapshot('"Error: Read index out of range, index: 4"')
+    expect(am.toTex('(1^)')).toMatchInlineSnapshot('"\\\\text{Error: Read index out of range, index: 4}"')
   })
 })

@@ -9,7 +9,7 @@
 
   function renderKatex() {
     tex = am.toTex(amStr);
-    kHtml = tex.includes('Error:') ? '' : katex.renderToString(tex, {
+    kHtml = katex.renderToString(tex, {
       displayMode: true,
       throwOnError: false,
     });

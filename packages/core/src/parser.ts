@@ -233,7 +233,7 @@ function parenedArrayNode(tokens: TokenizedValue[], current: number, closingInde
   node.body.push(createParenOfFlatNodeFrom(token, true))
   current = readTokensToFlatNode(current + 1, closingIndex, tokens, node)
   if (current >= tokens.length)
-    throw new ParenError(`Read index out of range, index: ${tokens[tokens.length - 1].current}`)
+    throw new ParenError(`Read index out of range, index: ${current}`)
 
   token = tokens[current]
   current++
