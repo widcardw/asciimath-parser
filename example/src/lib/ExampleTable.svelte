@@ -1,20 +1,21 @@
 <script lang="ts">
-  import type { AsciiMath } from "../../../src";
+  import { _ } from 'svelte-i18n'
+  import type { AsciiMath } from "../../../packages/core/src";
   import { renderTex } from "./renderTex";
 
   let tb = [
-    { label: "上下标", code: "a_1^2 + b_1^2 = c_1^2" },
-    { label: "文字", code: '"hello world"' },
-    { label: "分式", code: "a/b, a//b" },
-    { label: "根号", code: "sqrt n, root n x, (a^2)/(sqrt b)" },
-    { label: "极限", code: "lim_(n->oo) (1 + 1/n)^n" },
-    { label: "积分", code: "int_a^b f(x) dx" },
-    { label: "隐形括号", code: "sin {: x/2 :}" },
-    { label: "微分", code: 'dy/dx, ("d"r)/("d"theta), f\'\'(x)' },
-    { label: "偏微分", code: "(del f)/(del x), (del^3 f)/(del x del y^2)" },
-    { label: "偏微分 (试验)", code: "part f x, part^3 f (x y^2), part {::} x" },
-    { label: "矩阵", code: "[a, b; c, d], [a, b | c; d, e | f]" },
-    { label: "分段函数", code: "|x| = { x, if x > 0; -x, otherwise :}" },
+    { label: "example_list.supb", code: "a_1^2 + b_1^2 = c_1^2" },
+    { label: "example_list.text", code: '"hello world"' },
+    { label: "example_list.frac", code: "a/b, a//b" },
+    { label: "example_list.sqrt", code: "sqrt n, root n x, (a^2)/(sqrt b)" },
+    { label: "example_list.lim", code: "lim_(n->oo) (1 + 1/n)^n" },
+    { label: "example_list.int", code: "int_a^b f(x) dx" },
+    { label: "example_list.hidden_paren", code: "sin {: x/2 :}" },
+    { label: "example_list.diff", code: 'dy/dx, ("d"r)/("d"theta), f\'\'(x)' },
+    { label: "example_list.part", code: "(del f)/(del x), (del^3 f)/(del x del y^2)" },
+    { label: "example_list.parte", code: "part f x, part^3 f (x y^2), part {::} x" },
+    { label: "example_list.mat", code: "[a, b; c, d], [a, b | c; d, e | f]" },
+    { label: "example_list.piec", code: "|x| = { x, if x > 0; -x, otherwise :}" },
   ];
   export let am: AsciiMath;
 </script>
@@ -22,15 +23,15 @@
 <table>
   <thead>
     <tr>
-      <td>主题</td>
-      <td>效果</td>
-      <td>源码</td>
+      <td>{$_('themes')}</td>
+      <td>{$_('output')}</td>
+      <td>{$_('code')}</td>
     </tr>
   </thead>
   <tbody>
     {#each tb as it}
       <tr>
-        <td>{it.label}</td>
+        <td>{$_(it.label)}</td>
         <td>{@html renderTex(am, it.code)}</td>
         <td>{it.code}</td>
       </tr>

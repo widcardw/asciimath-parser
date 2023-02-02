@@ -1,6 +1,6 @@
 <script lang="ts">
   import Card from "./Card.svelte";
-  import type { AsciiMath } from "../../../src";
+  import type { AsciiMath } from "../../../packages/core/src/index";
   export let am: AsciiMath;
   let items: number[] = [0];
 

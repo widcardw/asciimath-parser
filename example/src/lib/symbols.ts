@@ -112,7 +112,7 @@ export const arrows = [
 
 export const fonts = [
   'bb A', 'bm A', 'bbb A', 'cc A',
-  'tt A', 'fr A', 'sf A',
+  'tt A', 'fr A', 'sf A', 'scr A',
 ]
 
 export const subp = [

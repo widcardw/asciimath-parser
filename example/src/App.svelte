@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { _ } from 'svelte-i18n'
   import CarbonLogoGithub from "./assets/CarbonLogoGithub.svelte";
   import CardList from "./lib/CardList.svelte";
   import { createAsciiMath } from "./lib/createAsciiMath";
@@ -19,28 +20,28 @@
   import SymbolTable from "./lib/SymbolTable.svelte";
   const am = createAsciiMath();
   const display = [
-    { title: "括号", symbols: parens, cols: 4 },
-    { title: "希腊字母", symbols: xila, cols: 4 },
-    { title: "运算符", symbols: operators, cols: 4 },
-    { title: "关系符号", symbols: rela, cols: 4 },
-    { title: "逻辑符号", symbols: logic, cols: 4 },
-    { title: "杂项", symbols: others, cols: 4 },
-    { title: "数学函数", symbols: mathFn, cols: 4 },
-    { title: "箭头", symbols: arrows, cols: 4 },
-    { title: "字体", symbols: fonts, cols: 4 },
-    { title: "注音符号", symbols: subp, cols: 4 },
-    { title: "上下叠合", symbols: updown, cols: 2 },
+    { title: "manual_list.parens", symbols: parens, cols: 4 },
+    { title: "manual_list.greek", symbols: xila, cols: 4 },
+    { title: "manual_list.operator", symbols: operators, cols: 4 },
+    { title: "manual_list.rela", symbols: rela, cols: 4 },
+    { title: "manual_list.logic", symbols: logic, cols: 4 },
+    { title: "manual_list.other", symbols: others, cols: 4 },
+    { title: "manual_list.mathFn", symbols: mathFn, cols: 4 },
+    { title: "manual_list.arrow", symbols: arrows, cols: 4 },
+    { title: "manual_list.font", symbols: fonts, cols: 4 },
+    { title: "manual_list.notation", symbols: subp, cols: 4 },
+    { title: "manual_list.superposition", symbols: updown, cols: 2 },
   ];
 </script>
 
 <main>
   <h1>Asciimath</h1>
   <CardList {am} />
-  <h2>使用样例</h2>
+  <h2>{$_('examples')}</h2>
   <ExampleTable {am} />
-  <h2>符号对照手册</h2>
+  <h2>{$_('manual')}</h2>
   {#each display as item}
-    <h3>{item.title}</h3>
+    <h3>{$_(item.title)}</h3>
     <SymbolTable {am} symbols={item.symbols} cols={item.cols} />
   {/each}
   <div class="fc p-8">

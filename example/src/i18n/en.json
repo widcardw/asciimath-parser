@@ -1,0 +1,34 @@
+{
+    "themes": "Themes",
+    "output": "Output",
+    "code": "Source code",
+    "examples": "Examples",
+    "example_list": {
+        "supb": "Super and subscript",
+        "text": "Text",
+        "frac": "Fraction",
+        "sqrt": "Square root",
+        "lim": "Limit",
+        "int": "Integral",
+        "hidden_paren": "Hidden paren",
+        "diff": "Differential",
+        "part": "Partial",
+        "parte": "Partial (experimental)",
+        "mat": "Matrix",
+        "piec": "Piecewise function"
+    },
+    "manual": "Manual",
+    "manual_list": {
+        "parens": "Paren",
+        "greek": "Greek alphabet",
+        "operator": "Operator",
+        "rela": "Relation symbol",
+        "logic": "Logical operator",
+        "other": "Others",
+        "mathFn": "Math function",
+        "arrow": "Arrow",
+        "font": "Font",
+        "notation": "Notation",
+        "superposition": "Superposition"
+    }
+}

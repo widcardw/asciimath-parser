@@ -1,0 +1,34 @@
+{
+    "themes": "主题",
+    "output": "效果",
+    "code": "源码",
+    "examples": "使用样例",
+    "example_list": {
+        "supb":   "上下标",
+        "text":   "文字",
+        "frac":   "分式",
+        "sqrt":   "根式",
+        "lim":    "极限",
+        "int":    "积分",
+        "hidden_paren": "隐形括号",
+        "diff":   "微分",
+        "part":   "偏微分",
+        "parte":  "偏微分 (实验性)",
+        "mat":    "矩阵",
+        "piec":   "分段函数"
+    },
+    "manual": "符号对照手册",
+    "manual_list": {
+        "parens": "括号",
+        "greek": "希腊字母",
+        "operator": "运算符",
+        "rela": "关系符号",
+        "logic": "逻辑符号",
+        "other": "杂项",
+        "mathFn": "数学函数",
+        "arrow": "箭头",
+        "font": "字体",
+        "notation": "注音符号",
+        "superposition": "上下叠合"
+    }
+}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AsciiMath } from "../../../packages/core";
+  import type { AsciiMath } from "../../../packages/core/src";
   import katex from "katex";
 
   export let am: AsciiMath;
