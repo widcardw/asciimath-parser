@@ -108,3 +108,14 @@ describe('asciimath matrix', () => {
     expect(trie.tryParsingAll('f(x)={x^2,if x>0;x, otherwise:}')).toMatchSnapshot()
   })
 })
+
+describe('tokenize color', () => {
+  const trie = createTrie()
+  it('should tokenize color', () => {
+    expect(trie.tryParsingAll('color(pink)(123)')).toMatchSnapshot()
+  })
+
+  it('should tokenize rgb color', () => {
+    expect(trie.tryParsingAll('color(#114514)(123)')).toMatchSnapshot()
+  })
+})

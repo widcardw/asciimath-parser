@@ -174,6 +174,55 @@ class Trie {
     return { value: '', isKeyWord: false, current, tex: '', type: TokenTypes.None }
   }
 
+  private getColorString(word: string, current: number): TokenizedValue {
+    let color = ''
+    while (current < word.length) {
+      const ch = word[current]
+      if (!/[#\da-z]/i.test(ch))
+        break
+      color += ch
+      current++
+    }
+
+    return { value: color, isKeyWord: false, current, tex: color, type: TokenTypes.Const }
+  }
+
+  private processColor(word: string, current: number): TokenizedValue {
+    let gotColor = false
+    let existParen = false
+    let res = { value: '', isKeyWord: false, current, tex: '', type: TokenTypes.Const }
+    while (current < word.length && !gotColor) {
+      const ch = word[current]
+      if (/\s/.test(ch)) {
+        current++
+        continue
+      }
+      if (/[\(\[\{]/.test(ch)) {
+        existParen = true
+        current++
+        continue
+      }
+      res = this.getColorString(word, current)
+      current = res.current
+      gotColor = true
+    }
+    if (!existParen)
+      return res
+    while (current < word.length) {
+      const ch = word[current]
+      if (/\s/.test(ch)) {
+        current++
+        continue
+      }
+      if (/[\)\]\}]/.test(ch)) {
+        current++
+        break
+      }
+    }
+    res.current = current
+    return res
+  }
+
   public tryParsingAll(word: string) {
     let current = 0
     const tokens: TokenizedValue[] = []
@@ -197,6 +246,11 @@ class Trie {
       current = t.current
       if (t.value !== '') {
         tokens.push(t)
+        if (t.value !== 'color')
+          continue
+        const nt = this.processColor(word, current)
+        current = nt.current
+        tokens.push(nt)
         continue
       }
       // process numbers

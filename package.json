@@ -13,7 +13,10 @@
   },
   "bugs": "https://github.com/widcardw/asciimath-parser/issues",
   "scripts": {
-    "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public"
+    "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public",
+    "b:core": "cd packages/core && nr build",
+    "b:cli": "cd packages/cli && nr build",
+    "b:example": "cd example && nr build"
   },
   "keywords": [
     "asciimath",

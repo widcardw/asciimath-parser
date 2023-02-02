@@ -32,7 +32,7 @@
 <div class="card">
   <textarea
     bind:value={amStr}
-    on:input={throttle(renderKatex, 500)}
+    on:input={throttle(renderKatex, 800)}
     class="input-area"
     placeholder="Please input"
   />

@@ -57,6 +57,12 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
       [/&#(x?[0-9a-fA-F]+);/g, (_match, $1) =>
         String.fromCodePoint($1[0] === 'x' ? `0${$1}` : $1),
       ],
+      [/dd(\^\S*)?\s+(\S+)\s+(\([^)]*\)|\S+)/g, (_m, $1, $2, $3) => {
+        $1 = $1 || ''
+        if ($3[0] === '(')
+          $3 = $3.slice(1, -1).split(/\s+/).join(' "d" ')
+        return `("d" ${$1} ${$2})/("d"${$3})`
+      }],
     ],
   }
   if (typeof config?.display !== 'undefined')

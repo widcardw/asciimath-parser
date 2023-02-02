@@ -12,6 +12,7 @@
         "int": "Integral",
         "hidden_paren": "Hidden paren",
         "diff": "Differential",
+        "diffe": "Differential (experimental)",
         "part": "Partial",
         "parte": "Partial (experimental)",
         "mat": "Matrix",

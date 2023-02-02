@@ -12,6 +12,7 @@
     { label: "example_list.int", code: "int_a^b f(x) dx" },
     { label: "example_list.hidden_paren", code: "sin {: x/2 :}" },
     { label: "example_list.diff", code: 'dy/dx, ("d"r)/("d"theta), f\'\'(x)' },
+    { label: "example_list.diffe", code: 'dd f x , dd^2 f (x y)' },
     { label: "example_list.part", code: "(del f)/(del x), (del^3 f)/(del x del y^2)" },
     { label: "example_list.parte", code: "part f x, part^3 f (x y^2), part {::} x" },
     { label: "example_list.mat", code: "[a, b; c, d], [a, b | c; d, e | f]" },
