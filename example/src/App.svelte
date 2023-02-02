@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { _ } from 'svelte-i18n'
+  import { waitLocale } from "svelte-i18n";
+  import "./i18n";
+  async function preload() {
+    return waitLocale();
+  }
+  import { _ } from "svelte-i18n";
   import CarbonLogoGithub from "./assets/CarbonLogoGithub.svelte";
   import CardList from "./lib/CardList.svelte";
   import { createAsciiMath } from "./lib/createAsciiMath";
@@ -34,26 +39,28 @@
   ];
 </script>
 
-<main>
-  <h1>Asciimath</h1>
-  <CardList {am} />
-  <h2>{$_('examples')}</h2>
-  <ExampleTable {am} />
-  <h2>{$_('manual')}</h2>
-  {#each display as item}
-    <h3>{$_(item.title)}</h3>
-    <SymbolTable {am} symbols={item.symbols} cols={item.cols} />
-  {/each}
-  <div class="fc p-8">
-    <a
-      href="https://github.com/widcardw/asciimath-parser"
-      target="_blank"
-      rel="noreferrer"
-    >
-      <CarbonLogoGithub />
-    </a>
-  </div>
-</main>
+{#await preload() then __}
+  <main>
+    <h1>Asciimath</h1>
+    <CardList {am} />
+    <h2>{$_("examples")}</h2>
+    <ExampleTable {am} />
+    <h2>{$_("manual")}</h2>
+    {#each display as item}
+      <h3>{$_(item.title)}</h3>
+      <SymbolTable {am} symbols={item.symbols} cols={item.cols} />
+    {/each}
+    <div class="fc p-8">
+      <a
+        href="https://github.com/widcardw/asciimath-parser"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <CarbonLogoGithub />
+      </a>
+    </div>
+  </main>
+{/await}
 
 <style>
   main {
