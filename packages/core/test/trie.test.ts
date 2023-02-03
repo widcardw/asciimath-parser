@@ -119,3 +119,33 @@ describe('tokenize color', () => {
     expect(trie.tryParsingAll('color(#114514)(123)')).toMatchSnapshot()
   })
 })
+
+describe('tokenize text', () => {
+  const trie = createTrie()
+  it('should tokenize text', () => {
+    expect(trie.tryParsingAll('text padding')).toMatchInlineSnapshot(`
+      [
+        {
+          "current": 12,
+          "isKeyWord": false,
+          "tex": "padding",
+          "type": "Text",
+          "value": "padding",
+        },
+      ]
+    `)
+  })
+  it('should tokenize text', () => {
+    expect(trie.tryParsingAll('text(why spacing)')).toMatchInlineSnapshot(`
+      [
+        {
+          "current": 17,
+          "isKeyWord": false,
+          "tex": "why spacing",
+          "type": "Text",
+          "value": "why spacing",
+        },
+      ]
+    `)
+  })
+})

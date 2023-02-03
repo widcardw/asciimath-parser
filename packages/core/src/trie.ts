@@ -11,6 +11,14 @@ interface TokenizedValue {
 const NUMBERPATTERN = /[0-9]/
 const STRINGPATTERN = /\S/
 
+function createTextToken(config: {
+  current: number
+  value?: string
+}): TokenizedValue {
+  const { value = '', current } = config
+  return { value, isKeyWord: false, current, tex: value, type: TokenTypes.Text }
+}
+
 class Trie {
   private _root: TrieNode
   private _char_to_index: Map<string, number> = new Map()
@@ -223,6 +231,31 @@ class Trie {
     return res
   }
 
+  private getPlainText(word: string, current: number): TokenizedValue {
+    let useParen = false
+    let ch = word[current]
+    while (/\s/.test(ch))
+      ch = word[++current]
+
+    useParen = ch === '('
+    let value = ''
+    if (useParen) {
+      ch = word[++current]
+      while (current < word.length && ch !== ')') {
+        value += ch
+        ch = word[++current]
+      }
+      current++
+      return createTextToken({ current, value })
+    }
+    // do not use paren, then read a word
+    while (current < word.length && /\S/.test(ch)) {
+      value += ch
+      ch = word[++current]
+    }
+    return createTextToken({ current, value })
+  }
+
   public tryParsingAll(word: string) {
     let current = 0
     const tokens: TokenizedValue[] = []
@@ -242,9 +275,16 @@ class Trie {
         continue
       }
       // process potential keywords
-      const t = this.tryParsing(word, current)
+      let t = this.tryParsing(word, current)
       current = t.current
       if (t.value !== '') {
+        if (t.value === 'text') {
+          t = this.getPlainText(word, current)
+          current = t.current
+          tokens.push(t)
+          continue
+        }
+
         tokens.push(t)
         if (t.value !== 'color')
           continue
