@@ -30,6 +30,7 @@
         "arrow": "Arrow",
         "font": "Font",
         "notation": "Notation",
+        "special": "Special",
         "superposition": "Superposition"
     }
 }

@@ -11,12 +11,25 @@ interface TokenizedValue {
 const NUMBERPATTERN = /[0-9]/
 const STRINGPATTERN = /\S/
 
-function createTextToken(config: {
+type GeneTokenFn = (config: {
   current: number
   value?: string
-}): TokenizedValue {
+}) => TokenizedValue
+
+const createTextToken: GeneTokenFn = (config: {
+  current: number
+  value?: string
+}) => {
   const { value = '', current } = config
   return { value, isKeyWord: false, current, tex: value, type: TokenTypes.Text }
+}
+
+const createTexToken: GeneTokenFn = (config: {
+  current: number
+  value?: string
+}) => {
+  const { value = '', current } = config
+  return { value, isKeyWord: false, current, tex: value, type: TokenTypes.Const }
 }
 
 class Trie {
@@ -231,7 +244,7 @@ class Trie {
     return res
   }
 
-  private getPlainText(word: string, current: number): TokenizedValue {
+  private getPlainText(word: string, current: number, fn: GeneTokenFn): TokenizedValue {
     let useParen = false
     let ch = word[current]
     while (/\s/.test(ch))
@@ -246,14 +259,14 @@ class Trie {
         ch = word[++current]
       }
       current++
-      return createTextToken({ current, value })
+      return fn({ current, value })
     }
     // do not use paren, then read a word
     while (current < word.length && /\S/.test(ch)) {
       value += ch
       ch = word[++current]
     }
-    return createTextToken({ current, value })
+    return fn({ current, value })
   }
 
   public tryParsingAll(word: string) {
@@ -279,7 +292,14 @@ class Trie {
       current = t.current
       if (t.value !== '') {
         if (t.value === 'text') {
-          t = this.getPlainText(word, current)
+          t = this.getPlainText(word, current, createTextToken)
+          current = t.current
+          tokens.push(t)
+          continue
+        }
+
+        if (t.value === 'tex') {
+          t = this.getPlainText(word, current, createTexToken)
           current = t.current
           tokens.push(t)
           continue

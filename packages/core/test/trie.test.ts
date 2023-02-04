@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { AsciiMath } from '../src'
 import { Trie, createTrie } from '../src/trie'
 
 const MULTILINE_AM = `sum_(n=1)^(+oo)&=(pi^2/6)
@@ -136,16 +137,35 @@ describe('tokenize text', () => {
     `)
   })
   it('should tokenize text', () => {
-    expect(trie.tryParsingAll('text(why spacing)')).toMatchInlineSnapshot(`
+    expect(trie.tryParsingAll('text(why spacing    )')).toMatchInlineSnapshot(`
       [
         {
-          "current": 17,
+          "current": 21,
           "isKeyWord": false,
-          "tex": "why spacing",
+          "tex": "why spacing    ",
           "type": "Text",
-          "value": "why spacing",
+          "value": "why spacing    ",
         },
       ]
     `)
+  })
+
+  it('should tokenize tex', () => {
+    expect(trie.tryParsingAll('tex(\\hbar)')).toMatchInlineSnapshot(`
+      [
+        {
+          "current": 10,
+          "isKeyWord": false,
+          "tex": "\\\\hbar",
+          "type": "Const",
+          "value": "\\\\hbar",
+        },
+      ]
+    `)
+  })
+
+  it('should generate tex', () => {
+    const am = new AsciiMath()
+    expect(am.toTex('tex(\\hbar)')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\hbar }"')
   })
 })

@@ -21,6 +21,7 @@
     subp,
     updown,
     xila,
+    special,
   } from "./lib/symbols";
   import SymbolTable from "./lib/SymbolTable.svelte";
   const am = createAsciiMath();
@@ -36,6 +37,7 @@
     { title: "manual_list.font", symbols: fonts, cols: 4 },
     { title: "manual_list.notation", symbols: subp, cols: 4 },
     { title: "manual_list.superposition", symbols: updown, cols: 2 },
+    { title: "manual_list.special", symbols: special, cols: 2 },
   ];
 </script>
 

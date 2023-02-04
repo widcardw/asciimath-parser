@@ -3,8 +3,14 @@ export const parens = [
   '{:', ':}',
   '[', ']',
   '{', '}',
-  '|',
   '(:', ':)',
+  '|__', '__|',
+  '|~', '~|',
+  '|',
+  'abs x',
+  'norm(bb(v))',
+  'floor(x/2)',
+  'ceil(x/3)',
 ]
 
 export const xila = [
@@ -92,8 +98,8 @@ export const others = [
   'del', 'grad', '+-', 'O/', 'oo',
   'aleph', '/_', ':.', ':\'',
   '...', 'cdots', 'vdots', 'ddots',
-  '| quad |', 'diamond', 'square', '|__', '__|',
-  '|~', '~|', 'NN', 'QQ', 'RR', 'CC',
+  '| quad |', 'diamond', 'square',
+  'NN', 'QQ', 'RR', 'CC',
 ]
 
 export const mathFn = [
@@ -107,7 +113,8 @@ export const mathFn = [
 export const arrows = [
   'uarr', 'darr', 'rarr', 'larr',
   '->', '|->', 'harr', 'rArr',
-  'lArr', 'hArr',
+  'lArr', 'hArr', '->>', '>->',
+  'curvArrLt', 'curvArrRt', 'circArrLt', 'circArrRt',
 ]
 
 export const fonts = [
@@ -117,7 +124,7 @@ export const fonts = [
 
 export const subp = [
   'hat x', 'bar x', 'ul x', 'vec x',
-  'dot x', 'ddot x', 'arc 123',
+  'dot x', 'ddot x', 'arc 123', 'tilde x',
 
 ]
 
@@ -126,4 +133,9 @@ export const updown = [
   'overbrace(12345)^n',
   'underbrace(12345)_n',
   '==_(123)^(456)',
+]
+
+export const special = [
+  'text(I\'m here)',
+  'tex(\\hbar)',
 ]
