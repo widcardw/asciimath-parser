@@ -231,7 +231,7 @@ const SYMBOLMAP: Map<string, {
   ['ul', { type: TokenTypes.OperatorA, tex: '\\underline{ $1 }' }],
   ['underbrace', { type: TokenTypes.OperatorA, tex: '\\underbrace{ $1 }' }],
   ['overbrace', { type: TokenTypes.OperatorA, tex: '\\overbrace{ $1 }' }],
-  ['color', { type: TokenTypes.OperatorOAB, tex: '\\color{$1}{ $2 }' }],
+  ['color', { type: TokenTypes.OperatorOAB, tex: '{ \\color{$1} $2 }' }],
   ['phantom', { type: TokenTypes.OperatorA, tex: '\\phantom{$1}' }],
   ['text', { type: TokenTypes.OperatorA, tex: '\\text{$1}' }],
   ['tex', { type: TokenTypes.Const, tex: '' }],

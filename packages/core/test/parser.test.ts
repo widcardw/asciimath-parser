@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { AsciiMath } from '../src'
 import { parser } from '../src/parser'
 import { createTrie } from '../src/trie'
 
@@ -115,5 +116,19 @@ describe('parse operator A op B', () => {
 
   it('should parse single right paren', () => {
     expect(parser(trie.tryParsingAll(')'))).toMatchSnapshot()
+  })
+})
+
+describe('test color', () => {
+  it('should parse color', () => {
+    const trie = createTrie()
+    const tokens = trie.tryParsingAll('color(green)[1,2],3')
+    expect(tokens).toMatchSnapshot()
+    const node = parser(tokens)
+    expect(node).toMatchSnapshot()
+  })
+  it('should parse correct color', () => {
+    const am = new AsciiMath()
+    expect(am.toTex('color(green)(123) 456')).toMatchInlineSnapshot('"\\\\displaystyle{ { \\\\color{green} 123 } 456 }"')
   })
 })
