@@ -5,7 +5,6 @@
     return waitLocale();
   }
   import { _ } from "svelte-i18n";
-  import CarbonLogoGithub from "./assets/CarbonLogoGithub.svelte";
   import CardList from "./lib/CardList.svelte";
   import { createAsciiMath } from "./lib/createAsciiMath";
   import ExampleTable from "./lib/ExampleTable.svelte";
@@ -44,6 +43,33 @@
 {#await preload() then __}
   <main>
     <h1>Asciimath</h1>
+    <a
+      href="https://npmjs.com/package/asciimath-parser"
+      target="_blank"
+      rel="noreferrer"
+    >
+      <img
+        src="https://img.shields.io/npm/v/asciimath-parser?color=a1b858&label=npm"
+        alt="version"
+      />
+    </a>
+    <a
+      href="https://npmjs.com/package/asciimath-parser-cli"
+      target="_blank"
+      rel="noreferrer"
+    >
+      <img
+        src="https://img.shields.io/static/v1?label=npm&message=cli&color=orange"
+        alt="Cli"
+      />
+    </a>
+    <a
+      href="https://github.com/widcardw/asciimath-parser"
+      target="_blank"
+      rel="noreferrer"
+    >
+      <img src="https://img.shields.io/badge/GitHub-blue" alt="GitHub" />
+    </a>
     <CardList {am} />
     <h2>{$_("examples")}</h2>
     <ExampleTable {am} />
@@ -52,15 +78,6 @@
       <h3>{$_(item.title)}</h3>
       <SymbolTable {am} symbols={item.symbols} cols={item.cols} />
     {/each}
-    <div class="fc p-8">
-      <a
-        href="https://github.com/widcardw/asciimath-parser"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <CarbonLogoGithub />
-      </a>
-    </div>
   </main>
 {/await}
 
@@ -69,13 +86,5 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 1rem;
-  }
-  .fc {
-    display: flex;
-    justify-content: center;
-    font-size: 1.5rem;
-  }
-  .p-8 {
-    padding: 2rem;
   }
 </style>
