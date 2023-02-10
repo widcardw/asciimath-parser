@@ -1,0 +1,29 @@
+.card {
+  border: 1px solid #7f7f7f33;
+  border-radius: 0.25rem;
+  flex: 1;
+}
+.display {
+  padding: 1rem;
+}
+.input-area {
+  width: 100%;
+  min-height: 4rem;
+  font-family: "Jetbrains Mono", "JetBrains Mono";
+  border: none;
+  border-bottom: 1px solid #7f7f7f33;
+  background: transparent;
+  overflow: auto;
+  word-break: break-all;
+  padding: 1rem;
+  resize: vertical;
+  display: block;
+  box-sizing: border-box;
+}
+.tex-code {
+  padding: 1rem;
+  margin: 0;
+  font-family: "Jetbrains Mono", "JetBrains Mono";
+  border-top: 1px solid #7f7f7f33;
+  border-bottom: 1px solid #7f7f7f33;
+}

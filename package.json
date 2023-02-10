@@ -23,12 +23,12 @@
     "LaTeX"
   ],
   "devDependencies": {
-    "@antfu/eslint-config": "^0.34.1",
+    "@widcardw/eslint-config": "^0.3.0-beta.2",
     "bumpp": "^8.2.1",
     "eslint": "^8.32.0",
     "typescript": "^4.9.4"
   },
   "eslintConfig": {
-    "extends": "@antfu"
+    "extends": "@widcardw"
   }
 }

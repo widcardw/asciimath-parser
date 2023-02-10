@@ -3,6 +3,8 @@
     "output": "效果",
     "code": "源码",
     "examples": "使用样例",
+    "inputAm": "在此处输入 Asciimath",
+    "inputTex": "在此处输入 KaTeX",
     "example_list": {
         "supb":   "上下标",
         "text":   "文字",
@@ -32,5 +34,14 @@
         "notation": "注音符号",
         "special": "特殊",
         "superposition": "上下叠合"
+    },
+    "caution": {
+        "title": "注意",
+        "message": "这个库是由我个人重构的，一些语法可能与 <a href=\"http://asciimath.org\" target=\"_blank\">asciimath.org</a> 原版不同，尤其是<a href=\"#example_list.mat\">矩阵</a>，使用时请格外注意。"
+    },
+    "usageScenario": {
+        "title": "使用场景",
+        "web": "配合 <a href='https://katex.org' target='_blank'>KaTeX</a> 或 <a href='https://www.mathjax.org/' target='_blank'>mathjax</a> 在 DOM 上生成公式。",
+        "obsidian": "使用 <a href='https://obsidian.md' target='_blank'>Obsidian</a> 笔记软件的 <a href='https://github.com/widcardw/obsidian-asciimath' target='_blank'>obsidian-asciimath</a> 插件。"
     }
 }

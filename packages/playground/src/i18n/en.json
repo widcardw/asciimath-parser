@@ -3,6 +3,8 @@
     "output": "Output",
     "code": "Source code",
     "examples": "Examples",
+    "inputAm": "Input asciimath here",
+    "inputTex": "Input KaTeX here",
     "example_list": {
         "supb": "Super and subscript",
         "text": "Text",
@@ -32,5 +34,14 @@
         "notation": "Notation",
         "special": "Special",
         "superposition": "Superposition"
+    },
+    "caution": {
+        "title": "Caution",
+        "message": "This library is refactored by me, which means that some of the syntax may not be consistent with <a href=\"http://asciimath.org\" target=\"_blank\">asciimath.org</a>, especially the <a href=\"#example_list.mat\">matrix</a>."
+    },
+    "usageScenario": {
+        "title": "Usage Scenario",
+        "web": "Display formulas in the DOM with <a href='https://katex.org' target='_blank'>KaTeX</a> or <a href='https://www.mathjax.org/' target='_blank'>mathjax</a>.",
+        "obsidian": "<a href='https://obsidian.md' target='_blank'>Obsidian</a> plugin <a href='https://github.com/widcardw/obsidian-asciimath' target='_blank'>asciimath</a>."
     }
 }
