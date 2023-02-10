@@ -1,7 +1,7 @@
 {
   "name": "am-parser-playground",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.3.9",
   "description": "",
   "scripts": {
     "start": "vite",
