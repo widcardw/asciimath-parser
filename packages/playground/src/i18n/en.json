@@ -37,12 +37,14 @@
     },
     "caution": {
         "title": "Caution",
-        "message": "This library is refactored by me, which means that some of the syntax may not be consistent with <a href=\"http://asciimath.org\" target=\"_blank\">asciimath.org</a>, especially the <a href=\"#example_list.mat\">matrix</a>."
+        "diff": "This library is refactored by me, which means that some of the syntax may not be consistent with <a href=\"http://asciimath.org\" target=\"_blank\">asciimath.org</a>, especially the <a href=\"#example_list.mat\">matrix</a>.",
+        "deps": "Asciimath parser itself does not depend on DOM or mathml, it simply parses your input code into LaTeX code. If you want to display formulas, please work it out with KaTeX or mathjax (for websites) or LaTeX (for articles)."
     },
-    "usageScenario": {
-        "title": "Usage Scenario",
+    "useStory": {
+        "title": "User Story",
         "web": "Display formulas in the DOM with <a href='https://katex.org' target='_blank'>KaTeX</a> or <a href='https://www.mathjax.org/' target='_blank'>mathjax</a>.",
-        "obsidian": "<a href='https://obsidian.md' target='_blank'>Obsidian</a> plugin <a href='https://github.com/widcardw/obsidian-asciimath' target='_blank'>asciimath</a>."
+        "obsidian": "Use <a href='https://obsidian.md' target='_blank'>Obsidian</a> with the plugin <a href='https://github.com/widcardw/obsidian-asciimath' target='_blank'>obsidian-asciimath</a>.",
+        "cli": "Use the <a href='https://npmjs.com/package/asciimath-parser-cli' target='_blank'>cli</a> to convert asciimath formulas in the file to LaTeX formulas."
     },
     "thanks": {
         "title": "Specially Thanks",

@@ -14,6 +14,7 @@
   "bugs": "https://github.com/widcardw/asciimath-parser/issues",
   "scripts": {
     "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public",
+    "d:playground": "cd packages/playground && nr dev",
     "b:core": "cd packages/core && nr build",
     "b:cli": "cd packages/cli && nr build",
     "b:playground": "nr b:core && cd packages/playground && nr build"

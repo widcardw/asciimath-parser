@@ -5,13 +5,17 @@ const Caution: Component = () => {
   const { t } = i18nFactory()
   return (
     <>
-      <h2>{t('usageScenario.title')}</h2>
+      <h2>{t('useStory.title')}</h2>
       <ul>
-        <li innerHTML={t('usageScenario.web')}></li>
-        <li innerHTML={t('usageScenario.obsidian')}></li>
+        <li innerHTML={t('useStory.web')}></li>
+        <li innerHTML={t('useStory.obsidian')}></li>
+        <li innerHTML={t('useStory.cli')}></li>
       </ul>
       <h2>{t('caution.title')}</h2>
-      <p innerHTML={t('caution.message')} />
+      <ul>
+        <li innerHTML={t('caution.diff')} />
+        <li innerHTML={t('caution.deps')} />
+      </ul>
     </>
   )
 }

@@ -40,7 +40,7 @@ const App: Component = () => {
   const { t } = i18nFactory()
   return (
     <main>
-      <h1>Asciimath</h1>
+      <h1>Asciimath Parser</h1>
       <div class="space-x-1">
         <For each={bandages}>
           {b => (

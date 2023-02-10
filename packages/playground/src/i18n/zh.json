@@ -37,12 +37,14 @@
     },
     "caution": {
         "title": "注意",
-        "message": "这个库是由我个人重构的，一些语法可能与 <a href=\"http://asciimath.org\" target=\"_blank\">asciimath.org</a> 原版不同，尤其是<a href=\"#example_list.mat\">矩阵</a>，使用时请格外注意。"
+        "diff": "这个库是由我个人重构的，一些语法可能与 <a href=\"http://asciimath.org\" target=\"_blank\">asciimath.org</a> 原版不同，尤其是<a href=\"#example_list.mat\">矩阵</a>，使用时请格外注意。",
+        "deps": "Asciimath parser 只是简单的将输入的公式转换为 LaTeX 代码，并不依赖于 DOM 和 mathml，如果你需要可视化呈现这些公式，请与 KaTeX 或 mathjax 等这些工具一起使用。"
     },
-    "usageScenario": {
+    "useStory": {
         "title": "使用场景",
-        "web": "配合 <a href='https://katex.org' target='_blank'>KaTeX</a> 或 <a href='https://www.mathjax.org/' target='_blank'>mathjax</a> 在 DOM 上生成公式",
-        "obsidian": "使用 <a href='https://obsidian.md' target='_blank'>Obsidian</a> 笔记软件的 <a href='https://github.com/widcardw/obsidian-asciimath' target='_blank'>obsidian-asciimath</a> 插件"
+        "web": "配合 <a href='https://katex.org' target='_blank'>KaTeX</a> 或 <a href='https://www.mathjax.org/' target='_blank'>mathjax</a> 在 DOM 上生成公式。",
+        "obsidian": "使用 <a href='https://obsidian.md' target='_blank'>Obsidian</a> 笔记软件的 <a href='https://github.com/widcardw/obsidian-asciimath' target='_blank'>obsidian-asciimath</a> 插件。",
+        "cli": "使用 <a href='https://npmjs.com/package/asciimath-parser-cli' target='_blank'>cli</a> 将文件中的 asciimath 公式转换为 LaTeX 公式。"
     },
     "thanks": {
         "title": "致谢",
