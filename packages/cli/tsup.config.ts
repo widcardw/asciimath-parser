@@ -6,4 +6,5 @@ export default defineConfig({
     'cli.ts',
   ],
   clean: true,
+  minify: true,
 })
