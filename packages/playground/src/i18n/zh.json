@@ -41,7 +41,11 @@
     },
     "usageScenario": {
         "title": "使用场景",
-        "web": "配合 <a href='https://katex.org' target='_blank'>KaTeX</a> 或 <a href='https://www.mathjax.org/' target='_blank'>mathjax</a> 在 DOM 上生成公式。",
-        "obsidian": "使用 <a href='https://obsidian.md' target='_blank'>Obsidian</a> 笔记软件的 <a href='https://github.com/widcardw/obsidian-asciimath' target='_blank'>obsidian-asciimath</a> 插件。"
+        "web": "配合 <a href='https://katex.org' target='_blank'>KaTeX</a> 或 <a href='https://www.mathjax.org/' target='_blank'>mathjax</a> 在 DOM 上生成公式",
+        "obsidian": "使用 <a href='https://obsidian.md' target='_blank'>Obsidian</a> 笔记软件的 <a href='https://github.com/widcardw/obsidian-asciimath' target='_blank'>obsidian-asciimath</a> 插件"
+    },
+    "thanks": {
+        "title": "致谢",
+        "content": "<a href='https://zmx0142857.github.io/note' target='_blank'>zmx0142857's note</a> 及其帮助"
     }
 }

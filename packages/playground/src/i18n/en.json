@@ -43,5 +43,9 @@
         "title": "Usage Scenario",
         "web": "Display formulas in the DOM with <a href='https://katex.org' target='_blank'>KaTeX</a> or <a href='https://www.mathjax.org/' target='_blank'>mathjax</a>.",
         "obsidian": "<a href='https://obsidian.md' target='_blank'>Obsidian</a> plugin <a href='https://github.com/widcardw/obsidian-asciimath' target='_blank'>asciimath</a>."
+    },
+    "thanks": {
+        "title": "Specially Thanks",
+        "content": "<a href='https://zmx0142857.github.io/note' target='_blank'>zmx0142857's note</a> and his great help"
     }
 }

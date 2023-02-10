@@ -16,7 +16,7 @@ class I18n {
     const res = keys.reduce((prev, curr) => {
       return (prev && prev[curr]) || fallback
     }, this.lngs[this.lng])
-    return res
+    return res || key
   }
 }
 
