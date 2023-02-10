@@ -4,11 +4,13 @@ importers:
 
   .:
     specifiers:
+      '@antfu/ni': ^0.19.0
       '@widcardw/eslint-config': ^0.3.0-beta.2
       bumpp: ^8.2.1
       eslint: ^8.32.0
       typescript: ^4.9.4
     devDependencies:
+      '@antfu/ni': 0.19.0
       '@widcardw/eslint-config': 0.3.0-beta.2_7uibuqfxkfaozanbtbziikiqje
       bumpp: 8.2.1
       eslint: 8.32.0
@@ -107,6 +109,11 @@ packages:
       - eslint-import-resolver-webpack
       - jest
       - supports-color
+    dev: true
+
+  /@antfu/ni/0.19.0:
+    resolution: {integrity: sha512-33VKTuBjoW2canoVMGa4g5oGCg7KK8UVmBBmUKzvQ+Fa69kk2YI8sqt94WCpvSWmW/yD5ZXsD9G9s689b9KwwQ==}
+    hasBin: true
     dev: true
 
   /@babel/code-frame/7.18.6:
