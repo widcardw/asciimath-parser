@@ -33,11 +33,13 @@
         "font": "Font",
         "notation": "Notation",
         "special": "Special",
-        "superposition": "Superposition"
+        "escapes": "Escape",
+        "superposition": "Superposition",
+        "displayMode": "Use # to insert \\displaystyle"
     },
     "caution": {
         "title": "Caution",
-        "diff": "This library is refactored by me, which means that some of the syntax may not be consistent with <a href=\"http://asciimath.org\" target=\"_blank\">asciimath.org</a>, especially the <a href=\"#example_list.mat\">matrix</a>.",
+        "diff": "This library is refactored by me, which means that some of the syntax may be inconsistent with <a href=\"http://asciimath.org\" target=\"_blank\">asciimath.org</a>, especially the <a href=\"#example_list.mat\">matrix</a>.",
         "deps": "Asciimath parser itself does not depend on DOM or mathml, it simply parses your input code into LaTeX code. If you want to display formulas, please work it out with KaTeX or mathjax (for websites) or LaTeX (for articles)."
     },
     "useStory": {
@@ -47,7 +49,7 @@
         "cli": "Use the <a href='https://npmjs.com/package/asciimath-parser-cli' target='_blank'>cli</a> to convert asciimath formulas in the file to LaTeX formulas."
     },
     "thanks": {
-        "title": "Specially Thanks",
-        "content": "<a href='https://zmx0142857.github.io/note' target='_blank'>zmx0142857's note</a> and his great help"
+        "title": "Special Thanks",
+        "content": "zmx0142857's <a href='https://zmx0142857.github.io/note' target='_blank'>note</a> and his great help"
     }
 }

@@ -33,6 +33,8 @@
         "font": "字体",
         "notation": "注音符号",
         "special": "特殊",
+        "escapes": "转义符号",
+        "displayMode": "使用 # 来插入 \\displaystyle 环境",
         "superposition": "上下叠合"
     },
     "caution": {
@@ -48,6 +50,6 @@
     },
     "thanks": {
         "title": "致谢",
-        "content": "<a href='https://zmx0142857.github.io/note' target='_blank'>zmx0142857's note</a> 及其帮助"
+        "content": "zmx0142857 的<a href='https://zmx0142857.github.io/note' target='_blank'>笔记</a>及其帮助"
     }
 }

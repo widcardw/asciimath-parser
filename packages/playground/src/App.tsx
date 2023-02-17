@@ -4,7 +4,7 @@ import { AsciiMath } from '@am'
 import { CardList } from './components/CardList'
 
 import {
-  arrows, fonts, logic, mathFn, operators,
+  arrows, displayMode, escapes, fonts, logic, mathFn, operators,
   others, parens, rela, special, subp, updown, xila,
 } from './utils/symbols'
 import { SymbolTable } from './components/SymbolTable'
@@ -32,6 +32,8 @@ const display = [
   { title: 'manual_list.notation', symbols: subp, cols: 4 },
   { title: 'manual_list.superposition', symbols: updown, cols: 2 },
   { title: 'manual_list.special', symbols: special, cols: 2 },
+  { title: 'manual_list.escapes', symbols: escapes, cols: 4 },
+  { title: 'manual_list.displayMode', symbols: displayMode, cols: 1 },
 ]
 
 const am = new AsciiMath()

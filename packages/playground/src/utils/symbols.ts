@@ -133,9 +133,19 @@ export const updown = [
   'overbrace(12345)^n',
   'underbrace(12345)_n',
   '==_(123)^(456)',
+  '-->_(a)^(b)',
 ]
 
 export const special = [
   'text(I\'m here)',
   'tex(\\hbar)',
+]
+
+export const escapes = [
+  '\\#', '\\$', '\\%', '\\_',
+  '"\\` a"', '\\@', '\\ ', '"\\^ a"',
+]
+
+export const displayMode = [
+  '[#part^2 f x, part^2 f (x y); part^2 f (y x), #part^2 f y]',
 ]
