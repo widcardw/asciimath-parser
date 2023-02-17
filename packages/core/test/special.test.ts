@@ -35,3 +35,11 @@ describe('matrix', () => {
     expect(am.toTex('[[a,b;c,d]')).toMatchSnapshot()
   })
 })
+
+describe('emoji', () => {
+  const am = new AsciiMath({ display: false })
+  it('should parse emoji', () => {
+    expect(am.toTex('😀😀'))
+      .toMatchInlineSnapshot('"😀😀"')
+  })
+})

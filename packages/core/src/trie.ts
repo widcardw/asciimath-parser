@@ -101,18 +101,18 @@ class Trie {
   }
 
   /**
-   * @param word input string
+   * @param letters input string
    * @returns value: matched keyword
    * current: the string cursor
    */
-  public tryParsing(word: string, start = 0): TokenizedValue {
+  public tryParsing(letters: string[], start = 0): TokenizedValue {
     let value = ''
     let root = this._root
     let isKeyWord = false
     let current = start
     // let depth = 0
-    for (; current < word.length; current++) {
-      const ch = word[current]
+    for (; current < letters.length; current++) {
+      const ch = letters[current]
       // console.log('depth', depth, ch)
 
       // the spaces are processed in `tryParsingAll`
@@ -142,43 +142,43 @@ class Trie {
     return { value, isKeyWord, current, ...ret }
   }
 
-  public tryParsingNumber(word: string, current: number): TokenizedValue {
-    let ch = word[current]
+  public tryParsingNumber(letters: string[], current: number): TokenizedValue {
+    let ch = letters[current]
     let value = ''
-    while (NUMBERPATTERN.test(ch) && current < word.length) {
+    while (NUMBERPATTERN.test(ch) && current < letters.length) {
       value += ch
-      ch = word[++current]
+      ch = letters[++current]
     }
     if (ch === '.') {
       value += ch
-      ch = word[++current]
+      ch = letters[++current]
     }
-    while (NUMBERPATTERN.test(ch) && current < word.length) {
+    while (NUMBERPATTERN.test(ch) && current < letters.length) {
       value += ch
-      ch = word[++current]
+      ch = letters[++current]
     }
     return { value, isKeyWord: false, current, tex: value, type: TokenTypes.NumberLiteral }
   }
 
-  public tryParsingString(word: string, current: number): TokenizedValue {
-    let ch = word[current]
+  public tryParsingString(letters: string[], current: number): TokenizedValue {
+    let ch = letters[current]
     let value = ''
-    while (STRINGPATTERN.test(ch) && current < word.length) {
+    while (STRINGPATTERN.test(ch) && current < letters.length) {
       const idx = this.c2i(ch)
       if (typeof idx !== 'undefined' && this._root._nextNode[idx] !== null)
         break
       value += ch
-      ch = word[++current]
+      ch = letters[++current]
     }
     return { value, isKeyWord: false, current, tex: value, type: TokenTypes.StringLiteral }
   }
 
-  public tryParsingNewLines(word: string, current: number): TokenizedValue {
-    let ch = word[current]
+  public tryParsingNewLines(letters: string[], current: number): TokenizedValue {
+    let ch = letters[current]
     let value = ''
-    while (/\n/.test(ch) && current < word.length) {
+    while (/\n/.test(ch) && current < letters.length) {
       value += ch
-      ch = word[++current]
+      ch = letters[++current]
     }
     if (value.length >= 2)
       return { value, isKeyWord: true, current, tex: '\\\\', type: TokenTypes.Align }
@@ -186,14 +186,14 @@ class Trie {
       return { value: '', isKeyWord: false, current, tex: '', type: TokenTypes.None }
   }
 
-  public tryParsingText(word: string, current: number): TokenizedValue {
-    let ch = word[current]
+  public tryParsingText(letters: string[], current: number): TokenizedValue {
+    let ch = letters[current]
     if (ch === '"') {
-      ch = word[++current]
+      ch = letters[++current]
       let value = ''
-      while (ch !== '"' && current < word.length) {
+      while (ch !== '"' && current < letters.length) {
         value += ch
-        ch = word[++current]
+        ch = letters[++current]
       }
       if (ch === '"') {
         current++
@@ -203,10 +203,10 @@ class Trie {
     return { value: '', isKeyWord: false, current, tex: '', type: TokenTypes.None }
   }
 
-  private getColorString(word: string, current: number): TokenizedValue {
+  private getColorString(letters: string[], current: number): TokenizedValue {
     let color = ''
-    while (current < word.length) {
-      const ch = word[current]
+    while (current < letters.length) {
+      const ch = letters[current]
       if (!/[#\da-z]/i.test(ch))
         break
       color += ch
@@ -216,9 +216,9 @@ class Trie {
     return { value: color, isKeyWord: false, current, tex: color, type: TokenTypes.Const }
   }
 
-  private skipSpaces(word: string, current: number): number {
-    while (current < word.length) {
-      const ch = word[current]
+  private skipSpaces(letters: string[], current: number): number {
+    while (current < letters.length) {
+      const ch = letters[current]
       if (!/\s/.test(ch))
         break
       current++
@@ -226,28 +226,28 @@ class Trie {
     return current
   }
 
-  private processColor(word: string, current: number): TokenizedValue {
+  private processColor(letters: string[], current: number): TokenizedValue {
     let existParen = false
     let res = { value: '', isKeyWord: false, current, tex: '', type: TokenTypes.Const }
-    current = this.skipSpaces(word, current)
-    if (current >= word.length)
+    current = this.skipSpaces(letters, current)
+    if (current >= letters.length)
       return res
     { // detect paren
-      const ch = word[current]
+      const ch = letters[current]
       if (/[\(\{\[]/.test(ch)) {
         existParen = true
         current++
       }
     }
-    current = this.skipSpaces(word, current)
-    res = this.getColorString(word, current)
+    current = this.skipSpaces(letters, current)
+    res = this.getColorString(letters, current)
     current = res.current
-    current = this.skipSpaces(word, current)
+    current = this.skipSpaces(letters, current)
     res.current = current
-    if (current >= word.length)
+    if (current >= letters.length)
       return res
     {
-      const ch = word[current]
+      const ch = letters[current]
       if (/[\)\}\]]/.test(ch) && existParen)
         current++
     }
@@ -255,27 +255,27 @@ class Trie {
     return res
   }
 
-  private getPlainText(word: string, current: number, fn: GeneTokenFn): TokenizedValue {
+  private getPlainText(letters: string[], current: number, fn: GeneTokenFn): TokenizedValue {
     let useParen = false
-    let ch = word[current]
+    let ch = letters[current]
     while (/\s/.test(ch))
-      ch = word[++current]
+      ch = letters[++current]
 
     useParen = ch === '('
     let value = ''
     if (useParen) {
-      ch = word[++current]
-      while (current < word.length && ch !== ')') {
+      ch = letters[++current]
+      while (current < letters.length && ch !== ')') {
         value += ch
-        ch = word[++current]
+        ch = letters[++current]
       }
       current++
       return fn({ current, value })
     }
     // do not use paren, then read a word
-    while (current < word.length && /\S/.test(ch)) {
+    while (current < letters.length && /\S/.test(ch)) {
       value += ch
-      ch = word[++current]
+      ch = letters[++current]
     }
     return fn({ current, value })
   }
@@ -284,9 +284,10 @@ class Trie {
     let current = 0
     const tokens: TokenizedValue[] = []
     let counter = 0
-    while (current < word.length) {
+    const letters = [...word]
+    while (current < letters.length) {
       {
-        const t = this.tryParsingNewLines(word, current)
+        const t = this.tryParsingNewLines(letters, current)
         current = t.current
         if (t.value !== '') {
           tokens.push(t)
@@ -294,23 +295,23 @@ class Trie {
         }
       }
       // process spaces
-      if (/\s/.test(word[current])) {
+      if (/\s/.test(letters[current])) {
         current++
         continue
       }
       // process potential keywords
-      let t = this.tryParsing(word, current)
+      let t = this.tryParsing(letters, current)
       current = t.current
       if (t.value !== '') {
         if (t.value === 'text') {
-          t = this.getPlainText(word, current, createTextToken)
+          t = this.getPlainText(letters, current, createTextToken)
           current = t.current
           tokens.push(t)
           continue
         }
 
         if (t.value === 'tex') {
-          t = this.getPlainText(word, current, createTexToken)
+          t = this.getPlainText(letters, current, createTexToken)
           current = t.current
           tokens.push(t)
           continue
@@ -319,14 +320,14 @@ class Trie {
         tokens.push(t)
         if (t.value !== 'color')
           continue
-        const nt = this.processColor(word, current)
+        const nt = this.processColor(letters, current)
         current = nt.current
         tokens.push(nt)
         continue
       }
       // process numbers
       {
-        const t = this.tryParsingNumber(word, current)
+        const t = this.tryParsingNumber(letters, current)
         current = t.current
         if (t.value !== '') {
           tokens.push(t)
@@ -335,7 +336,7 @@ class Trie {
       }
       // process text wrapped with double quote
       {
-        const t = this.tryParsingText(word, current)
+        const t = this.tryParsingText(letters, current)
         current = t.current
         if (t.value !== '') {
           tokens.push(t)
@@ -344,7 +345,7 @@ class Trie {
       }
       // process other string
       {
-        const t = this.tryParsingString(word, current)
+        const t = this.tryParsingString(letters, current)
         current = t.current
         if (t.value !== '') {
           tokens.push(t)
@@ -352,7 +353,7 @@ class Trie {
         }
       }
       counter++
-      if (counter > word.length * 2)
+      if (counter > letters.length * 2)
         throw new Error('Oops! There may be an infinity loop')
     }
     return tokens
