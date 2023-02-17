@@ -1,3 +1,4 @@
+/* eslint-disable solid/no-innerhtml */
 import type { Component } from 'solid-js'
 import { i18nFactory } from '~/i18n'
 import './index.css'

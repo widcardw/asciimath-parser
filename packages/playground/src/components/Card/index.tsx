@@ -1,14 +1,14 @@
 import type { Component } from 'solid-js'
 import { createMemo, createSignal } from 'solid-js'
+import { useDebounceFn } from 'solidjs-use'
 import katex from 'katex'
 import type { AsciiMath } from '@am'
-import { throttle } from '~/utils/throttle'
 import './index.css'
 import { i18nFactory } from '~/i18n'
 
 const Card: Component<{
   am: AsciiMath
-}> = ({ am }) => {
+}> = (props) => {
   const [amStr, setAmStr] = createSignal('')
   const [tex, setTex] = createSignal('')
   const kHtml = createMemo(() => katex.renderToString(tex(), {
@@ -19,7 +19,7 @@ const Card: Component<{
 
   function inputAmCb(e: Event) {
     setAmStr((e.target as HTMLTextAreaElement).value)
-    setTex(am.toTex(amStr()))
+    setTex(props.am.toTex(amStr()))
   }
 
   function inputTexCb(e: Event) {
@@ -31,15 +31,16 @@ const Card: Component<{
       <textarea
         class="input-area"
         placeholder={t('inputAm')}
-        onInput={throttle(inputAmCb, 800)}
+        onInput={useDebounceFn(inputAmCb, 500)}
       />
       <textarea
         class="input-area"
         placeholder={t('inputTex')}
         value={tex()}
-        onInput={throttle(inputTexCb, 800)}
+        onInput={useDebounceFn(inputTexCb, 500)}
       />
-      <div class="display" innerHTML={kHtml()}></div>
+      {/* eslint-disable-next-line solid/no-innerhtml */}
+      <div class="display" innerHTML={kHtml()} />
     </div>
   )
 }

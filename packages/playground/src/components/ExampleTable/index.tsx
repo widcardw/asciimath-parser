@@ -1,3 +1,4 @@
+/* eslint-disable solid/no-innerhtml */
 import type { Component } from 'solid-js'
 import { For } from 'solid-js'
 import type { AsciiMath } from '@am'
@@ -22,7 +23,7 @@ const tb = [
 
 const ExampleTable: Component<{
   am: AsciiMath
-}> = ({ am }) => {
+}> = (props) => {
   const { t } = i18nFactory()
   return (
     <table>
@@ -38,7 +39,7 @@ const ExampleTable: Component<{
           {it => (
             <tr>
               <td id={it.label}>{t(it.label)}</td>
-              <td innerHTML={renderTex(am, it.code)} />
+              <td innerHTML={renderTex(props.am, it.code)} />
               <td>{it.code}</td>
             </tr>
           )}

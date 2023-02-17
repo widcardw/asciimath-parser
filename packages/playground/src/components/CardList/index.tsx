@@ -5,14 +5,14 @@ import { Card } from '../Card'
 
 const CardList: Component<{
   am: AsciiMath
-}> = ({ am }) => {
+}> = (props) => {
   const [items, setItems] = createSignal([0])
   return (
     <>
       <For each={items()}>
-        {(item, i) => (
+        {(_item, i) => (
           <div class="mb-4 w-full flex">
-            <Card am={am} />
+            <Card am={props.am} />
             <button
               style={{ 'font-family': 'KaTeX_Main' }}
               onClick={() => setItems(p => [...p.slice(0, i()), ...p.slice(i() + 1)])}
@@ -24,7 +24,7 @@ const CardList: Component<{
       <button
         class="w-full mb-1rem"
         onClick={() => setItems(p => [...p, Date.now()])}
-        style="font-family: KaTeX_Main"
+        style={{ 'font-family': 'KaTeX_Main' }}
       >+
       </button>
     </>
