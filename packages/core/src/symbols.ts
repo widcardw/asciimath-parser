@@ -5,7 +5,8 @@ enum TokenTypes {
   Const = 'Const',
   OperatorA = 'OperatorA',
   OperatorOAB = 'OperatorOAB',
-  OperatorAOB = 'OperatorAOB',
+  OperatorAOB = 'OperatorAOB', // div
+  OperatorMinus = 'OperatorMinus',
   OperatorAO = 'OperatorAO',
   OperatorO2 = 'OperatorOptionalTwoParams',
   OperatorSup = 'OperatorSup',
@@ -294,6 +295,8 @@ const SYMBOLMAP: Map<string, {
   ['&', { type: TokenTypes.Align, tex: '&' }],
   [',', { type: TokenTypes.Split, tex: ',' }],
   [';', { type: TokenTypes.Split, tex: ';' }],
+
+  ['-', { type: TokenTypes.OperatorMinus, tex: '{-$1}' }],
 
 ])
 

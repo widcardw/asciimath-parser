@@ -9,7 +9,7 @@ describe('asciimath', () => {
     ],
   })
   it('should parse integrals', () => {
-    expect(am.toTex('int _0 ^(+oo) "e"^(-x) dx = 1')).toMatchSnapshot()
+    expect(am.toTex('int _0 ^(+oo) "e"^-x dx = 1')).toMatchSnapshot()
     expect(am.toTex('theta d0')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\theta {\\\\text{d}\\\\theta} }"')
     expect(am.toTex('a dp b dp')).toMatchInlineSnapshot('"\\\\displaystyle{ a { \\\\text{d} p } b { \\\\text{d} p } }"')
   })

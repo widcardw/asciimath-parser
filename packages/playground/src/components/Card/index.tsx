@@ -31,13 +31,13 @@ const Card: Component<{
       <textarea
         class="input-area"
         placeholder={t('inputAm')}
-        onInput={useDebounceFn(inputAmCb, 500)}
+        onInput={useDebounceFn(inputAmCb, 800)}
       />
       <textarea
         class="input-area"
         placeholder={t('inputTex')}
         value={tex()}
-        onInput={useDebounceFn(inputTexCb, 500)}
+        onInput={useDebounceFn(inputTexCb, 800)}
       />
       {/* eslint-disable-next-line solid/no-innerhtml */}
       <div class="display" innerHTML={kHtml()} />

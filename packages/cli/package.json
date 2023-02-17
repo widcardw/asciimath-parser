@@ -29,8 +29,5 @@
     "bumpp": "^8.2.1",
     "cac": "^6.7.14",
     "tsup": "^6.5.0"
-  },
-  "eslintConfig": {
-    "extends": "@antfu"
   }
 }

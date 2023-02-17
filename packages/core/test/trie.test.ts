@@ -8,8 +8,7 @@ f(x)&=x^2`
 
 describe('trie fail', () => {
   it.fails('could not create Trie with no chars', () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const trie = new Trie([])
+    const _trie = new Trie([])
   })
   it.fails('could not insert keyword that contains character that greater than \\uffff', () => {
     const trie = new Trie(['🤤', ...Array.from({ length: 26 }, (_, i) => i).map(i => String.fromCharCode(65 + i))])
@@ -113,7 +112,9 @@ describe('asciimath matrix', () => {
 describe('tokenize color', () => {
   const trie = createTrie()
   it('should tokenize color', () => {
-    expect(trie.tryParsingAll('color(pink)(123)')).toMatchSnapshot()
+    expect(
+      trie.tryParsingAll('color(pink)(123)'),
+    ).toMatchSnapshot()
   })
 
   it('should tokenize rgb color', () => {

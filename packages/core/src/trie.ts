@@ -149,6 +149,14 @@ class Trie {
       value += ch
       ch = word[++current]
     }
+    if (ch === '.') {
+      value += ch
+      ch = word[++current]
+    }
+    while (NUMBERPATTERN.test(ch) && current < word.length) {
+      value += ch
+      ch = word[++current]
+    }
     return { value, isKeyWord: false, current, tex: value, type: TokenTypes.NumberLiteral }
   }
 
@@ -208,37 +216,40 @@ class Trie {
     return { value: color, isKeyWord: false, current, tex: color, type: TokenTypes.Const }
   }
 
-  private processColor(word: string, current: number): TokenizedValue {
-    let gotColor = false
-    let existParen = false
-    let res = { value: '', isKeyWord: false, current, tex: '', type: TokenTypes.Const }
-    while (current < word.length && !gotColor) {
-      const ch = word[current]
-      if (/\s/.test(ch)) {
-        current++
-        continue
-      }
-      if (/[\(\[\{]/.test(ch)) {
-        existParen = true
-        current++
-        continue
-      }
-      res = this.getColorString(word, current)
-      current = res.current
-      gotColor = true
-    }
-    if (!existParen)
-      return res
+  private skipSpaces(word: string, current: number): number {
     while (current < word.length) {
       const ch = word[current]
-      if (/\s/.test(ch)) {
-        current++
-        continue
-      }
-      if (/[\)\]\}]/.test(ch)) {
-        current++
+      if (!/\s/.test(ch))
         break
+      current++
+    }
+    return current
+  }
+
+  private processColor(word: string, current: number): TokenizedValue {
+    let existParen = false
+    let res = { value: '', isKeyWord: false, current, tex: '', type: TokenTypes.Const }
+    current = this.skipSpaces(word, current)
+    if (current >= word.length)
+      return res
+    { // detect paren
+      const ch = word[current]
+      if (/[\(\{\[]/.test(ch)) {
+        existParen = true
+        current++
       }
+    }
+    current = this.skipSpaces(word, current)
+    res = this.getColorString(word, current)
+    current = res.current
+    current = this.skipSpaces(word, current)
+    res.current = current
+    if (current >= word.length)
+      return res
+    {
+      const ch = word[current]
+      if (/[\)\}\]]/.test(ch) && existParen)
+        current++
     }
     res.current = current
     return res
@@ -372,7 +383,6 @@ function createTrie(config: {
   for (const k of SYMBOLMAP.keys())
     trie.insert(k)
 
-  // trie.MAP = SYMBOLMAP
   return trie
 }
 
