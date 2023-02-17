@@ -89,10 +89,22 @@ function createConstNode(arg?: TokenizedValue | string) {
   }
 }
 
-function createFlatNode(): FlatNode {
+function createFlatNode(): FlatNode
+function createFlatNode(n: Exclude<ChildNode, FlatNode>): FlatNode
+function createFlatNode(n: ChildNode[]): FlatNode
+function createFlatNode(n?: Exclude<ChildNode, FlatNode> | ChildNode[]): FlatNode {
+  let body: ChildNode[] = []
+  if (n) {
+    if (Array.isArray(n))
+      body = n
+
+    else
+      body.push(n)
+  }
+
   return {
     type: NodeTypes.Flat,
-    body: [],
+    body,
   }
 }
 
@@ -136,7 +148,7 @@ function readParenedExpression2(tokens: TokenizedValue[], current: number): {
     return parenStartedNoClosingNode(tokens, current)
   }
   else {
-    if (semiIndex === -1) {
+    if (semiIndex === -1 || semiIndex > closingIndex) {
       // process the expression as an array
       return parenedArrayNode(tokens, current, closingIndex)
     }
@@ -563,6 +575,68 @@ function getParamOneNode(tokens: TokenizedValue[], current: number, lookForward:
   return { node, current }
 }
 
+function createDeriUpperNode(operator: string, sup: ChildNode | null, fn: ChildNode): ChildNode {
+  const upperNode = createFlatNode()
+  // partial or derivate
+  upperNode.body.push(createConstNode(operator))
+  // superscript
+  if (sup)
+    upperNode.body.push(sup)
+  // function
+  upperNode.body.push(fn)
+  return upperNode
+}
+
+function insertOperatorsForDenominator(node: FlatNode, operator: string): FlatNode {
+  return createFlatNode(node.body.map(v => [createConstNode(operator), v]).flat())
+}
+
+function getPartialDerivativeExpressionNode(tokens: TokenizedValue[], current: number): WalkResult {
+  const node = createParamTwoNode()
+  let token = tokens[current]
+  node.tex = '\\frac{ $1 }{ $2 }'
+  const operator = token.tex
+  let sup: ChildNode | null = null
+  // find if there is any superscript
+  current++
+  if (current >= tokens.length)
+    return { node, current }
+
+  token = tokens[current]
+  if (token.type === TokenTypes.OperatorSup) {
+    const walkRes = getParamOneNode(tokens, current, false)
+    current = walkRes.current
+    sup = walkRes.node
+  }
+
+  // find the upper
+  const fnRes = walk(tokens, current, false)
+  current = fnRes.current
+  if (fnRes.node.type === NodeTypes.Flat)
+    fnRes.node = removeParenOfFlatExpr(fnRes.node)
+  node.params[0] = createDeriUpperNode(operator, sup, fnRes.node)
+
+  // find the variables
+  if (current >= tokens.length)
+    return { node, current }
+
+  const underRes = walk(tokens, current)
+  current = underRes.current
+  if (underRes.node.type === NodeTypes.Flat) {
+    underRes.node = removeParenOfFlatExpr(underRes.node)
+    underRes.node = insertOperatorsForDenominator(underRes.node, operator)
+  }
+  else {
+    underRes.node = createFlatNode(underRes.node)
+    underRes.node.body.unshift(createConstNode(operator))
+    if (sup)
+      underRes.node.body.push(sup)
+  }
+  node.params[1] = underRes.node
+
+  return { node, current }
+}
+
 interface WalkResult {
   node: ChildNode
   current: number
@@ -626,6 +700,10 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): Walk
 
       // detect next token
       ({ node, current } = lookForwardOperatorOptionalTwoParams(tokens, current, token))
+      break
+    }
+    case TokenTypes.OperatorPartial: {
+      ({ node, current } = getPartialDerivativeExpressionNode(tokens, current))
       break
     }
     case TokenTypes.Split:

@@ -45,22 +45,12 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
       ['dy', '{\\text{d}y}'],
       ['dz', '{\\text{d}z}'],
       ['dt', '{\\text{d}t}'],
+      ['#', '\\displaystyle'],
     ],
     replaceBeforeTokenizing: [
-      [/part(\^\S*)?\s+(\S+)\s+(\([^)]*\)|\S+)/g, (_match, $1, $2, $3) => {
-        if (!$1)
-          $1 = ''
-        if ($3[0] === '(')
-          $3 = $3.slice(1, -1).split(/\s+/).join(' del ')
-        return `(del${$1} ${$2})/(del ${$3})`
-      }],
       [/&#(x?[0-9a-fA-F]+);/g, (_match, $1) =>
         String.fromCodePoint($1[0] === 'x' ? `0${$1}` : $1),
       ],
-      [/dd(\^\S*)?\s+(\S+)\s+(\S+)/g, (_match, $1, $2, $3) => {
-        $1 = $1 || ''
-        return `("d"${$1} ${$2})/("d" ${$3}${$1})`
-      }],
     ],
   }
   if (typeof config?.display !== 'undefined')

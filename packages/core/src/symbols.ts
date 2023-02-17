@@ -10,6 +10,7 @@ enum TokenTypes {
   OperatorAO = 'OperatorAO', // n!, n!!
   OperatorO2 = 'OperatorOptionalTwoParams',
   OperatorSup = 'OperatorSup', // a^n, a_n
+  OperatorPartial = 'OperatorPartial',
   LParen = 'LParen',
   RParen = 'RParen',
   Paren = 'Paren',
@@ -105,6 +106,14 @@ const SYMBOLMAP: Map<string, {
   ['~=', { type: TokenTypes.Const, tex: '\\cong' }],
   ['~', { type: TokenTypes.Const, tex: '\\sim' }],
   ['~~', { type: TokenTypes.Const, tex: '\\approx' }],
+  ['\\#', { type: TokenTypes.Const, tex: '\\#' }],
+  ['\\&', { type: TokenTypes.Const, tex: '\\&' }],
+  ['\\@', { type: TokenTypes.Const, tex: '@' }],
+  ['\\%', { type: TokenTypes.Const, tex: '\\%' }],
+  ['\\_', { type: TokenTypes.Const, tex: '\\_' }],
+  ['\\^', { type: TokenTypes.Const, tex: '\\^' }],
+  ['\\$', { type: TokenTypes.Const, tex: '\\$' }],
+  ['\\ ', { type: TokenTypes.Const, tex: '\\ ' }],
   ['prop', { type: TokenTypes.Const, tex: '\\propto' }],
   ['complement', { type: TokenTypes.Const, tex: '\\complement' }],
 
@@ -222,6 +231,7 @@ const SYMBOLMAP: Map<string, {
   ['overset', { type: TokenTypes.OperatorOAB, tex: '\\overset{ $1 }{ $2 }' }],
   ['underset', { type: TokenTypes.OperatorOAB, tex: '\\underset{ $1 }{ $2 }' }],
   ['hat', { type: TokenTypes.OperatorA, tex: '\\hat{ $1 }' }],
+  ['\\`', { type: TokenTypes.OperatorA, tex: '\\`{ $1 }' }],
   ['widehat', { type: TokenTypes.OperatorA, tex: '\\widehat{ $1 }' }],
   ['arc', { type: TokenTypes.OperatorA, tex: '\\stackrel{\\frown}{ $1 }' }],
   ['bar', { type: TokenTypes.OperatorA, tex: '\\bar{ $1 }' }],
@@ -260,6 +270,7 @@ const SYMBOLMAP: Map<string, {
   ['oiiint', { type: TokenTypes.Const, tex: '\u2230' }],
   ['laplace', { type: TokenTypes.Const, tex: '\\Delta' }],
   ['==', { type: TokenTypes.OperatorO2, tex: '\\xlongequal[ $2 ]{ $1 }' }],
+  ['-->', { type: TokenTypes.OperatorO2, tex: '\\xrightarrow[ $2 ]{ $1 }' }],
   ['||', { type: TokenTypes.Const, tex: '\\Vert' }],
   ['!||', { type: TokenTypes.Const, tex: '\u2226' }],
   ['S=', { type: TokenTypes.Const, tex: '\u224C' }],
@@ -297,6 +308,10 @@ const SYMBOLMAP: Map<string, {
   [';', { type: TokenTypes.Split, tex: ';' }],
 
   ['-', { type: TokenTypes.OperatorMinus, tex: '{-$1}' }],
+
+  ['part', { type: TokenTypes.OperatorPartial, tex: '\\partial' }],
+  ['pp', { type: TokenTypes.OperatorPartial, tex: '\\partial' }],
+  ['dd', { type: TokenTypes.OperatorPartial, tex: '\\mathrm{d}' }],
 
 ])
 

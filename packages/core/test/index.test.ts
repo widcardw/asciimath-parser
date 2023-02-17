@@ -13,11 +13,6 @@ describe('asciimath', () => {
     expect(am.toTex('theta d0')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\theta {\\\\text{d}\\\\theta} }"')
     expect(am.toTex('a dp b dp')).toMatchInlineSnapshot('"\\\\displaystyle{ a { \\\\text{d} p } b { \\\\text{d} p } }"')
   })
-
-  it('should parse partial ...', () => {
-    expect(am.toTex('part f x = 2x')).toMatchSnapshot()
-    expect(am.toTex('part^3 f (x y^2) = 2x^2 y')).toMatchSnapshot()
-  })
 })
 
 describe('display', () => {

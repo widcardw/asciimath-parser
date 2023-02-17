@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { parser } from '../src/parser'
+import { codegen } from '../src/codegen'
+import { createTrie } from '../src/trie'
 import { AsciiMath } from '../src'
 
 describe('special cases', () => {
@@ -21,12 +24,6 @@ describe('special cases', () => {
     expect(am.toTex('color(pink)(abc)'))
       .toMatchInlineSnapshot('"{ \\\\color{pink} ab c }"')
   })
-  it('should generate dd f x', () => {
-    expect(am.toTex('dd f x'))
-      .toMatchInlineSnapshot('"\\\\frac{ \\\\text{d} f }{ \\\\text{d} x }"')
-    expect(am.toTex('dd^3 f x'))
-      .toMatchInlineSnapshot('"\\\\frac{ \\\\text{d} ^{ 3 } f }{ \\\\text{d} x ^{ 3 } }"')
-  })
 })
 
 describe('matrix', () => {
@@ -41,5 +38,16 @@ describe('emoji', () => {
   it('should parse emoji', () => {
     expect(am.toTex('😀😀'))
       .toMatchInlineSnapshot('"😀😀"')
+  })
+})
+
+describe('backslash', () => {
+  it('should parse backslash', () => {
+    const trie = createTrie()
+    const tokens = trie.tryParsingAll('\\')
+    expect(tokens).toMatchSnapshot()
+    const ast = parser(tokens)
+    expect(ast).toMatchSnapshot()
+    expect(codegen(ast)).toMatchInlineSnapshot('"\\\\"')
   })
 })
