@@ -1,7 +1,7 @@
 {
   "name": "asciimath-parser-monorepo",
   "type": "module",
-  "version": "0.4.0-beta.2",
+  "version": "0.4.0-beta.3",
   "private": true,
   "description": "Transform asciimath to LaTeX",
   "author": "widcardw",
@@ -17,7 +17,7 @@
     "LaTeX"
   ],
   "scripts": {
-    "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public",
+    "release": "nr b:core && nr b:cli && bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public",
     "d:playground": "cd packages/playground && nr dev",
     "b:core": "cd packages/core && nr build",
     "b:cli": "cd packages/cli && nr build",
