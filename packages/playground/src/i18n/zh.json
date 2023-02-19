@@ -51,5 +51,10 @@
   "thanks": {
     "title": "致谢",
     "content": "zmx0142857 的<a href='https://zmx0142857.github.io/note' target='_blank'>笔记</a>及其帮助"
+  },
+  "how2use": {
+    "title": "如何使用",
+    "install": "使用 npm/yarn/pnpm 包管理工具安装。",
+    "import": "引入 AsciiMath，创建实例，使用 <code>toTex</code> 方法来生成 LaTeX 代码。"
   }
 }

@@ -24,7 +24,7 @@ function getArrayBoundary(node: MatrixNode) {
   }
   else {
     const maxCol = Math.max(...node.params.map(c => c.length))
-    beginArray += '{' + ''.padEnd(maxCol, ch) + '}'
+    beginArray += `{${''.padEnd(maxCol, ch)}}`
   }
   return [beginArray, '\\end{array}']
 }

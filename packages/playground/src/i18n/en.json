@@ -51,5 +51,10 @@
   "thanks": {
     "title": "Special Thanks",
     "content": "zmx0142857's <a href='https://zmx0142857.github.io/note' target='_blank'>note</a> and his great help"
+  },
+  "how2use": {
+    "title": "How to Use",
+    "install": "Install the package with npm/yarn/pnpm.",
+    "import": "Import it and create an instance of Asciimath, then use the <code>toTex</code> method to generate LaTeX code."
   }
 }
