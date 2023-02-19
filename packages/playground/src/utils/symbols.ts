@@ -143,7 +143,7 @@ export const special = [
 
 export const escapes = [
   '\\#', '\\$', '\\%', '\\_',
-  '"\\` a"', '\\@', '\\ ', '"\\^ a"',
+  '"\\`a"', '\\@', '\\ ', '"\\^a"',
 ]
 
 export const displayMode = [

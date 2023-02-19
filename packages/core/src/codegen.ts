@@ -1,34 +1,32 @@
 import type { ChildNode, MatrixNode, RootNode } from './parser'
 import { AlignDirection, NodeTypes } from './parser'
 
-function getMatrixBoundary(node: MatrixNode) {
-  if (node.alignment === AlignDirection.Left)
-    return ['\\begin{matrix*}[l]', '\\end{matrix*}']
-
-  return ['\\begin{matrix}', '\\end{matrix}']
-}
-
 function getArrayBoundary(node: MatrixNode) {
   const div = node.dividerIndices
+  let beginArray = '\\begin{array}'
+  let ch = 'c'
+  if (node.alignment === AlignDirection.Left)
+    ch = 'l'
+
   if (div.length) {
     const divMax = div[div.length - 1]
     for (let i = div.length - 1; i >= 1; i--)
       div[i] -= div[i - 1]
 
-    let beginArray = '\\begin{array}{'
+    beginArray += '{'
     for (let i = 0; i < div.length; i++)
-      beginArray += `${''.padEnd(div[i], 'c')}|`
+      beginArray += `${''.padEnd(div[i], ch)}|`
 
     // MathJax would complain if the array env arg
     // is not consistent with the elements of the matrix.
     const maxCol = Math.max(...node.params.map(i => i.length))
-    beginArray += `${''.padEnd(maxCol - divMax, 'c')}}`
-    return [
-      beginArray,
-      '\\end{array}',
-    ]
+    beginArray += `${''.padEnd(maxCol - divMax, ch)}}`
   }
-  return ['', '']
+  else {
+    const maxCol = Math.max(...node.params.map(c => c.length))
+    beginArray += '{' + ''.padEnd(maxCol, ch) + '}'
+  }
+  return [beginArray, '\\end{array}']
 }
 
 function codegen(node: ChildNode | RootNode): string {
@@ -46,15 +44,16 @@ function codegen(node: ChildNode | RootNode): string {
       return node.body.map(codegen).join(' ')
     }
     case NodeTypes.Matrix: {
-      const [beginMatrix, endMatrix] = getMatrixBoundary(node)
+      // const [beginMatrix, endMatrix] = getMatrixBoundary(node)
       const [arrayBegin, arrayEnd] = getArrayBoundary(node)
       return [
         node.lparen,
-        beginMatrix,
+        // beginMatrix,
         arrayBegin,
         node.params.map(i => i.map(codegen).join('&')).join('\\\\'),
+        '\\\\',
         arrayEnd,
-        endMatrix,
+        // endMatrix,
         node.rparen,
       ].join(' ')
     }

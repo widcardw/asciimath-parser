@@ -288,6 +288,8 @@ const SYMBOLMAP: Map<string, {
   ['normal', { type: TokenTypes.Const, tex: '\\unlhd' }],
   ['rnormal', { type: TokenTypes.Const, tex: '\\unrhd' }],
 
+  ['hline', { type: TokenTypes.Const, tex: '\\hline' }],
+
   ['(', { type: TokenTypes.LParen, tex: '(' }],
   [')', { type: TokenTypes.RParen, tex: ')' }],
   ['[', { type: TokenTypes.LParen, tex: '[' }],

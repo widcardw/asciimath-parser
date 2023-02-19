@@ -1,7 +1,7 @@
 {
   "name": "asciimath-parser",
-  "version": "0.4.0-beta.1",
   "type": "module",
+  "version": "0.4.0-beta.1",
   "description": "Transform asciimath to LaTeX",
   "author": "widcardw",
   "license": "MIT",
@@ -11,6 +11,10 @@
     "url": "git+https://github.com/widcardw/asciimath-parser.git"
   },
   "bugs": "https://github.com/widcardw/asciimath-parser/issues",
+  "keywords": [
+    "asciimath",
+    "LaTeX"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -37,10 +41,6 @@
     "build": "tsup",
     "cov": "vitest --run --coverage"
   },
-  "keywords": [
-    "asciimath",
-    "LaTeX"
-  ],
   "devDependencies": {
     "@types/prompts": "^2.4.2",
     "@vitest/coverage-c8": "^0.28.3",

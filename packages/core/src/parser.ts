@@ -82,10 +82,19 @@ function createConstNode(arg?: TokenizedValue | string) {
       tex: arg,
     }
   }
+  let tex
+  if (arg.type === TokenTypes.Text) {
+    tex = arg.tex.replace(/^(\\quad)?([^\\]+)(\\quad)?$/, (_match, $1, $2, $3) => {
+      return `${$1 || ''}\\text{${$2}}${$3 || ''}`
+    })
+  }
+  else {
+    tex = arg.tex
+  }
   return {
     type: NodeTypes.Const,
     value: arg.value,
-    tex: arg.type === TokenTypes.Text ? `\\text{${arg.tex}}` : arg.tex,
+    tex,
   }
 }
 
@@ -238,7 +247,7 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
   return { node, current }
 }
 
-class ParenError extends Error {}
+class ParenError extends Error { }
 
 function parenedArrayNode(tokens: TokenizedValue[], current: number, closingIndex: number) {
   let token = tokens[current]
@@ -407,7 +416,7 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
     tempNode = createFlatNode()
     token = tokens[current]
     while (current < barIndex
-        && token.type !== TokenTypes.Split) {
+      && token.type !== TokenTypes.Split) {
       const walkRes = walk(tokens, current)
       current = walkRes.current
       tempNode.body.push(walkRes.node)

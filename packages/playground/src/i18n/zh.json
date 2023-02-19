@@ -1,55 +1,55 @@
 {
-    "themes": "主题",
-    "output": "效果",
-    "code": "源码",
-    "examples": "使用样例",
-    "inputAm": "在此处输入 Asciimath",
-    "inputTex": "在此处输入 KaTeX",
-    "example_list": {
-        "supb":   "上下标",
-        "text":   "文字",
-        "frac":   "分式",
-        "sqrt":   "根式",
-        "lim":    "极限",
-        "int":    "积分",
-        "hidden_paren": "隐形括号",
-        "diff":   "微分",
-        "diffe": "微分 (实验性)",
-        "part":   "偏微分",
-        "parte":  "偏微分 (实验性)",
-        "mat":    "矩阵",
-        "piec":   "分段函数"
-    },
-    "manual": "符号对照手册",
-    "manual_list": {
-        "parens": "括号",
-        "greek": "希腊字母",
-        "operator": "运算符",
-        "rela": "关系符号",
-        "logic": "逻辑符号",
-        "other": "杂项",
-        "mathFn": "数学函数",
-        "arrow": "箭头",
-        "font": "字体",
-        "notation": "注音符号",
-        "special": "特殊",
-        "escapes": "转义符号",
-        "displayMode": "使用 # 来插入 \\displaystyle 环境",
-        "superposition": "上下叠合"
-    },
-    "caution": {
-        "title": "注意",
-        "diff": "这个库是由我个人重构的，一些语法可能与 <a href=\"http://asciimath.org\" target=\"_blank\">asciimath.org</a> 原版不同，尤其是<a href=\"#example_list.mat\">矩阵</a>，使用时请格外注意。",
-        "deps": "Asciimath parser 只是简单的将输入的公式转换为 LaTeX 代码，并不依赖于 DOM 和 mathml，如果你需要可视化呈现这些公式，请与 KaTeX 或 mathjax 等这些工具一起使用。"
-    },
-    "useStory": {
-        "title": "使用场景",
-        "web": "配合 <a href='https://katex.org' target='_blank'>KaTeX</a> 或 <a href='https://www.mathjax.org/' target='_blank'>mathjax</a> 在 DOM 上生成公式。",
-        "obsidian": "使用 <a href='https://obsidian.md' target='_blank'>Obsidian</a> 笔记软件的 <a href='https://github.com/widcardw/obsidian-asciimath' target='_blank'>obsidian-asciimath</a> 插件。",
-        "cli": "使用 <a href='https://npmjs.com/package/asciimath-parser-cli' target='_blank'>cli</a> 将文件中的 asciimath 公式转换为 LaTeX 公式。"
-    },
-    "thanks": {
-        "title": "致谢",
-        "content": "zmx0142857 的<a href='https://zmx0142857.github.io/note' target='_blank'>笔记</a>及其帮助"
-    }
+  "themes": "主题",
+  "output": "效果",
+  "code": "源码",
+  "examples": "使用样例",
+  "inputAm": "在此处输入 Asciimath",
+  "inputTex": "在此处输入 KaTeX",
+  "example_list": {
+    "supb": "上下标",
+    "text": "文字",
+    "frac": "分式",
+    "sqrt": "根式",
+    "lim": "极限",
+    "int": "积分",
+    "hidden_paren": "隐形括号",
+    "diff": "微分",
+    "diffe": "微分 (实验性)",
+    "part": "偏微分",
+    "parte": "偏微分 (实验性)",
+    "mat": "矩阵",
+    "piec": "分段函数"
+  },
+  "manual": "符号对照手册",
+  "manual_list": {
+    "parens": "括号",
+    "greek": "希腊字母",
+    "operator": "运算符",
+    "rela": "关系符号",
+    "logic": "逻辑符号",
+    "other": "杂项",
+    "mathFn": "数学函数",
+    "arrow": "箭头",
+    "font": "字体",
+    "notation": "注音符号",
+    "special": "特殊",
+    "escapes": "转义符号",
+    "displayMode": "使用 # 来插入 \\displaystyle 环境",
+    "superposition": "上下叠合"
+  },
+  "caution": {
+    "title": "注意",
+    "diff": "这个库是由我个人重构的，一些语法可能与 <a href=\"http://asciimath.org\" target=\"_blank\">asciimath.org</a> 原版不同，尤其是<a href=\"#example_list.mat\">矩阵</a>，使用时请格外注意。",
+    "deps": "Asciimath parser 只是简单的将输入的公式转换为 LaTeX 代码，并不依赖于 DOM 和 mathml，如果你需要可视化呈现这些公式，请与 KaTeX 或 mathjax 等这些工具一起使用。"
+  },
+  "useStory": {
+    "title": "使用场景",
+    "web": "配合 <a href='https://katex.org' target='_blank'>KaTeX</a> 或 <a href='https://www.mathjax.org/' target='_blank'>mathjax</a> 在 DOM 上生成公式。",
+    "obsidian": "使用 <a href='https://obsidian.md' target='_blank'>Obsidian</a> 笔记软件的 <a href='https://github.com/widcardw/obsidian-asciimath' target='_blank'>obsidian-asciimath</a> 插件。",
+    "cli": "使用 <a href='https://npmjs.com/package/asciimath-parser-cli' target='_blank'>cli</a> 将文件中的 asciimath 公式转换为 LaTeX 公式。"
+  },
+  "thanks": {
+    "title": "致谢",
+    "content": "zmx0142857 的<a href='https://zmx0142857.github.io/note' target='_blank'>笔记</a>及其帮助"
+  }
 }

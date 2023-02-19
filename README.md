@@ -76,8 +76,8 @@ pnpx am-parse input_file.txt
 # This will parse delimitered asciimath formulas into LaTeX formulas.
 ```
 
-| Options  |        | 
-|----------|--------|
-| `-d <delimiter>`           | Specify a delimiter (default: `) |
+| Options                    |                                                                   | 
+|----------------------------|-------------------------------------------------------------------|
+| `-d <delimiter>`           | Specify a delimiter (default: `)                                  |
 | `--display <display_mode>` | Whether to enable display mode in inline formula (default: false) |
-| `-h, --help`               |    Display this message |
+| `-h, --help`               | Display this message                                              |
