@@ -137,4 +137,5 @@ pre {
   background-color: #7f7f7f11;
   padding: 0.75em;
   border-radius: 0.2rem;
+  overflow: auto;
 }
