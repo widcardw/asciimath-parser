@@ -9,6 +9,8 @@ const Footer: Component = () => {
     <>
       <h2>{t('thanks.title')}</h2>
       <p innerHTML={t('thanks.content')} />
+      <h2>{t('reportIssue.title')}</h2>
+      <p innerHTML={t('reportIssue.content')} />
       <footer>
         <span class="op-70">Playground made with </span><a href="https://solidjs.com">Solidjs</a>
         &nbsp;&nbsp;&nbsp;

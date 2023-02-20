@@ -56,5 +56,9 @@
     "title": "How to Use",
     "install": "Install the package with npm/yarn/pnpm.",
     "import": "Import it and create an instance of Asciimath, then use the <code>toTex</code> method to generate LaTeX code."
+  },
+  "reportIssue": {
+    "title": "Report an Issue",
+    "content": "Go to <a href='https://github.com/widcardw/asciimath-parser/issues' target='_blank'>GitHub issue</a> and provide a template that can reproduce the problem you ran into."
   }
 }

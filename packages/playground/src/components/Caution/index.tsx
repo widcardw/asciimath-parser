@@ -1,19 +1,23 @@
 /* eslint-disable solid/no-innerhtml */
 import type { Component } from 'solid-js'
-import { Suspense } from 'solid-js'
+import type { AsciiMath } from '@am'
 import { highlight, languages } from 'prismjs'
 import { i18nFactory } from '~/i18n'
 import { version } from '~/../package.json'
 import './highlight.css'
 
 const installCode = `pnpm install asciimath-parser${version.includes('beta') ? `@${version}` : ''}`
-const jsCode = `import { AsciiMath } from 'asciimath-parser'
-const am = new AsciiMath()
-console.log(am.toTex('sum_1^(+oo)1/n^2=pi^2/6'))
-// \\displaystyle{ \\sum _{ n = 1 } ^{ + \\infty } \\frac{ 1 }{ n ^{ 2 } } = \\frac{ \\pi ^{ 2 } }{ 6 } }`
 
-const Caution: Component = () => {
+const Caution: Component<{
+  am: AsciiMath
+// eslint-disable-next-line solid/no-destructure
+}> = ({ am }) => {
   const { t } = i18nFactory()
+  const f = 'sum_(n=1)^(+oo)1/n^2=pi^2/6'
+  const jsCode = `import { AsciiMath } from 'asciimath-parser'
+const am = new AsciiMath()
+console.log(am.toTex('${f}'))
+// ${am.toTex(f)}`
   return (
     <>
       <h2>{t('how2use.title')}</h2>

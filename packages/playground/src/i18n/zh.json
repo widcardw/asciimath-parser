@@ -56,5 +56,9 @@
     "title": "如何使用",
     "install": "使用 npm/yarn/pnpm 包管理工具安装。",
     "import": "引入 AsciiMath，创建实例，使用 <code>toTex</code> 方法来生成 LaTeX 代码。"
+  },
+  "reportIssue": {
+    "title": "遇到问题 & 贡献",
+    "content": "请至 <a href='https://github.com/widcardw/asciimath-parser/issues' target='_blank'>GitHub issue</a> 报告你的问题，最好使用能够稳定复现的案例，并给出合适的错误日志，谢谢！"
   }
 }

@@ -51,7 +51,7 @@ const App: Component = () => {
         </For>
       </div>
       <CardList am={am} />
-      <Caution />
+      <Caution am={am} />
       <h2>{t('examples')}</h2>
       <ExampleTable am={am} />
       <h2>{t('manual')}</h2>
