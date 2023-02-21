@@ -3,6 +3,7 @@ import { parser } from './parser'
 import type { Trie } from './trie'
 import { createTrie } from './trie'
 
+type ConstLaw = [string, string]
 type ReplaceLaw = [RegExp | string, string | ((substring: string, ...args: any[]) => string)]
 
 interface AsciiMathConfig {
@@ -20,7 +21,7 @@ interface AsciiMathConfig {
    *   ['dy', '\text{d}y']
    * ]
    */
-  extConst?: Array<[string, string]>
+  extConst?: ConstLaw[]
   /**
    * Replace target expressions before tokenizing
    *
@@ -79,9 +80,9 @@ class AsciiMath {
       code = this.replaceLaws.reduce((prev, curLaw) => {
       // in fact the judgement is no use...
         if (typeof curLaw[1] === 'function')
-          return prev.replace(curLaw[0], curLaw[1])
+          return prev.replaceAll(curLaw[0], curLaw[1])
         else
-          return prev.replace(curLaw[0], curLaw[1])
+          return prev.replaceAll(curLaw[0], curLaw[1])
       }, code)
       let res = codegen(parser(this.trie.tryParsingAll(code)))
       if (this.display)

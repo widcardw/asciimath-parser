@@ -36,10 +36,6 @@ class Trie {
   private _root: TrieNode
   private _char_to_index: Map<string, number> = new Map()
   private _n: number
-  // public MAP: Map<string, {
-  //   type: TokenTypes
-  //   tex: string
-  // }> = new Map()
 
   public constructor(nodes: string[]) {
     if (nodes.length === 0)
@@ -376,7 +372,7 @@ function createTrie(config: {
     SYMBOLMAP.set(k, { type: TokenTypes.Const, tex: v })
   })
   for (const k of SYMBOLMAP.keys())
-    k.split('').forEach(i => charset.add(i))
+    [...k].forEach(i => charset.add(i))
   const chars = Array.from(charset)
   chars.push(' ')
 

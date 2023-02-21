@@ -51,3 +51,17 @@ describe('backslash', () => {
     expect(codegen(ast)).toMatchInlineSnapshot('"\\\\"')
   })
 })
+
+describe('replace laws', () => {
+  it('should replace all', () => {
+    const am = new AsciiMath({
+      display: false,
+      replaceBeforeTokenizing: [
+        ['123', '456'],
+        ['ref', 'text(reference)'],
+      ],
+    })
+    expect(am.toTex('123456123ref')).toMatchInlineSnapshot('"456456456 \\\\text{reference}"')
+    expect(am.toTex('123456ref ref')).toMatchInlineSnapshot('"456456 \\\\text{reference} \\\\text{reference}"')
+  })
+})
