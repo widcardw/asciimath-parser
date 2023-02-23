@@ -1,6 +1,7 @@
 import type { Component } from 'solid-js'
 import { For } from 'solid-js'
 import { AsciiMath } from '@am'
+import { useDark, usePreferredDark } from 'solidjs-use'
 import { CardList } from './components/CardList'
 
 import {
@@ -16,7 +17,7 @@ import { Caution } from './components/Caution'
 const bandages = [
   { href: 'https://npmjs.com/package/asciimath-parser', src: 'https://img.shields.io/npm/v/asciimath-parser?color=a1b858&label=npm' },
   { href: 'https://npmjs.com/package/asciimath-parser-cli', src: 'https://img.shields.io/static/v1?label=npm&message=cli&color=orange' },
-  { href: 'https://github.com/widcardw/asciimath-parser', src: 'https://img.shields.io/badge/GitHub-blue' },
+  { href: 'https://github.com/widcardw/asciimath-parser', src: 'https://img.shields.io/badge/GitHub-blue?logo=github' },
 ]
 
 const display = [
@@ -40,6 +41,8 @@ const am = new AsciiMath()
 
 const App: Component = () => {
   const { t } = i18nFactory()
+  const [isDark, setDark] = useDark()
+  const _preferredDark = usePreferredDark()
   return (
     <main>
       <h1>Asciimath Parser</h1>
@@ -49,6 +52,11 @@ const App: Component = () => {
             <a href={b.href} target="_blank"><img src={b.src} /></a>
           )}
         </For>
+        <img
+          style={{ cursor: 'pointer' }}
+          src={`https://img.shields.io/badge/${isDark() ? 'Dark-white' : 'Light-white'}?label=Theme`}
+          onClick={() => setDark(!isDark())}
+        />
       </div>
       <CardList am={am} />
       <Caution am={am} />
