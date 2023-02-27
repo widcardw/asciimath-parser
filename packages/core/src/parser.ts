@@ -619,7 +619,7 @@ function getPartialDerivativeExpressionNode(tokens: TokenizedValue[], current: n
   }
 
   // find the upper
-  const fnRes = walk(tokens, current, false)
+  const fnRes = walk(tokens, current, true)
   current = fnRes.current
   if (fnRes.node.type === NodeTypes.Flat)
     fnRes.node = removeParenOfFlatExpr(fnRes.node)
