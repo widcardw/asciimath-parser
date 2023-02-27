@@ -20,6 +20,9 @@
   display: block;
   box-sizing: border-box;
 }
+.dark .input-area {
+  color: #ddd;
+}
 .tex-code {
   padding: 1rem;
   margin: 0;
