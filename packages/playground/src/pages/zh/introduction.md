@@ -197,11 +197,11 @@ console.log(am.toTex('sum_(n=1)^(+oo)1/n^2=pi^2/6'))
 |:-----:|:-----:|
 | $\displaystyle{ \left[ \begin{array}{cc} \displaystyle \frac{ \partial ^{ 2 } f }{ \partial x ^{ 2 } }&\frac{ \partial ^{ 2 } f }{ \partial x \partial y }\\\frac{ \partial ^{ 2 } f }{ \partial y \partial x }&\displaystyle \frac{ \partial ^{ 2 } f }{ \partial y ^{ 2 } } \\ \end{array} \right] }$ | [#part^2 f x, part^2 f (x y); part^2 f (y x), #part^2 f y] |
 
-## Special Thanks
+## 特别感谢
 
-zmx0142857's [note](https://zmx0142857.github.io/notes) and his great help.
+zmx0142857 的[笔记](https://zmx0142857.github.io/notes)以及他的帮助。
 
-## Report an Issue
+## 遇到问题
 
-Go to [GitHub issue](https://github.com/widcardw/asciimath-parser/issues) and provide a template that can reproduce the problem you ran into.
+请至 [GitHub issue](https://github.com/widcardw/asciimath-parser/issues) 提供能够稳定复现的情况并给出适当的报错信息。
 
