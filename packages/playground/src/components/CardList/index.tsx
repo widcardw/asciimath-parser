@@ -1,18 +1,18 @@
 import type { Component } from 'solid-js'
 import { For, createSignal } from 'solid-js'
-import type { AsciiMath } from '@am'
+import { AsciiMath } from '../../../../core'
 import { Card } from '../Card'
+import './index.css'
 
-const CardList: Component<{
-  am: AsciiMath
-}> = (props) => {
+const CardList: Component = () => {
   const [items, setItems] = createSignal([0])
+  const am = new AsciiMath()
   return (
     <>
       <For each={items()}>
         {(_item, i) => (
-          <div class="mb-4 w-full flex">
-            <Card am={props.am} />
+          <div class="mb-4 w-full flex-no">
+            <Card am={am} />
             <button
               style={{ 'font-family': 'KaTeX_Main' }}
               onClick={() => setItems(p => [...p.slice(0, i()), ...p.slice(i() + 1)])}

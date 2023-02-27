@@ -1,37 +1,27 @@
 {
-  "name": "am-parser-playground",
-  "version": "0.4.0-beta.4",
-  "private": true,
-  "description": "",
-  "license": "MIT",
-  "scripts": {
-    "start": "vite",
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview"
-  },
-  "dependencies": {
-    "solid-js": "^1.6.2"
-  },
-  "devDependencies": {
-    "@types/katex": "^0.16.0",
-    "@types/prismjs": "^1.26.0",
-    "@widcardw/eslint-config": "^0.3.1",
-    "@widcardw/eslint-config-solid": "0.3.1",
-    "eslint": "^8.32.0",
-    "eslint-plugin-css": "^0.6.0",
-    "katex": "^0.16.4",
-    "prism-theme-vars": "^0.2.4",
-    "prismjs": "^1.29.0",
-    "solidjs-use": "^1.1.0",
-    "typescript": "^4.9.4",
-    "vite": "^3.2.4",
-    "vite-plugin-solid": "^2.4.0"
-  },
-  "eslintConfig": {
-    "extends": [
-      "@widcardw",
-      "@widcardw/eslint-config-solid"
-    ]
-  }
+	"name": "play",
+	"type": "module",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "astro dev",
+		"start": "astro dev",
+		"check": "astro check && tsc",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro"
+	},
+	"dependencies": {
+		"@astrojs/solid-js": "^2.0.2",
+		"@types/node": "^18.0.0",
+		"astro": "^1.6.0",
+		"solid-js": "^1.6.10"
+	},
+	"devDependencies": {
+		"@types/katex": "^0.16.0",
+		"katex": "^0.16.4",
+		"rehype-katex": "^6.0.2",
+		"remark-gfm": "^3.0.1",
+		"remark-math": "^5.1.1",
+		"solidjs-use": "^1.1.0"
+	}
 }

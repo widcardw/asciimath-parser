@@ -159,7 +159,7 @@ const SYMBOLMAP: Map<string, {
   ['~|', { type: TokenTypes.RParen, tex: '\\rceil' }],
   ['CC', { type: TokenTypes.Const, tex: '\\mathbb{C}' }],
   ['NN', { type: TokenTypes.Const, tex: '\\mathbb{N}' }],
-  ['QQ', { type: TokenTypes.Const, tex: '\\mathbb{QQ}' }],
+  ['QQ', { type: TokenTypes.Const, tex: '\\mathbb{Q}' }],
   ['RR', { type: TokenTypes.Const, tex: '\\mathbb{R}' }],
   ['ZZ', { type: TokenTypes.Const, tex: '\\mathbb{Z}' }],
   ['\'', { type: TokenTypes.Const, tex: '^{\\prime}' }],

@@ -2,9 +2,8 @@ import type { Component } from 'solid-js'
 import { createMemo, createSignal } from 'solid-js'
 import { useDebounceFn } from 'solidjs-use'
 import katex from 'katex'
-import type { AsciiMath } from '@am'
+import type { AsciiMath } from '../../../../core'
 import './index.css'
-import { i18nFactory } from '~/i18n'
 
 const Card: Component<{
   am: AsciiMath
@@ -15,7 +14,6 @@ const Card: Component<{
     displayMode: true,
     throwOnError: false,
   }))
-  const { t } = i18nFactory()
 
   function inputAmCb(e: Event) {
     setAmStr((e.target as HTMLTextAreaElement).value)
@@ -30,16 +28,15 @@ const Card: Component<{
     <div class="card">
       <textarea
         class="input-area"
-        placeholder={t('inputAm')}
+        placeholder="Input Asciimath here"
         onInput={useDebounceFn(inputAmCb, 800)}
       />
       <textarea
         class="input-area"
-        placeholder={t('inputTex')}
+        placeholder="Input KaTeX here"
         value={tex()}
         onInput={useDebounceFn(inputTexCb, 800)}
       />
-      {/* eslint-disable-next-line solid/no-innerhtml */}
       <div class="display" innerHTML={kHtml()} />
     </div>
   )

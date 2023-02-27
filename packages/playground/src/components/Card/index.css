@@ -9,7 +9,7 @@
 .input-area {
   width: 100%;
   min-height: 4rem;
-  font-family: "Jetbrains Mono", "JetBrains Mono";
+  font-family: var(--font-mono);
   border: none;
   border-bottom: 1px solid #7f7f7f33;
   background: transparent;
@@ -26,7 +26,7 @@
 .tex-code {
   padding: 1rem;
   margin: 0;
-  font-family: "Jetbrains Mono", "JetBrains Mono";
+  font-family: var(--font-mono);
   border-top: 1px solid #7f7f7f33;
   border-bottom: 1px solid #7f7f7f33;
 }

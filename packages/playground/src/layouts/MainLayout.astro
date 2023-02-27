@@ -1,0 +1,49 @@
+---
+import HeadCommon from '../components/HeadCommon.astro';
+import HeadSEO from '../components/HeadSEO.astro';
+import PageContent from '../components/PageContent/PageContent.astro';
+import * as CONFIG from '../config';
+import type { MarkdownHeading } from 'astro';
+
+type Props = {
+  frontmatter: CONFIG.Frontmatter;
+  headings: MarkdownHeading[];
+};
+
+const { frontmatter, headings } = Astro.props as Props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const currentPage = Astro.url.pathname;
+---
+
+<html dir={frontmatter.dir ?? 'ltr'} lang={frontmatter.lang ?? 'en-us'} class="initial">
+  <head>
+    <HeadCommon />
+    <HeadSEO frontmatter={frontmatter} canonicalUrl={canonicalURL} />
+    <title>
+      {frontmatter.title ? `${frontmatter.title} 🚀 ${CONFIG.SITE.title}` : CONFIG.SITE.title}
+    </title>
+    <style>
+      body {
+        width: 100%;
+        --gutter: 0.5rem;
+        --doc-padding: 2rem;
+      }
+
+      .layout {
+        max-width: 55rem;
+        margin: 2rem auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="layout">
+      <PageContent frontmatter={frontmatter} headings={headings} currentPage={currentPage}>
+        <slot />
+        <div style="text-align: center; opacity: 50%; margin: 2rem auto;">
+          Playground built with <a href="https://astro.build">Astro</a> &nbsp;&nbsp;&nbsp; Deploys on <a href="https://netlify.app">Netlify</a>
+        </div>
+      </PageContent>
+    </main>
+  </body>
+</html>

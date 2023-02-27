@@ -1,0 +1,63 @@
+---
+import type { Frontmatter } from '../../config';
+import type { MarkdownHeading } from 'astro';
+import { getLanguageFromURL } from '../../languages';
+import LanguageSelect from '../LanguageSelect/LanguageSelect';
+import ThemeToggle from '../ThemeToggle/ThemeToggleButton';
+import { Shield } from '../Shield/Shield';
+import { CardList } from '../CardList';
+
+type Props = {
+  frontmatter: Frontmatter;
+  headings: MarkdownHeading[];
+  currentPage: string;
+};
+
+const { frontmatter } = Astro.props as Props;
+const title = frontmatter.title;
+const { currentPage } = Astro.props as Props;
+const lang = getLanguageFromURL(currentPage);
+
+const bandages = [
+  { href: 'https://npmjs.com/package/asciimath-parser', src: 'https://img.shields.io/npm/v/asciimath-parser?color=a1b858&label=npm' },
+  { href: 'https://npmjs.com/package/asciimath-parser-cli', src: 'https://img.shields.io/static/v1?label=npm&message=cli&color=orange' },
+  { href: 'https://github.com/widcardw/asciimath-parser', src: 'https://img.shields.io/badge/GitHub-blue?logo=github' },
+]
+---
+
+<article id="article" class="content">
+  <section class="main-section">
+    <div class="flex justify-between">
+      <h1 class="content-title" id="overview">{title}</h1>
+      <div class="flex space-x-2">
+        <LanguageSelect lang={lang} client:idle />
+        <ThemeToggle client:idle />
+      </div>
+    </div>
+    {bandages.map(s => (<><Shield href={s.href} src={s.src} />&nbsp;</>))}
+    <CardList client:idle />
+    <slot />
+  </section>
+</article>
+
+<style>
+  .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 0;
+    margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+    margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+
+  .content > section {
+    margin-bottom: 4rem;
+  }
+
+  .block {
+    display: block;
+  }
+
+  @media (min-width: 50em) {
+    .sm\:hidden {
+      display: none;
+    }
+  }
+</style>
