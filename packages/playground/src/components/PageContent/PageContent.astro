@@ -27,7 +27,7 @@ const bandages = [
 
 <article id="article" class="content">
   <section class="main-section">
-    <div class="flex justify-between">
+    <div class="header-bar">
       <h1 class="content-title" id="overview">{title}</h1>
       <div class="flex space-x-2">
         <LanguageSelect lang={lang} client:idle />
@@ -41,6 +41,18 @@ const bandages = [
 </article>
 
 <style>
+  .header-bar {
+    margin-bottom: 1rem;
+  }
+  @media (min-width: 37.75em) {
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .main-section {
+    padding: var(--doc-padding) var(--gutter);
+  }
   .space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 0;
     margin-right: calc(0.5rem * var(--tw-space-x-reverse));
