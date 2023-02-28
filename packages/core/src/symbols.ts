@@ -114,6 +114,7 @@ const SYMBOLMAP: Map<string, {
   ['\\^', { type: TokenTypes.Const, tex: '\\^' }],
   ['\\$', { type: TokenTypes.Const, tex: '\\$' }],
   ['\\ ', { type: TokenTypes.Const, tex: '\\ ' }],
+  ['\\,', { type: TokenTypes.Const, tex: '\\,' }],
   ['prop', { type: TokenTypes.Const, tex: '\\propto' }],
   ['complement', { type: TokenTypes.Const, tex: '\\complement' }],
 
