@@ -74,6 +74,7 @@ am-parse input.txt
 
 You can also use matrix dividers like `[a, b | c; d, e | f]`, it yields $\left[ \begin{array}{cc|c} a&b&c\\d&e&f \\ \end{array} \right]$.
 
+## Manual
 
 ### Paren
 
@@ -190,22 +191,23 @@ You can also use matrix dividers like `[a, b | c; d, e | f]`, it yields $\left[ 
 |:-----:|:-----:|:-----:|:-----:|
 | $\displaystyle{ \overset{ \text{bala} }{ x } }$ | overset("bala")(x) | $\displaystyle{ \overbrace{ 12345 } ^{ n } }$ | overbrace(12345)^n |
 | $\displaystyle{ \underbrace{ 12345 } _{ n } }$ | underbrace(12345)\_n | $\displaystyle{ \xlongequal[ 123 ]{ 456 } }$ | ==\_(123)^(456) |
-| $\displaystyle{ \xrightarrow[ a ]{ b } }$ | -->_(a)^(b) |
+| $\displaystyle{ \xrightarrow[ a ]{ b } }$ | -->\_(a)^(b) |
 
 
 ### Special
 
 | output | code | output | code |
 |:-----:|:-----:|:-----:|:-----:|
-| $\displaystyle{ \text{I'm here} }$ | text(I'm here) | $\displaystyle{ \hbar }$ | tex(\hbar) |
+| $\text{I'm here}$ | text(I'm here) | $\hbar$ | tex(\hbar) |
 
 
 ### Escape
 
 | output | code | output | code | output | code | output | code |
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| $\displaystyle{ \# }$ | \# | \$ | \$ | $\displaystyle{ \% }$ | \% | $\displaystyle{ \_ }$ | \_ |
-| $\displaystyle{ \`a }$ | "\`a" | $\displaystyle{ @ }$ | \@ | $\displaystyle{ \  }$ | \  | $\displaystyle{ \^a }$ | "\^a" |
+| $\#$ | \\# | \$ | \\$ | $\%$ | \\% | $\_$ | \\\_ |
+| $\`a$ | "\\`a" | $@$ | \\@ | $\ $ | \\  | $\^a$ | "\\^a" |
+| $\,$ | \\, | |  |  |  |  |  |
 
 
 ### Use `#` to insert `\displaystyle`

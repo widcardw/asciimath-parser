@@ -1,5 +1,8 @@
 <script is:inline>
-	// Redirect your homepage to the first page of documentation.
-	// If you have a landing page, remove this script and add it here!
-	window.location.pathname = `/en/introduction`;
+  // Redirect your homepage to the first page of documentation.
+  // If you have a landing page, remove this script and add it here!
+  let lang = window.navigator.language.split('-').shift()
+  if (lang !== 'zh')
+    lang = 'en'
+  window.location.pathname = `/${lang}/introduction`;
 </script>

@@ -11,5 +11,8 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [remarkGfm, remarkMath],
     rehypePlugins: [rehypeKatex],
+    shikiConfig: {
+      theme: 'nord',
+    },
   },
 })

@@ -10,6 +10,8 @@ layout: ../../layouts/MainLayout.astro
 
 ## 如何使用
 
+### API
+
 使用 npm/yarn/pnpm 包管理工具安装。
 
 ```sh
@@ -23,6 +25,21 @@ import { AsciiMath } from 'asciimath-parser'
 const am = new AsciiMath()
 console.log(am.toTex('sum_(n=1)^(+oo)1/n^2=pi^2/6'))
 // \displaystyle{ \sum _{ n = 1 } ^{ + \infty } \frac{ 1 }{ n ^{ 2 } } = \frac{ \pi ^{ 2 } }{ 6 } }
+```
+
+### Cli
+
+使用包管理工具安装，可以使用全局安装或本工作环境安装。
+
+```sh
+pnpm add -g asciimath-parser-cli
+```
+
+输入一个文件，将所有被 **反引号** \` 包裹的公式都转换为被 **美元符** `$` 包裹的 LaTeX 公式。
+
+```sh
+am-parse input.txt
+# 将会生成 input_parsed_xxx.tex
 ```
 
 ## 使用场景
@@ -57,6 +74,7 @@ console.log(am.toTex('sum_(n=1)^(+oo)1/n^2=pi^2/6'))
 
 你也可以使用 `|` 来编写增广矩阵，例如 `[a, b | c; d, e | f]`，它会生成 $\left[ \begin{array}{cc|c} a&b&c\\d&e&f \\ \end{array} \right]$.
 
+## 符号对照手册
 
 ### 括号
 
@@ -173,23 +191,23 @@ console.log(am.toTex('sum_(n=1)^(+oo)1/n^2=pi^2/6'))
 |:-----:|:-----:|:-----:|:-----:|
 | $\displaystyle{ \overset{ \text{bala} }{ x } }$ | overset("bala")(x) | $\displaystyle{ \overbrace{ 12345 } ^{ n } }$ | overbrace(12345)^n |
 | $\displaystyle{ \underbrace{ 12345 } _{ n } }$ | underbrace(12345)\_n | $\displaystyle{ \xlongequal[ 123 ]{ 456 } }$ | ==\_(123)^(456) |
-| $\displaystyle{ \xrightarrow[ a ]{ b } }$ | -->_(a)^(b) |
+| $\displaystyle{ \xrightarrow[ a ]{ b } }$ | -->\_(a)^(b) |
 
 
 ### 特殊
 
 | 输出 | 源码 | 输出 | 源码 |
 |:-----:|:-----:|:-----:|:-----:|
-| $\displaystyle{ \text{I'm here} }$ | text(I'm here) | $\displaystyle{ \hbar }$ | tex(\hbar) |
+| $\text{I'm here}$ | text(I'm here) | $\hbar$ | tex(\hbar) |
 
 
 ### 转义符号
 
 | 输出 | 源码 | 输出 | 源码 | 输出 | 源码 | 输出 | 源码 |
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| $\displaystyle{ \# }$ | \# | \$ | \$ | $\displaystyle{ \% }$ | \% | $\displaystyle{ \_ }$ | \_ |
-| $\displaystyle{ \`a }$ | "\`a" | $\displaystyle{ @ }$ | \@ | $\displaystyle{ \  }$ | \  | $\displaystyle{ \^a }$ | "\^a" |
-
+| $\#$ | \\# | \$ | \\$ | $\%$ | \\% | $\_$ | \\\_ |
+| $\`a$ | "\\`a" | $@$ | \\@ | $\ $ | \\  | $\^a$ | "\\^a" |
+| $\,$ | \\, | |  |  |  |  |  |
 
 ### 使用 `#` 来插入 `\displaystyle`
 

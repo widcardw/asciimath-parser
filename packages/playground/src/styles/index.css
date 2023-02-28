@@ -243,14 +243,22 @@ table {
 
 /* Zebra striping */
 tr:nth-of-type(odd) {
-	background: rgba(128, 128, 128, 0.1);
+	background: hsla(var(--color-gray-40), 0.1);
+}
+
+tr:nth-of-type(even) {
+	background: hsla(var(--color-gray-80), 0.1);
 }
 
 thead,
 th {
-	background: rgba(128, 128, 128, 0.2);
+	background: hsla(var(--color-gray-80), 1);
 	color: var(--theme-color);
 	font-weight: bold;
+}
+
+.theme-dark thead, .theme-dark th {
+	background-color: hsla(var(--color-gray-40), 1);
 }
 
 td,
@@ -412,5 +420,5 @@ table {
 }
 
 td:nth-child(odd) {
-	background-color: rgba(128, 128, 128, 0.1);
+	background-color: hsla(var(--color-gray-40), 0.1);
 }
