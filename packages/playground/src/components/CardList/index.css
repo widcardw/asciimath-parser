@@ -24,7 +24,7 @@ button:focus-visible {
 
 .theme-dark {
   color: #ddd;
-  background-color: #242424;
+  background-color: var(--theme-bg);
 }
 .theme-dark button {
   background-color: var(--theme-code-bg);
