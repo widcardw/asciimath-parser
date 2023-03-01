@@ -77,4 +77,13 @@ describe('spaces', () => {
   it('should not recognize as matrix', () => {
     expect(am.toTex('a |\\;| b')).toMatchInlineSnapshot('"a \\\\left| \\\\; \\\\right| b"')
   })
+  it('should parse over arrow', () => {
+    expect(am.toTex('(AB)^-->')).toMatchInlineSnapshot('"\\\\overrightarrow{\\\\left( A B \\\\right)}"')
+    expect(am.toTex('(AB)^--> + (CD)^-->')).toMatchInlineSnapshot('"\\\\overrightarrow{\\\\left( A B \\\\right)} + \\\\overrightarrow{\\\\left( C D \\\\right)}"')
+  })
+  it('should parse factorial', () => {
+    expect(am.toTex('(mn)!')).toMatchInlineSnapshot('"{\\\\left( m n \\\\right) !}"')
+    expect(am.toTex('(mn)!!')).toMatchInlineSnapshot('"{\\\\left( m n \\\\right) !!}"')
+    expect(am.toTex('(mn)!!/n!')).toMatchInlineSnapshot('"\\\\frac{ {\\\\left( m n \\\\right) !!} }{ {n !} }"')
+  })
 })

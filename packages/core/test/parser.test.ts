@@ -128,7 +128,8 @@ describe('test color', () => {
     expect(node).toMatchSnapshot()
   })
   it('should parse correct color', () => {
-    const am = new AsciiMath()
-    expect(am.toTex('color(green)(123) 456')).toMatchInlineSnapshot('"\\\\displaystyle{ { \\\\color{green} 123 } 456 }"')
+    const am = new AsciiMath({ display: false })
+    expect(am.toTex('color(green)(123) 456')).toMatchInlineSnapshot('"{ \\\\color{green} 123 } 456"')
+    expect(am.toTex('m!')).toMatchInlineSnapshot('"{m !}"')
   })
 })

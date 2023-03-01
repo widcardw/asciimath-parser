@@ -544,13 +544,11 @@ function preProcessOperatorSup(node: ChildNode, operator: TokenizedValue, tokens
 }
 
 function preProcessOperatorAO(node: ChildNode, nextToken: TokenizedValue) {
-  const newNode = createFlatNode()
-  if (node.type === NodeTypes.Flat)
-    newNode.body.push(...(node.body))
-
-  else
-    newNode.body.push(node)
-  newNode.body.push(createConstNode(nextToken))
+  const newNode = createParamOneNode()
+  // if (node.type === NodeTypes.Flat)
+  //   node = removeParenOfFlatExpr(node)
+  newNode.params = node
+  newNode.tex = nextToken.tex
   node = newNode
   return node
 }

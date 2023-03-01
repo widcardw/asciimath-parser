@@ -177,12 +177,14 @@ am-parse input.txt
 | $\displaystyle{ \mathtt{ A } }$ | tt A | $\displaystyle{ \mathfrak{ A } }$ | fr A | $\displaystyle{ \mathsf{ A } }$ | sf A | $\displaystyle{ \mathscr{ A } }$ | scr A |
 
 
-### 注音
+### 注音和上标
 
 | 输出 | 源码 | 输出 | 源码 | 输出 | 源码 | 输出 | 源码 |
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | $\displaystyle{ \hat{ x } }$ | hat x | $\displaystyle{ \bar{ x } }$ | bar x | $\displaystyle{ \underline{ x } }$ | ul x | $\displaystyle{ \vec{ x } }$ | vec x |
-| $\displaystyle{ \dot{ x } }$ | dot x | $\displaystyle{ \ddot{ x } }$ | ddot x | $\displaystyle{ \stackrel{\frown}{ 123 } }$ | arc 123 | $\displaystyle{ \tilde{ x } }$ | tilde x |
+| $\displaystyle{ \dot{ x } }$ | dot x | $\displaystyle{ \ddot{ x } }$ | ddot x | $\displaystyle{ \stackrel{\frown}{ x } }$ | arc x | $\displaystyle{ \tilde{ x } }$ | tilde x |
+| $\overrightarrow{AB}$ | {:AB:}^--> | $\overleftarrow{CD}$ | {:CD:}^<-- | $\overrightarrow{EF}$ | Vec(EF) | $\overline{GH}$  | ol(GH) |
+| $\widehat{AB}$ | widehat(AB) | $\widetilde{CD}$ | widetilde(CD) | | | | |
 
 
 ### 上下叠合
@@ -226,6 +228,23 @@ am-parse input.txt
 | 输出 | 源码 |
 |:-----:|:-----:|
 | $\displaystyle{ \left[ \begin{array}{cc} \displaystyle \frac{ \partial ^{ 2 } f }{ \partial x ^{ 2 } }&\frac{ \partial ^{ 2 } f }{ \partial x \partial y }\\\frac{ \partial ^{ 2 } f }{ \partial y \partial x }&\displaystyle \frac{ \partial ^{ 2 } f }{ \partial y ^{ 2 } } \\ \end{array} \right] }$ | [#part^2 f x, part^2 f (x y); part^2 f (y x), #part^2 f y] |
+
+### 多行公式与 `aligned` 环境
+
+```
+f(x) & = x "e"^x
+                         <-- 这里一个空行
+f'(x) & = (x + 1) "e"^x
+                         <-- 这里一个空行
+f''(x) & = (x + 2) "e"^x
+```
+
+$$
+\begin{aligned}f \left( x \right) & = x \text{e} ^{ x } \\ f ^{\prime} \left( x \right) & = \left( x + 1 \right) \text{e} ^{ x } \\ f ^{\prime\prime} \left( x \right) & = \left( x + 2 \right) \text{e} ^{ x }\end{aligned}
+$$
+
+> **注意** 如果你想要使用多行公式，你的公式中至少需要包含一个 `&` 符号。
+
 
 ## 特别感谢
 
