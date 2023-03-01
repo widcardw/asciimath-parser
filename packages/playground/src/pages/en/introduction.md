@@ -144,7 +144,7 @@ You can also use matrix dividers like `[a, b | c; d, e | f]`, it yields $\left[ 
 | $\displaystyle{ \partial }$ | del | $\displaystyle{ \nabla }$ | grad | $\displaystyle{ \pm }$ | +- | $\displaystyle{ \varnothing }$ | O/ |
 | $\displaystyle{ \infty }$ | oo | $\displaystyle{ \aleph }$ | aleph | $\displaystyle{ \angle }$ | /_ | $\displaystyle{ \therefore }$ | :. |
 | $\displaystyle{ \because }$ | :' | $\displaystyle{ \ldots }$ | ... | $\displaystyle{ \cdots }$ | cdots | $\displaystyle{ \vdots }$ | vdots |
-| $\displaystyle{ \ddots }$ | ddots | $\displaystyle{ \left\| \quad \right\| }$ | \| quad \| | $\displaystyle{ \diamond }$ | diamond | $\displaystyle{ \square }$ | square |
+| $\displaystyle{ \ddots }$ | ddots  | $\displaystyle{ \diamond }$ | diamond | $\displaystyle{ \square }$ | square | | |
 | $\displaystyle{ \mathbb{N} }$ | NN | $\displaystyle{ \mathbb{Q} }$ | QQ | $\displaystyle{ \mathbb{R} }$ | RR | $\displaystyle{ \mathbb{C} }$ | CC |
 
 
@@ -206,9 +206,20 @@ You can also use matrix dividers like `[a, b | c; d, e | f]`, it yields $\left[ 
 | output | code | output | code | output | code | output | code |
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | $\#$ | \\# | \$ | \\$ | $\%$ | \\% | $\_$ | \\\_ |
-| $\`a$ | "\\`a" | $@$ | \\@ | $\ $ | \\  | $\^a$ | "\\^a" |
-| $\,$ | \\, | |  |  |  |  |  |
+| $\`a$ | "\\`a" | $@$ | \\@ | $\^a$ | "\\^a" | | |
 
+### Space
+
+| code | output | width |
+|-----|------|-----|
+| a quad b | $a\quad b$ | 1 em |
+| a qquad b | $a\qquad b$ | 2 em |
+| a enspace b | $a\enspace b$ | 0.5 em |
+| a \\; b | $a\;b$ | 5/18 em |
+| a \\: b | $a\:b$ | 4/18 em |
+| a \\, b | $a\,b$ | 3/18 em |
+| a \\! b | $a\!b$ | -3/18 em |
+| a hspace(12pt) b | $a\hspace{12pt}b$ | 12 pt |
 
 ### Use `#` to insert `\displaystyle`
 
