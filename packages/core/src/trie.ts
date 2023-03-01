@@ -24,7 +24,7 @@ const createTextToken: GeneTokenFn = (config: {
   return { value, isKeyWord: false, current, tex: value, type: TokenTypes.Text }
 }
 
-const createTexToken: GeneTokenFn = (config: {
+const createConstToken: GeneTokenFn = (config: {
   current: number
   value?: string
 }) => {
@@ -299,26 +299,37 @@ class Trie {
       let t = this.tryParsing(letters, current)
       current = t.current
       if (t.value !== '') {
-        if (t.value === 'text') {
-          t = this.getPlainText(letters, current, createTextToken)
-          current = t.current
-          tokens.push(t)
-          continue
+        switch (t.value) {
+          case 'text': {
+            t = this.getPlainText(letters, current, createTextToken)
+            current = t.current
+            tokens.push(t)
+            break
+          }
+          case 'tex': {
+            t = this.getPlainText(letters, current, createConstToken)
+            current = t.current
+            tokens.push(t)
+            break
+          }
+          case 'hspace': {
+            tokens.push(t)
+            const nt = this.getPlainText(letters, current, createConstToken)
+            current = nt.current
+            tokens.push(nt)
+            break
+          }
+          case 'color': {
+            tokens.push(t)
+            const nt = this.processColor(letters, current)
+            current = nt.current
+            tokens.push(nt)
+            break
+          }
+          default: {
+            tokens.push(t)
+          }
         }
-
-        if (t.value === 'tex') {
-          t = this.getPlainText(letters, current, createTexToken)
-          current = t.current
-          tokens.push(t)
-          continue
-        }
-
-        tokens.push(t)
-        if (t.value !== 'color')
-          continue
-        const nt = this.processColor(letters, current)
-        current = nt.current
-        tokens.push(nt)
         continue
       }
       // process numbers

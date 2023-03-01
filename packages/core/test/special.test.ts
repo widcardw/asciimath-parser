@@ -65,3 +65,16 @@ describe('replace laws', () => {
     expect(am.toTex('123456ref ref')).toMatchInlineSnapshot('"456456 \\\\text{reference} \\\\text{reference}"')
   })
 })
+
+describe('spaces', () => {
+  const am = new AsciiMath({ display: false })
+  it('should parse spaces', () => {
+    expect(am.toTex('a\\;b')).toMatchInlineSnapshot('"a \\\\; b"')
+    expect(am.toTex('a\\,b')).toMatchInlineSnapshot('"a \\\\, b"')
+    expect(am.toTex('a\\:b')).toMatchInlineSnapshot('"a \\\\: b"')
+    expect(am.toTex('a enspace b')).toMatchInlineSnapshot('"a \\\\enspace b"')
+  })
+  it('should not recognize as matrix', () => {
+    expect(am.toTex('a |\\;| b')).toMatchInlineSnapshot('"a \\\\left| \\\\; \\\\right| b"')
+  })
+})

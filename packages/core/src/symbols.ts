@@ -115,6 +115,11 @@ const SYMBOLMAP: Map<string, {
   ['\\$', { type: TokenTypes.Const, tex: '\\$' }],
   ['\\ ', { type: TokenTypes.Const, tex: '\\ ' }],
   ['\\,', { type: TokenTypes.Const, tex: '\\,' }],
+  ['\\;', { type: TokenTypes.Const, tex: '\\;' }],
+  ['\\:', { type: TokenTypes.Const, tex: '\\:' }],
+  ['\\!', { type: TokenTypes.Const, tex: '\\!' }],
+  ['enspace', { type: TokenTypes.Const, tex: '\\enspace' }],
+  ['hspace', { type: TokenTypes.OperatorA, tex: '\\hspace{$1}' }],
   ['prop', { type: TokenTypes.Const, tex: '\\propto' }],
   ['complement', { type: TokenTypes.Const, tex: '\\complement' }],
 
