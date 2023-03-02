@@ -50,7 +50,7 @@ function codegen(node: ChildNode | RootNode): string {
         node.lparen,
         // beginMatrix,
         arrayBegin,
-        node.params.map(i => i.map(codegen).join('&')).join('\\\\'),
+        node.params.map(i => i.map(codegen).join(' & ')).join('\\\\'),
         '\\\\',
         arrayEnd,
         // endMatrix,
