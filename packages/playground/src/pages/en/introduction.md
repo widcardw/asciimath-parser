@@ -207,7 +207,7 @@ You can also use matrix dividers like `[a, b | c; d, e | f]`, it yields $\left[ 
 
 | output | code | output | code | output | code | output | code |
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| $\#$ | \\# | \$ | \\$ | $\%$ | \\% | $\_$ | \\\_ |
+| $\#$ | \\# | \$ | \\$ | $\%$ | \\% or % | $\_$ | \\\_ |
 | $\`a$ | "\\`a" | $@$ | \\@ | $\^a$ | "\\^a" | | |
 
 ### Space

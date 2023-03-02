@@ -110,6 +110,7 @@ const SYMBOLMAP: Map<string, {
   ['\\&', { type: TokenTypes.Const, tex: '\\&' }],
   ['\\@', { type: TokenTypes.Const, tex: '@' }],
   ['\\%', { type: TokenTypes.Const, tex: '\\%' }],
+  ['%', { type: TokenTypes.Const, tex: '\\%' }],
   ['\\_', { type: TokenTypes.Const, tex: '\\_' }],
   ['\\^', { type: TokenTypes.Const, tex: '\\^' }],
   ['\\$', { type: TokenTypes.Const, tex: '\\$' }],
