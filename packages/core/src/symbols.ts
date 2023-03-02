@@ -61,7 +61,9 @@ const SYMBOLMAP: Map<string, {
   ['omega', { type: TokenTypes.Const, tex: '\\omega' }],
   ['Omega', { type: TokenTypes.Const, tex: '\\Omega' }],
   ['***', { type: TokenTypes.Const, tex: '\\star' }],
+  ['star', { type: TokenTypes.Const, tex: '\\star' }],
   ['**', { type: TokenTypes.Const, tex: '\\ast' }],
+  ['ast', { type: TokenTypes.Const, tex: '\\ast' }],
   ['*', { type: TokenTypes.Const, tex: '\\cdot' }],
   ['//', { type: TokenTypes.Const, tex: '{/}' }],
   ['\\\\', { type: TokenTypes.Const, tex: '\\backslash' }],
@@ -229,6 +231,7 @@ const SYMBOLMAP: Map<string, {
   ['circArrRt', { type: TokenTypes.Const, tex: '\\circlearrowright' }],
   ['^-->', { type: TokenTypes.OperatorAO, tex: '\\overrightarrow{ $1 }' }],
   ['^<--', { type: TokenTypes.OperatorAO, tex: '\\overleftarrow{ $1 }' }],
+  ['^<-->', { type: TokenTypes.OperatorAO, tex: '\\overleftrightarrow{ $1 }' }],
 
   ['sqrt', { type: TokenTypes.OperatorA, tex: '\\sqrt{ $1 }' }],
   ['root', { type: TokenTypes.OperatorOAB, tex: '\\sqrt[ $1 ]{ $2 }' }],
