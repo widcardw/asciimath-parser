@@ -22,7 +22,8 @@
     "b:core": "cd packages/core && nr build",
     "b:cli": "cd packages/cli && nr build",
     "b:playground": "nr b:core && cd packages/playground && nr build",
-    "t:core": "cd packages/core && nr test --run"
+    "t:core": "cd packages/core && nr test --run",
+    "t:cov": "cd packages/core && nr cov"
   },
   "devDependencies": {
     "@antfu/ni": "^0.19.0",
