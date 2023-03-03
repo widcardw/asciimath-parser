@@ -73,6 +73,7 @@ describe('spaces', () => {
     expect(am.toTex('a\\,b')).toMatchInlineSnapshot('"a \\\\, b"')
     expect(am.toTex('a\\:b')).toMatchInlineSnapshot('"a \\\\: b"')
     expect(am.toTex('a enspace b')).toMatchInlineSnapshot('"a \\\\enspace b"')
+    expect(am.toTex('a hspace(12pt) b')).toMatchInlineSnapshot('"a \\\\hspace{12pt} b"')
   })
   it('should not recognize as matrix', () => {
     expect(am.toTex('a |\\;| b')).toMatchInlineSnapshot('"a \\\\left| \\\\; \\\\right| b"')
@@ -85,5 +86,12 @@ describe('spaces', () => {
     expect(am.toTex('(mn)!')).toMatchInlineSnapshot('"{\\\\left( m n \\\\right) !}"')
     expect(am.toTex('(mn)!!')).toMatchInlineSnapshot('"{\\\\left( m n \\\\right) !!}"')
     expect(am.toTex('(mn)!!/n!')).toMatchInlineSnapshot('"\\\\frac{ {\\\\left( m n \\\\right) !!} }{ {n !} }"')
+  })
+})
+
+describe('aligned environment', () => {
+  const am = new AsciiMath({ display: false })
+  it('should generate aligned env', () => {
+    expect(am.toTex('a=b\n\nc=d')).toMatchInlineSnapshot('"\\\\begin{aligned}a = b \\\\\\\\ c = d\\\\end{aligned}"')
   })
 })

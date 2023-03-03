@@ -36,7 +36,7 @@ function codegen(node: ChildNode | RootNode): string {
     }
     case NodeTypes.Root: {
       let res = node.body.map(codegen).join(' ')
-      if (node.body.find(n => n.type === NodeTypes.Const && n.value === '&'))
+      if (node.body.find(n => n.type === NodeTypes.Const && (n.value === '&' || n.tex === '\\\\')))
         res = `\\begin{aligned}${res}\\end{aligned}`
       return res
     }
@@ -44,16 +44,13 @@ function codegen(node: ChildNode | RootNode): string {
       return node.body.map(codegen).join(' ')
     }
     case NodeTypes.Matrix: {
-      // const [beginMatrix, endMatrix] = getMatrixBoundary(node)
       const [arrayBegin, arrayEnd] = getArrayBoundary(node)
       return [
         node.lparen,
-        // beginMatrix,
         arrayBegin,
         node.params.map(i => i.map(codegen).join(' & ')).join('\\\\'),
         '\\\\',
         arrayEnd,
-        // endMatrix,
         node.rparen,
       ].join(' ')
     }
