@@ -199,7 +199,7 @@ const SYMBOLMAP: Map<string, {
   ['lcm', { type: TokenTypes.Const, tex: '\\operatorname{lcm}' }],
   ['min', { type: TokenTypes.Const, tex: '\\min' }],
   ['max', { type: TokenTypes.Const, tex: '\\max' }],
-  ['Sup', { type: TokenTypes.Const, tex: '\\operatorname{sup}' }],
+  ['Sup', { type: TokenTypes.Const, tex: '\\sup' }],
   ['inf', { type: TokenTypes.Const, tex: '\\inf' }],
   ['mod', { type: TokenTypes.Const, tex: '\\operatorname{mod}' }],
   ['sgn', { type: TokenTypes.Const, tex: '\\operatorname{sgn}' }],
