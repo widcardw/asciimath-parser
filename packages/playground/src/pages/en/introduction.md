@@ -183,8 +183,7 @@ You can also use matrix dividers like `[a, b | c; d, e | f]`, it yields $\left[ 
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | $\displaystyle{ \hat{ x } }$ | hat x | $\displaystyle{ \bar{ x } }$ | bar x | $\displaystyle{ \underline{ x } }$ | ul x | $\displaystyle{ \vec{ x } }$ | vec x |
 | $\displaystyle{ \dot{ x } }$ | dot x | $\displaystyle{ \ddot{ x } }$ | ddot x | $\displaystyle{ \stackrel{\frown}{ x } }$ | arc x | $\displaystyle{ \tilde{ x } }$ | tilde x |
-| $\overrightarrow{AB}$ | {:AB:}^--> | $\overleftarrow{CD}$ | {:CD:}^<-- | $\overrightarrow{EF}$ | Vec(EF) | $\overline{GH}$  | ol(GH) |
-| $\widehat{AB}$ | widehat(AB) | $\widetilde{CD}$ | widetilde(CD) | | | | |
+| $\overrightarrow{AB}$ | Vec(AB) | $\widehat{AB}$ | Hat(AB) | $\widetilde{CD}$ | Tilde(CD) | | |
 
 
 ### Superposition
@@ -200,7 +199,7 @@ You can also use matrix dividers like `[a, b | c; d, e | f]`, it yields $\left[ 
 
 | output | code | output | code |
 |:-----:|:-----:|:-----:|:-----:|
-| $\text{I'm here}$ | text(I'm here) | $\hbar$ | tex(\hbar) |
+| $\text{I'm here}$ | text(I'm here) | $\hbar$ | tex"\hbar" |
 
 
 ### Escape

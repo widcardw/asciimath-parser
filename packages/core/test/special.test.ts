@@ -78,8 +78,8 @@ describe('spaces', () => {
     expect(am.toTex('a |\\;| b')).toMatchInlineSnapshot('"a \\\\left| \\\\; \\\\right| b"')
   })
   it('should parse over arrow', () => {
-    expect(am.toTex('(AB)^-->')).toMatchInlineSnapshot('"\\\\overrightarrow{ \\\\left( A B \\\\right) }"')
-    expect(am.toTex('(AB)^--> + (CD)^-->')).toMatchInlineSnapshot('"\\\\overrightarrow{ \\\\left( A B \\\\right) } + \\\\overrightarrow{ \\\\left( C D \\\\right) }"')
+    expect(am.toTex('Vec(AB)')).toMatchInlineSnapshot('"\\\\overrightarrow{ A B }"')
+    expect(am.toTex('Vec(AB) + Vec(CD)')).toMatchInlineSnapshot('"\\\\overrightarrow{ A B } + \\\\overrightarrow{ C D }"')
   })
   it('should parse factorial', () => {
     expect(am.toTex('(mn)!')).toMatchInlineSnapshot('"{\\\\left( m n \\\\right) !}"')

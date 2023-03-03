@@ -183,8 +183,8 @@ am-parse input.txt
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | $\displaystyle{ \hat{ x } }$ | hat x | $\displaystyle{ \bar{ x } }$ | bar x | $\displaystyle{ \underline{ x } }$ | ul x | $\displaystyle{ \vec{ x } }$ | vec x |
 | $\displaystyle{ \dot{ x } }$ | dot x | $\displaystyle{ \ddot{ x } }$ | ddot x | $\displaystyle{ \stackrel{\frown}{ x } }$ | arc x | $\displaystyle{ \tilde{ x } }$ | tilde x |
-| $\overrightarrow{AB}$ | {:AB:}^--> | $\overleftarrow{CD}$ | {:CD:}^<-- | $\overrightarrow{EF}$ | Vec(EF) | $\overline{GH}$  | ol(GH) |
-| $\widehat{AB}$ | widehat(AB) | $\widetilde{CD}$ | widetilde(CD) | | | | |
+| $\overrightarrow{AB}$ | Vec(AB) | $\widehat{CD}$ | Hat(CD) | $\widetilde{EF}$ | Tilde(EF) | $\overline{GH}$ | ol(GH) |
+
 
 
 ### 上下叠合
@@ -200,7 +200,7 @@ am-parse input.txt
 
 | 输出 | 源码 | 输出 | 源码 |
 |:-----:|:-----:|:-----:|:-----:|
-| $\text{I'm here}$ | text(I'm here) | $\hbar$ | tex(\hbar) |
+| $\text{I'm here}$ | text(I'm here) | $\hbar$ | tex"\hbar" |
 
 
 ### 转义符号

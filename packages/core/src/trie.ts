@@ -182,21 +182,26 @@ class Trie {
       return { value: '', isKeyWord: false, current, tex: '', type: TokenTypes.None }
   }
 
-  public tryParsingText(letters: string[], current: number): TokenizedValue {
+  private getPlainTextInDoubleQuote(letters: string[], current: number): { value: string; current: number } {
+    let value = ''
     let ch = letters[current]
     if (ch === '"') {
       ch = letters[++current]
-      let value = ''
       while (ch !== '"' && current < letters.length) {
         value += ch
         ch = letters[++current]
       }
       if (ch === '"') {
         current++
-        return { value, isKeyWord: false, current, tex: value, type: TokenTypes.Text }
+        return { current, value }
       }
     }
-    return { value: '', isKeyWord: false, current, tex: '', type: TokenTypes.None }
+    return { value, current }
+  }
+
+  public tryParsingText(letters: string[], current: number): TokenizedValue {
+    const { value, current: newCurrent } = this.getPlainTextInDoubleQuote(letters, current)
+    return { value, isKeyWord: false, current: newCurrent, tex: value, type: TokenTypes.Text }
   }
 
   private getColorString(letters: string[], current: number): TokenizedValue {
@@ -307,8 +312,11 @@ class Trie {
             break
           }
           case 'tex': {
-            t = this.getPlainText(letters, current, createConstToken)
-            current = t.current
+            // t = this.getPlainText(letters, current, createConstToken)
+            current = this.skipSpaces(letters, current)
+            const { value: v, current: c } = this.getPlainTextInDoubleQuote(letters, current)
+            current = c
+            t = createConstToken({ current, value: v })
             tokens.push(t)
             break
           }

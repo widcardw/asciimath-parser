@@ -31,7 +31,7 @@ describe('trie success', () => {
     expect(trie.search('aaaa')).toBe(false)
     expect(trie.search('bananan')).toBe(false)
     // directly search keyword
-    expect(trie.tryParsing('banana')).toMatchInlineSnapshot(`
+    expect(trie.tryParsing([...'banana'])).toMatchInlineSnapshot(`
       {
         "current": 6,
         "isKeyWord": true,
@@ -39,7 +39,7 @@ describe('trie success', () => {
       }
     `)
     // match the longest keyword and return the keyword
-    expect(trie.tryParsing('bananan')).toMatchInlineSnapshot(`
+    expect(trie.tryParsing([...'bananan'])).toMatchInlineSnapshot(`
       {
         "current": 6,
         "isKeyWord": true,
@@ -47,7 +47,7 @@ describe('trie success', () => {
       }
     `)
     // it does not match any keyword
-    expect(trie.tryParsing('bab')).toMatchInlineSnapshot(`
+    expect(trie.tryParsing([...'bab'])).toMatchInlineSnapshot(`
       {
         "current": 2,
         "isKeyWord": false,
@@ -57,7 +57,7 @@ describe('trie success', () => {
       }
     `)
     // skip when meeting a space
-    expect(trie.tryParsing('ab cfdgerafw')).toMatchInlineSnapshot(`
+    expect(trie.tryParsing([...'ab cfdgerafw'])).toMatchInlineSnapshot(`
       {
         "current": 2,
         "isKeyWord": false,
@@ -67,7 +67,7 @@ describe('trie success', () => {
       }
     `)
     // maybe it is somewhat strange...
-    expect(trie.tryParsing('bana')).toMatchInlineSnapshot(`
+    expect(trie.tryParsing([...'bana'])).toMatchInlineSnapshot(`
       {
         "current": 4,
         "isKeyWord": false,
@@ -152,7 +152,7 @@ describe('tokenize text', () => {
   })
 
   it('should tokenize tex', () => {
-    expect(trie.tryParsingAll('tex(\\hbar)')).toMatchInlineSnapshot(`
+    expect(trie.tryParsingAll('tex"\\hbar"')).toMatchInlineSnapshot(`
       [
         {
           "current": 10,
@@ -167,6 +167,6 @@ describe('tokenize text', () => {
 
   it('should generate tex', () => {
     const am = new AsciiMath()
-    expect(am.toTex('tex(\\hbar)')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\hbar }"')
+    expect(am.toTex('tex"\\hbar"')).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\hbar }"')
   })
 })
