@@ -243,7 +243,7 @@ $$
 \begin{aligned}f \left( x \right) & = x \text{e} ^{ x } \\ f ^{\prime} \left( x \right) & = \left( x + 1 \right) \text{e} ^{ x } \\ f ^{\prime\prime} \left( x \right) & = \left( x + 2 \right) \text{e} ^{ x }\end{aligned}
 $$
 
-> **注意** 如果你想要使用多行公式，你的公式中至少需要包含一个 `&` 符号。
+> **注意** `&` 相当于 LaTeX 中的 `&`，而上述的空行相当于 LaTeX 中的 `\\` 换行
 
 
 ## 特别感谢

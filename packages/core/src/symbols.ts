@@ -324,6 +324,7 @@ const SYMBOLMAP: Map<string, {
   // ['"', { type: TokenTypes.Paren, tex: '\\text{ $1 }' }],
 
   ['&', { type: TokenTypes.Align, tex: '&' }],
+  ['&&', { type: TokenTypes.Align, tex: '&&' }],
   [',', { type: TokenTypes.Split, tex: ',' }],
   [';', { type: TokenTypes.Split, tex: ';' }],
 

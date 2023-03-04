@@ -242,7 +242,7 @@ $$
 \begin{aligned}f \left( x \right) & = x \text{e} ^{ x } \\ f ^{\prime} \left( x \right) & = \left( x + 1 \right) \text{e} ^{ x } \\ f ^{\prime\prime} \left( x \right) & = \left( x + 2 \right) \text{e} ^{ x }\end{aligned}
 $$
 
-> **Caution** If you want to use `aligned` environment, the formula must contain at least one `&`.
+> **Caution** The `&` acts as `&` in `aligned` env, and the blank lines act as `\\` in LaTeX.
 
 ## Special Thanks
 
