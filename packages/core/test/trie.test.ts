@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { AsciiMath } from '../src'
 import { Trie, createTrie } from '../src/trie'
 
-const MULTILINE_AM = `sum_(n=1)^(+oo)&=(pi^2/6)
+const MULTILINE_AM = `sum_(n=1)^(+oo)1/n^2&=pi^2/6
 
 f(x)&=x^2`
 

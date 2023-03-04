@@ -18,7 +18,7 @@ describe('special cases', () => {
   })
   it('should parse minus', () => {
     expect(am.toTex('a-b-c/d'))
-      .toMatchInlineSnapshot('"a {-b} {-\\\\frac{ c }{ d }}"')
+      .toMatchInlineSnapshot('"a - b - \\\\frac{ c }{ d }"')
   })
   it('should parse pink color', () => {
     expect(am.toTex('color(pink)(abc)'))

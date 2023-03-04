@@ -50,7 +50,7 @@ describe('parse det', () => {
     expect(parser(trie.tryParsingAll('|1,2|'))).toMatchSnapshot()
   })
   it('should parse a set expression', () => {
-    expect(parser(trie.tryParsingAll('{(x,y)|x2+y2<=1}'))).toMatchSnapshot()
+    expect(parser(trie.tryParsingAll('{(x,y)|x^2+y^2<=1}'))).toMatchSnapshot()
   })
   it('should parse a det with inner parens', () => {
     expect(parser(trie.tryParsingAll('|1,2;(3 + 4)^7,4|'))).toMatchSnapshot()

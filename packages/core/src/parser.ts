@@ -582,6 +582,42 @@ function getParamOneNode(tokens: TokenizedValue[], current: number, lookForward:
   return { node, current }
 }
 
+function generateMinusNode(tokens: TokenizedValue[], current: number): { node: ChildNode; current: number } {
+  // the minus token
+  const token = tokens[current]
+  // the previous token is not `_` ot `^`
+  if (current > 0) {
+    const prevToken = tokens[current - 1]
+    if (prevToken.type !== TokenTypes.OperatorSup
+      && prevToken.type !== TokenTypes.OperatorA
+      && prevToken.type !== TokenTypes.OperatorOAB
+      && prevToken.type !== TokenTypes.OperatorAOB)
+      return { node: createConstNode(token.value), current: current + 1 }
+  }
+  // operator is at the beginning
+  else {
+    return { node: createConstNode(token.value), current: current + 1 }
+  }
+  current++
+  // out of boundary
+  if (current >= tokens.length)
+    return { node: createConstNode(token.value), current }
+
+  // the next token is right paren, just skip
+  const nextToken = tokens[current]
+  if (nextToken.type === TokenTypes.RParen)
+    return { node: createConstNode(token.value), current }
+
+  const walkRes = walk(tokens, current, true)
+  current = walkRes.current
+  if (walkRes.node.type === NodeTypes.Flat)
+    walkRes.node = removeParenOfFlatExpr(walkRes.node)
+  const node = createParamOneNode()
+  node.tex = token.tex
+  node.params = walkRes.node
+  return { node, current }
+}
+
 function createDeriUpperNode(operator: string, sup: ChildNode | null, fn: ChildNode): ChildNode {
   const upperNode = createFlatNode()
   // partial or derivate
@@ -678,8 +714,7 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): Walk
       break
     }
     case TokenTypes.OperatorMinus: {
-      // low priority, do look forward
-      ({ node, current } = getParamOneNode(tokens, current, true))
+      ({ node, current } = generateMinusNode(tokens, current))
       break
     }
     case TokenTypes.OperatorOAB: {

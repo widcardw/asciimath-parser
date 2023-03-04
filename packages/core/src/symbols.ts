@@ -65,6 +65,7 @@ const SYMBOLMAP: Map<string, {
   ['**', { type: TokenTypes.Const, tex: '\\ast' }],
   ['ast', { type: TokenTypes.Const, tex: '\\ast' }],
   ['*', { type: TokenTypes.Const, tex: '\\cdot' }],
+  ['cdot', { type: TokenTypes.Const, tex: '\\cdot' }],
   ['//', { type: TokenTypes.Const, tex: '{/}' }],
   ['\\\\', { type: TokenTypes.Const, tex: '\\backslash' }],
   ['setminus', { type: TokenTypes.Const, tex: '\\setminus' }],
@@ -328,7 +329,8 @@ const SYMBOLMAP: Map<string, {
   [',', { type: TokenTypes.Split, tex: ',' }],
   [';', { type: TokenTypes.Split, tex: ';' }],
 
-  ['-', { type: TokenTypes.OperatorMinus, tex: '{-$1}' }],
+  ['-', { type: TokenTypes.OperatorMinus, tex: '{-$1 }' }],
+  ['+', { type: TokenTypes.OperatorMinus, tex: '{+$1 }' }],
 
   ['part', { type: TokenTypes.OperatorPartial, tex: '\\partial' }],
   ['pp', { type: TokenTypes.OperatorPartial, tex: '\\partial' }],
