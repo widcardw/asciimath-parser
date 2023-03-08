@@ -1,0 +1,58 @@
+{
+  "name": "asciimath-parser",
+  "type": "module",
+  "version": "0.5.0",
+  "description": "Transform asciimath to LaTeX",
+  "author": "widcardw",
+  "license": "MIT",
+  "homepage": "https://github.com/widcardw/asciimath-parser#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/widcardw/asciimath-parser.git"
+  },
+  "bugs": "https://github.com/widcardw/asciimath-parser/issues",
+  "keywords": [
+    "asciimath",
+    "LaTeX"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "vitest --run",
+    "build": "tsup",
+    "nearley": "nearleyc src/parser.ne -o src/parser.js && node src/after-build.js",
+    "cov": "vitest --run --coverage"
+  },
+  "devDependencies": {
+    "@types/nearley": "^2.11.2",
+    "@types/prompts": "^2.4.2",
+    "@vitest/coverage-c8": "^0.28.3",
+    "bumpp": "^8.2.1",
+    "nearley": "^2.20.1",
+    "tsup": "^6.5.0",
+    "vitest": "^0.27.2"
+  },
+  "dependencies": {
+    "asciimath-parser": "link:",
+    "moo": "^0.5.2"
+  }
+}
