@@ -1,22 +1,22 @@
 export enum TokenTypes {
   keyword = 'keyword',
-  opA = 'opA',
+  opOA = 'opOA',
   opOAB = 'opOAB',
   lp = 'lp',
   rp = 'rp',
   limits = 'limits',
 }
 
-type SymbolsType = {
-  keyword: any,
-  opA: any,
-  opOAB: any,
-  lp: any,
-  rp: any,
-  limits: any,
+export interface Symbols {
+  keyword?: any
+  opOA?: any
+  opOAB?: any
+  lp?: any
+  rp?: any
+  limits?: any
 }
 
-const symbols: SymbolsType = {
+const symbols: Symbols = {
   keyword: {
     // greek letters
     'alpha': { tex: '\\alpha' },
@@ -125,6 +125,7 @@ const symbols: SymbolsType = {
     'rhd': { tex: '\\rhd' },
     'normal': { tex: '\\unlhd' },
     'rnormal': { tex: '\\unrhd' },
+    '#': { tex: '\\displaystyle' },
 
     // escapes
     '\\#': { tex: '\\#' },
@@ -257,69 +258,69 @@ const symbols: SymbolsType = {
     'circArrLt': { tex: '\\circlearrowleft' },
     'circArrRt': { tex: '\\circlearrowright' },
   },
-  opA: {
-    'abs': { tex: '\\left|$1\\right|' },
-    'norm': { tex: '\\left\\|$1\\right\\|' },
-    'floor': { tex: '\\left\\lfloor$1\\right\\rfloor' },
-    'ceil': { tex: '\\left\\lceil$1\\right\\rceil' },
-    'sqrt': { tex: '\\sqrt{ $1 }' },
-    'hat': { tex: '\\hat{ $1 }' },
-    'widehat': { tex: '\\widehat{ $1 }' },
-    'Hat': { tex: '\\widehat{ $1 }' },
-    'tilde': { tex: '\\tilde{ $1 }' },
-    'widetilde': { tex: '\\widetilde{ $1 }' },
-    'Tilde': { tex: '\\widetilde{ $1 }' },
-    'ol': { tex: '\\overline{ $1 }' },
-    'overline': { tex: '\\overline{ $1 }' },
-    'arc': { tex: '\\stackrel{\\frown}{ $1 }' },
-    'bar': { tex: '\\bar{ $1 }' },
-    'vec': { tex: '\\vec{ $1 }' },
-    'Vec': { tex: '\\overrightarrow{ $1 }' },
-    'dot': { tex: '\\dot{ $1 }' },
-    'ddot': { tex: '\\ddot{ $1 }' },
-    'ul': { tex: '\\underline{ $1 }' },
-    'underline': { tex: '\\underline{ $1 }' },
-    'underbrace': { tex: '\\underbrace{ $1 }' },
-    'ubrace': { tex: '\\underbrace{ $1 }' },
-    'overbrace': { tex: '\\overbrace{ $1 }' },
-    'obrace': { tex: '\\overbrace{ $1 }' },
-    'phantom': { tex: '\\phantom{ $1 }' },
-    'text': { tex: '\\text{$1}' },
-    'mbox': { tex: '\\mbox{$1}' },
-    'op': { tex: '\\operatorname{ $1 }' },
-    'cancel': { tex: '\\cancel{ $1 }' },
-    'hspace': { tex: '\\hspace{$1}' },
+  opOA: {
+    abs: { tex: '\\left|$1\\right|' },
+    norm: { tex: '\\left\\|$1\\right\\|' },
+    floor: { tex: '\\left\\lfloor$1\\right\\rfloor' },
+    ceil: { tex: '\\left\\lceil$1\\right\\rceil' },
+    sqrt: { tex: '\\sqrt{ $1 }' },
+    hat: { tex: '\\hat{ $1 }' },
+    widehat: { tex: '\\widehat{ $1 }' },
+    Hat: { tex: '\\widehat{ $1 }' },
+    tilde: { tex: '\\tilde{ $1 }' },
+    widetilde: { tex: '\\widetilde{ $1 }' },
+    Tilde: { tex: '\\widetilde{ $1 }' },
+    ol: { tex: '\\overline{ $1 }' },
+    overline: { tex: '\\overline{ $1 }' },
+    arc: { tex: '\\stackrel{\\frown}{ $1 }' },
+    bar: { tex: '\\bar{ $1 }' },
+    vec: { tex: '\\vec{ $1 }' },
+    Vec: { tex: '\\overrightarrow{ $1 }' },
+    dot: { tex: '\\dot{ $1 }' },
+    ddot: { tex: '\\ddot{ $1 }' },
+    ul: { tex: '\\underline{ $1 }' },
+    underline: { tex: '\\underline{ $1 }' },
+    underbrace: { tex: '\\underbrace{ $1 }' },
+    ubrace: { tex: '\\underbrace{ $1 }' },
+    overbrace: { tex: '\\overbrace{ $1 }' },
+    obrace: { tex: '\\overbrace{ $1 }' },
+    phantom: { tex: '\\phantom{ $1 }' },
+    text: { tex: '\\text{$1}' },
+    mbox: { tex: '\\mbox{$1}' },
+    op: { tex: '\\operatorname{ $1 }' },
+    cancel: { tex: '\\cancel{ $1 }' },
+    hspace: { tex: '\\hspace{$1}' },
 
     // unary minus and plus
     // '-': { tex: '{-$1 }' },
     // '+': { tex: '{+$1 }' },
 
     // font command
-    'bb': { tex: '\\mathbf{ $1 }' },
-    'mathbf': { tex: '\\mathbf{ $1 }' },
-    'sf': { tex: '\\mathsf{ $1 }' },
-    'mathsf': { tex: '\\mathsf{ $1 }' },
-    'bbb': { tex: '\\mathbb{ $1 }' },
-    'mathbb': { tex: '\\mathbb{ $1 }' },
-    'cc': { tex: '\\mathcal{ $1 }' },
-    'mathcal': { tex: '\\mathcal{ $1 }' },
-    'tt': { tex: '\\mathtt{ $1 }' },
-    'mathtt': { tex: '\\mathtt{ $1 }' },
-    'fr': { tex: '\\mathfrak{ $1 }' },
-    'mathfrak': { tex: '\\mathfrak{ $1 }' },
-    'bm': { tex: '\\boldsymbol{ $1 }' },
-    'rm': { tex: '\\mathrm{ $1 }' },
-    'mathrm': { tex: '\\mathrm{ $1 }' },
-    'scr': { tex: '\\mathscr{ $1 }' },
-    'mathscr': { tex: '\\mathscr{ $1 }' },
+    bb: { tex: '\\mathbf{ $1 }' },
+    mathbf: { tex: '\\mathbf{ $1 }' },
+    sf: { tex: '\\mathsf{ $1 }' },
+    mathsf: { tex: '\\mathsf{ $1 }' },
+    bbb: { tex: '\\mathbb{ $1 }' },
+    mathbb: { tex: '\\mathbb{ $1 }' },
+    cc: { tex: '\\mathcal{ $1 }' },
+    mathcal: { tex: '\\mathcal{ $1 }' },
+    tt: { tex: '\\mathtt{ $1 }' },
+    mathtt: { tex: '\\mathtt{ $1 }' },
+    fr: { tex: '\\mathfrak{ $1 }' },
+    mathfrak: { tex: '\\mathfrak{ $1 }' },
+    bm: { tex: '\\boldsymbol{ $1 }' },
+    rm: { tex: '\\mathrm{ $1 }' },
+    mathrm: { tex: '\\mathrm{ $1 }' },
+    scr: { tex: '\\mathscr{ $1 }' },
+    mathscr: { tex: '\\mathscr{ $1 }' },
   },
   opOAB: {
-    'root': { tex: '\\sqrt[ $1 ]{ $2 }'},
-    'frac': { tex: '\\frac{ $1 }{ $2 }'},
-    'stackrel': { tex: '\\stackrel{ $1 }{ $2 }'},
-    'overset': { tex: '\\overset{ $1 }{ $2 }'},
-    'underset': { tex: '\\under{ $1 }{ $2 }'},
-    'color': { tex: '{ \\color{$1} $2 }'},
+    root: { tex: '\\sqrt[ $1 ]{ $2 }' },
+    frac: { tex: '\\frac{ $1 }{ $2 }' },
+    stackrel: { tex: '\\stackrel{ $1 }{ $2 }' },
+    overset: { tex: '\\overset{ $1 }{ $2 }' },
+    underset: { tex: '\\under{ $1 }{ $2 }' },
+    color: { tex: '{ \\color{$1} $2 }' },
   },
   lp: {
     '(': { tex: '(' },
@@ -340,9 +341,20 @@ const symbols: SymbolsType = {
     '~|': { tex: '\\rceil' },
   },
   limits: {
-    '==': { tex: '\\xlongequal[ $2 ]{ $1 }'},
-    '-->': { tex: '\\xrightarrow[ $2 ]{ $1 }'},
+    '==': { tex: '\\xlongequal[ $2 ]{ $1 }' },
+    '-->': { tex: '\\xrightarrow[ $2 ]{ $1 }' },
   },
 }
 
-export default symbols
+const initSymbols = (extSymbols: Symbols = {}): Symbols => {
+  const res: Symbols = {}
+  Object.keys(symbols).forEach((key) => {
+    res[key as TokenTypes] = {
+      ...symbols[key as TokenTypes],
+      ...extSymbols[key as TokenTypes],
+    }
+  })
+  return res
+}
+
+export default initSymbols

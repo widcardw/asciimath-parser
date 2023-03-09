@@ -1,6 +1,6 @@
 import type { Component } from 'solid-js'
 import { For, createSignal } from 'solid-js'
-import { AsciiMath } from '../../../../core'
+import { AsciiMath } from '../../asciimath'
 import { Card } from '../Card'
 import './index.css'
 

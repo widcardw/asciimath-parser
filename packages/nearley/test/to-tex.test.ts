@@ -1,46 +1,95 @@
 import { describe, expect, it } from 'vitest'
 import Nearley from 'nearley'
-import toTex from '../src/to-tex'
-import grammar from '../src/parser.js'
-import lexer from '../src/lexer'
+import initSymbols from '../src/symbols'
+import initLexer from '../src/lexer'
+import initGrammar from '../src/grammar.js'
+import initGenerator from '../src/to-tex'
 
-const examples: { input: string, output: string, desc?: string }[] = [
-  { input: 'a', output: 'a' },
+const symbols = initSymbols({
+  keyword: {
+    dx: { tex: '{\\text{d}x}' },
+    dy: { tex: '{\\text{d}y}' },
+    dz: { tex: '{\\text{d}z}' },
+    dt: { tex: '{\\text{d}t}' },
+  },
+})
+const lexer = initLexer(symbols)
+const grammar = initGrammar(lexer)
+const toTex = initGenerator(symbols)
+
+type Examples = { input: string; output: string; desc?: string }[]
+
+const passedExamples: Examples = [
+  { input: '    ', output: '' },
+  { input: ' a', output: 'a' },
   { input: '+', output: '+' },
   { input: 'pi', output: '\\pi' },
   { input: '1+2+3', output: '1 + 2 + 3' },
   { input: '1+-2', output: '1 \\pm 2' },
   { input: '(1+2]', output: '\\left(1 + 2\\right]' },
   { input: 'sin 11_4^514 19^19_8 1_0', output: '\\sin 11_4^514 19_8^19 1_0' },
-  { input: '[a;b;c]', output: '\\begin{array}[c]a \\\\ b \\\\ c\\end{array}' },
-  { input: '[a, b; c, d;]', output: '\\begin{array}[cc]a & b \\\\ c & d\\end{array}' },
+  { input: '[a;b;c]', output: '\\left[\\begin{array}{c}a \\\\ b \\\\ c\\end{array}\\right]' },
+  { input: '[a, b; c, d;:}', output: '\\left[\\begin{array}{cc}a & b \\\\ c & d\\end{array}\\right.' },
+  { input: 'sqrt x', output: '\\sqrt{ x }' },
+  { input: 'sqrt (x)', output: '\\sqrt{ x }' },
+  { input: 'root 3 2.0', output: '\\sqrt[ 3 ]{ 2.0 }' },
+  { input: 'root [3)  {:2.0}', output: '\\sqrt[ 3 ]{ 2.0 }' },
+  { input: 'color (red)  abc', output: '{ \\color{red} a } b c' },
+  { input: 'sum_(n=1)^(+oo) 1/n^2 = pi^2/6', output: '\\sum_{ n = 1 }^{ + \\infty } \\frac{ 1 }{ n^2 } = \\frac{ \\pi^2 }{ 6 }' },
+  { input: 'a_1^2 + b_1^2 = c_1^2', output: 'a_1^2 + b_1^2 = c_1^2' },
+  { input: 'a/b, a//b', output: '\\frac{ a }{ b } , a {/} b' },
+  { input: 'sqrt n, root n x, a^2/sqrt b', output: '\\sqrt{ n } , \\sqrt[ n ]{ x } , \\frac{ a^2 }{ \\sqrt{ b } }' },
+  { input: 'lim_(n->oo) (1 + 1/n)^n', output: '\\lim_{ n \\to \\infty } \\left(1 + \\frac{ 1 }{ n }\\right)^n' },
+  { input: 'sin {: x/2 :}', output: '\\sin \\left.\\frac{ x }{ 2 }\\right.' },
+  { input: 'int_a^b f(x) dx', output: '\\int_a^b f \\left(x\\right) {\\text{d}x}' },
+  { input: '(del f)/(del x), (del^3 f)/(del x del y^2)', output: '\\frac{ \\partial f }{ \\partial x } , \\frac{ \\partial^3 f }{ \\partial x \\partial y^2 }' },
 ]
+
+const todoExamples: Examples = [
+  // { input: '"hello world"', output: '\\text{hello world}' },
+  // { input: 'dy/dx, ("d"r)/("d"theta), f''(x)', output: '' },
+  // { input: 'ddfx , dd^2 f x , ddot x', output: '' },
+  // { input: 'ppfx, pp^3 f (x y^2), part {::} x', output: '' },
+  // { input: '|x| = { x, if x > 0; -x, otherwise :}', output: '' },
+  // { input: '', output: '' },
+]
+
+const examples: Examples = [
+  ...passedExamples,
+  ...todoExamples,
+]
+
+// 打印 token 列表
+const traceLex = (input: string) => {
+  lexer.reset(input)
+  const buf = []
+  let res = lexer.next()
+  while (res) {
+    buf.push(res)
+    res = lexer.next()
+  }
+  console.error('traceLex:', buf)
+}
 
 const am2tex = (input: string) => {
   const parser = new Nearley.Parser(Nearley.Grammar.fromCompiled(grammar))
-  parser.feed(input)
-  if (parser.results.length !== 1) {
-    console.log(parser.results)
-    throw new Error('invalid possible parses: ' + parser.results.length)
+  try {
+    parser.feed(input)
+    if (parser.results.length !== 1)
+      throw new Error(`possible parses: ${parser.results.length}`)
+    return toTex(parser.results)
   }
-  return toTex(parser.results)
+  catch (err) {
+    console.error(err)
+    traceLex(input)
+  }
 }
-
-// describe('test lexer', () => {
-//   lexer.reset('[a;b;c]')
-//   let res = lexer.next()
-//   console.log(res)
-//   while (res) {
-//     res = lexer.next()
-//     console.log(res)
-//   }
-// })
 
 describe('test to-tex', () => {
   examples.forEach((item, index) => {
-    it(`#${index} ${item.desc} ${item.input}`, () => {
+    it(`#${index} ${item.desc ? `[${item.desc}] ` : ''}${item.input}`, () => {
       expect(am2tex(item.input)).toMatchInlineSnapshot(
-        '"' + item.output.replace(/\\/g, '\\\\') + '"'
+        `"${item.output.replace(/\\/g, '\\\\')}"`,
       )
     })
   })

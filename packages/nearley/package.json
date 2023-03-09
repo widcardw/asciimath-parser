@@ -1,5 +1,5 @@
 {
-  "name": "asciimath-parser",
+  "name": "asciimath-parser-nearley",
   "type": "module",
   "version": "0.5.0",
   "description": "Transform asciimath to LaTeX",
@@ -39,10 +39,11 @@
   "scripts": {
     "test": "vitest --run",
     "build": "tsup",
-    "nearley": "nearleyc src/parser.ne -o src/parser.js && node src/after-build.js",
+    "nearley": "nearleyc src/parser.ne -o src/grammar.js && node src/after-build.js",
     "cov": "vitest --run --coverage"
   },
   "devDependencies": {
+    "@types/moo": "^0.5.5",
     "@types/nearley": "^2.11.2",
     "@types/prompts": "^2.4.2",
     "@vitest/coverage-c8": "^0.28.3",
@@ -52,7 +53,6 @@
     "vitest": "^0.27.2"
   },
   "dependencies": {
-    "asciimath-parser": "link:",
     "moo": "^0.5.2"
   }
 }

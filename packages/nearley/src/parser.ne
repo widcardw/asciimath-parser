@@ -15,22 +15,26 @@
 # I ::= S_S | S^S | S_S^S | S          Intermediate expression
 # E ::= IE | I/I                       Expression
 
-# 原则上空格后置
-# good: (infix _):+
-# bad: (_ infix):+
-expr -> (infix _):+ {% d => d[0].map(e => e[0]) %}
-  | infix _ %opAOB _ infix {% d => ({ type: 'fraction', $1: d[0], $2: d[4] }) %}
+am -> _ expr:? {% d => d[1] %}
 
-infix -> simple _ "_" _ simple _ "^" _ simple {% d => ({ type: 'infix', value: d[0], sub: d[4], sup: d[8] }) %}
-  | simple _ "^" _ simple _ "_" _ simple {% d => ({ type: 'infix', value: d[0], sub: d[8], sup: d[4] }) %}
-  | simple _ "_" _ simple {% d => ({ type: 'infix', value: d[0], sub: d[4] }) %}
-  | simple _ "^" _ simple {% d => ({ type: 'infix', value: d[0], sup: d[4] }) %}
+# 原则上空格后置
+# good: (subsup _):+
+# bad: (_ subsup):+
+expr -> ((subsup | infix) _):+ {% d => d[0].map(e => e[0]) %}
+
+infix -> subsup _ %opAOB _ subsup {% d => ({ type: 'opOAB', value: 'frac', $1: d[0], $2: d[4] }) %}
+
+subsup -> simple _ "_" _ simple _ "^" _ simple {% d => ({ type: 'subsup', value: d[0], sub: d[4], sup: d[8] }) %}
+  | simple _ "^" _ simple _ "_" _ simple {% d => ({ type: 'subsup', value: d[0], sub: d[8], sup: d[4] }) %}
+  | simple _ "_" _ simple {% d => ({ type: 'subsup', value: d[0], sub: d[4] }) %}
+  | simple _ "^" _ simple {% d => ({ type: 'subsup', value: d[0], sup: d[4] }) %}
   | simple {% id %} # id 等价于 d => d[0]
 
 simple -> matrix {% id %}
-  | %lp _ expr _ %rp {% d => ({ type: 'paren', left: d[0], right: d[4], value: d[2] }) %}
-  | %opA _ simple {% d => ({ type:'opA', value: d[0], $1: d[2] }) %}
-  | %opAB _ simple _ simple {% d => ({ type: 'opAB', value: d[0], $1: d[2], $2: d[4] }) %}
+  | %lp _ expr %rp {% d => ({ type: 'paren', left: d[0], right: d[3], value: d[2] }) %}
+  | %opOA _ simple {% d => ({ type:'opOA', value: d[0].value, $1: d[2] }) %}
+  | %opOAB _ simple _ simple {% d => ({ type: 'opOAB', value: d[0].value, $1: d[2], $2: d[4] }) %}
+  | %color %literal %colorEnd _ simple {% d => ({ type: 'opOAB', value: 'color', $1: d[1], $2: d[4] }) %}
   | value {% id %}
 
 # 矩阵至少含有一个分号
@@ -44,8 +48,8 @@ matrix -> %lp _ matrix_row (%semicolon _ matrix_row):+ %semicolon:? _ %rp {%
   %}
 
 # 矩阵每行至少有一元素
-matrix_row -> expr _ (%comma _ expr _):* %comma:? _ {%
-    d => [d[0], ...d[2].map(item => item[2])].flat()
+matrix_row -> expr (%comma _ expr):* %comma:? _ {%
+    d => [d[0], ...d[1].map(item => item[2])].flat()
   %}
 
 value -> %literal {% id %}

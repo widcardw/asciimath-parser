@@ -2,7 +2,7 @@ import type { Component } from 'solid-js'
 import { createMemo, createSignal } from 'solid-js'
 import { useDebounceFn } from 'solidjs-use'
 import katex from 'katex'
-import type { AsciiMath } from '../../../../core'
+import type { AsciiMath } from '../../asciimath'
 import './index.css'
 
 const Card: Component<{

@@ -18,6 +18,7 @@
 		"solid-js": "^1.6.10"
 	},
 	"devDependencies": {
+		"@babel/core": "^7.21.0",
 		"@types/katex": "^0.16.0",
 		"katex": "^0.16.4",
 		"rehype-katex": "^6.0.2",
