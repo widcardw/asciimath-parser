@@ -236,7 +236,7 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
   if (current < tokens.length) {
     current++
     node.rparen = `\\right${token.tex}`
-    if (token.value === ':}')
+    if (token.value === ':}' && !node.lparen.endsWith('.'))
       node.alignment = AlignDirection.Left
   }
   // unreachable
@@ -541,8 +541,16 @@ function preProcessOperatorSup(node: ChildNode, operator: TokenizedValue, tokens
   // avoid receiving fractions or other nodes as sup node
   const walkRes = walk(tokens, current, false)
   current = walkRes.current
-  if (walkRes.node.type === NodeTypes.Flat)
+  if (walkRes.node.type === NodeTypes.Flat) {
     walkRes.node = removeParenOfFlatExpr(walkRes.node)
+  }
+  else if (walkRes.node.type === NodeTypes.Matrix) {
+    const mat = walkRes.node
+    if (mat.lparen.endsWith('(') && mat.rparen.endsWith(')')) {
+      mat.lparen = ''
+      mat.rparen = ''
+    }
+  }
   supNode.params = walkRes.node
   newNode.body.push(supNode)
   node = newNode
