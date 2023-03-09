@@ -290,7 +290,7 @@ const SYMBOLMAP: Map<string, {
   ['laplace', { type: TokenTypes.Const, tex: '\\Delta' }],
   ['==', { type: TokenTypes.OperatorO2, tex: '\\xlongequal[ $2 ]{ $1 }' }],
   ['-->', { type: TokenTypes.OperatorO2, tex: '\\xrightarrow[ $2 ]{ $1 }' }],
-  ['||', { type: TokenTypes.Const, tex: '\\Vert' }],
+  ['||', { type: TokenTypes.Paren, tex: '\\Vert' }],
   ['!||', { type: TokenTypes.Const, tex: '\u2226' }],
   ['S=', { type: TokenTypes.Const, tex: '\u224C' }],
   ['S~', { type: TokenTypes.Const, tex: '\u223D' }],

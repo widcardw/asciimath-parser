@@ -199,7 +199,7 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
       token = tokens[++current]
       continue
     }
-    else if (token.type === TokenTypes.Paren /* && token.value === '|' */) {
+    else if (token.type === TokenTypes.Paren) {
       if (tempNode) {
         tempArr.push(tempNode)
         tempNode = null
@@ -308,7 +308,7 @@ function findPairedClosingParen(current: number, tokens: TokenizedValue[]) {
   return { closingIndex, semiIndex }
 }
 
-function findPairedBar(arr: TokenizedValue[], start: number, end: number): {
+function findPairedBar(arr: TokenizedValue[], start: number, end: number, targetRight: string): {
   semiIndex: number
   barIndex: number
 } {
@@ -316,6 +316,7 @@ function findPairedBar(arr: TokenizedValue[], start: number, end: number): {
   let barIndex = -1
   const stack: string[] = []
   for (let i = start; i < end; i++) {
+    // left and right paren
     if (arr[i].type === TokenTypes.LParen) {
       stack.push('')
       continue
@@ -324,15 +325,20 @@ function findPairedBar(arr: TokenizedValue[], start: number, end: number): {
       stack.pop()
       continue
     }
+    // skip inner matrix
     if (stack.length > 0)
       continue
+    // bar start, rparen end
+    // it means that the program cannot find paired bar
     if (arr[i].type === TokenTypes.RParen)
       break
+    // it has semicolons, then recognize it as a matrix
     if (arr[i].value === ';') {
       if (semiIndex === -1)
         semiIndex = i
     }
-    else if (arr[i].value === '|') {
+    // found the paired bar
+    else if (arr[i].value === targetRight) {
       if (barIndex === -1)
         barIndex = i
     }
@@ -348,7 +354,7 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
 } {
   let token = tokens[current]
   // in fact only `|` matches `TokenTypes.Paren`
-  const { semiIndex, barIndex } = findPairedBar(tokens, current + 1, tokens.length)
+  const { semiIndex, barIndex } = findPairedBar(tokens, current + 1, tokens.length, token.value)
 
   /**
      * case 1: not matrix
@@ -356,15 +362,15 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
      * for example `{ (x, y) | x^2 + y^2 <= 1 }`
      */
   if (barIndex === -1)
-    return createSingleBarNode(current)
+    return createSingleBarNode(current, token)
 
   // used as `abs`
   if (semiIndex === -1 || semiIndex > barIndex) {
     const node = createFlatNode()
     current++
-    node.body.push(createConstNode('\\left|'))
+    node.body.push(createConstNode(`\\left${token.tex}`))
     current = readTokensToFlatNode(current, barIndex, tokens, node)
-    node.body.push(createConstNode('\\right|'))
+    node.body.push(createConstNode(`\\right${token.tex}`))
     current = barIndex + 1
     return { current, node }
   }
@@ -382,8 +388,8 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
      * however, the case is too complex, so I won't implement it ¯\_(ツ)_/¯
      */
   const node = createMatrixNode()
-  node.lparen = '\\left|'
-  node.rparen = '\\right|'
+  node.lparen = `\\left${token.tex}`
+  node.rparen = `\\right${token.tex}`
 
   token = tokens[++current]
   let tempArr: ChildNode[] = []
@@ -444,13 +450,13 @@ function readTokensToFlatNode(current: number, end: number, tokens: TokenizedVal
   return current
 }
 
-function createSingleBarNode(current: number): { node: ChildNode; current: number } {
+function createSingleBarNode(current: number, token: TokenizedValue): { node: ChildNode; current: number } {
   return {
     current: current + 1,
     node: {
       type: NodeTypes.Const,
-      value: '|',
-      tex: '\\mid',
+      value: token.value,
+      tex: token.tex === '|' ? '\\mid' : token.tex,
     },
   }
 }
