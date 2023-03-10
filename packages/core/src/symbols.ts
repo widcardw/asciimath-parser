@@ -336,6 +336,11 @@ const SYMBOLMAP: Map<string, {
   ['pp', { type: TokenTypes.OperatorPartial, tex: '\\partial' }],
   ['dd', { type: TokenTypes.OperatorPartial, tex: '\\mathrm{d}' }],
 
+  ['tiny', { type: TokenTypes.OperatorA, tex: '{\\tiny $1 }' }],
+  ['small', { type: TokenTypes.OperatorA, tex: '{\\small $1 }' }],
+  ['large', { type: TokenTypes.OperatorA, tex: '{\\large $1 }' }],
+  ['huge', { type: TokenTypes.OperatorA, tex: '{\\huge $1 }' }],
+
 ])
 
 export {
