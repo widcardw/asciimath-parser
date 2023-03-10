@@ -5,6 +5,12 @@ export enum TokenTypes {
   lp = 'lp',
   rp = 'rp',
   limits = 'limits',
+  subsup = 'subsup',
+  align = 'align',
+  part = 'part',
+  opAO = 'opAO',
+  opAOB = 'opAOB',
+  pipe = 'pipe',
 }
 
 export interface Symbols {
@@ -14,6 +20,12 @@ export interface Symbols {
   lp?: any
   rp?: any
   limits?: any
+  subsup?: any
+  align?: any
+  part?: any
+  opAO?: any
+  opAOB?: any
+  pipe?: any
 }
 
 const symbols: Symbols = {
@@ -125,7 +137,6 @@ const symbols: Symbols = {
     'rhd': { tex: '\\rhd' },
     'normal': { tex: '\\unlhd' },
     'rnormal': { tex: '\\unrhd' },
-    '#': { tex: '\\displaystyle' },
 
     // escapes
     '\\#': { tex: '\\#' },
@@ -196,6 +207,7 @@ const symbols: Symbols = {
     '\'\'\'': { tex: '^{\\prime\\prime\\prime}' },
     'laplace': { tex: '\\Delta' },
     'hline': { tex: '\\hline' },
+    '#': { tex: '\\displaystyle' },
 
     // math text
     'if': { tex: '\\text{\\if\\quad}' },
@@ -286,6 +298,7 @@ const symbols: Symbols = {
     obrace: { tex: '\\overbrace{ $1 }' },
     phantom: { tex: '\\phantom{ $1 }' },
     text: { tex: '\\text{$1}' },
+    tex: { tex: '{ $1 }' },
     mbox: { tex: '\\mbox{$1}' },
     op: { tex: '\\operatorname{ $1 }' },
     cancel: { tex: '\\cancel{ $1 }' },
@@ -313,10 +326,19 @@ const symbols: Symbols = {
     mathrm: { tex: '\\mathrm{ $1 }' },
     scr: { tex: '\\mathscr{ $1 }' },
     mathscr: { tex: '\\mathscr{ $1 }' },
+
+    // font size
+    tiny: { tex: '{ \\tiny $1 }' },
+    small: { tex: '{ \\small $1 }' },
+    large: { tex: '{ \\large $1 }' },
+    huge: { tex: '{ \\huge $1 }' },
   },
   opOAB: {
     root: { tex: '\\sqrt[ $1 ]{ $2 }' },
     frac: { tex: '\\frac{ $1 }{ $2 }' },
+    over: { tex: '{ $1 \\over $2 }' },
+    atop: { tex: '{ $1 \\atop $2 }' },
+    choose: { tex: '{ $1 \\choose $2 }' },
     stackrel: { tex: '\\stackrel{ $1 }{ $2 }' },
     overset: { tex: '\\overset{ $1 }{ $2 }' },
     underset: { tex: '\\under{ $1 }{ $2 }' },
@@ -343,6 +365,28 @@ const symbols: Symbols = {
   limits: {
     '==': { tex: '\\xlongequal[ $2 ]{ $1 }' },
     '-->': { tex: '\\xrightarrow[ $2 ]{ $1 }' },
+  },
+  subsup: {
+    '_': { tex: '_' },
+    '^': { tex: '^' },
+  },
+  align: {
+    '&&': { tex: '&&' },
+    '&': { tex: '&' },
+  },
+  part: {
+    pp: { tex: '\\partial' },
+    dd: { tex: '\\text{d}' },
+  },
+  opAO: {
+    '!!': { tex: '{ $1!! }' },
+    '!': { tex: '{ $1! }' },
+  },
+  opAOB: {
+    '/': { tex: '\\frac{ $1 }{ $2 }' },
+  },
+  pipe: {
+    '|': { tex: '|' },
   },
 }
 

@@ -93,7 +93,7 @@ class AsciiMath {
       const parser = new Nearley.Parser(this.compiledGrammar)
       parser.feed(code)
       if (parser.results.length === 0) {
-        throw new Error('cannot parse')
+        throw new Error('unexpected end of input')
       }
       else if (parser.results.length > 1) {
         console.error(parser.results)
@@ -106,7 +106,10 @@ class AsciiMath {
     }
     catch (e) {
       console.error(e)
-      return `\\text{${String(e).split('\n')[0]}}`
+      const message = String(e)
+      const index = message.indexOf(':\n')
+      const end = index === -1 ? undefined : index
+      return `\\text{${message.slice(0, end)}}`
     }
   }
 }
