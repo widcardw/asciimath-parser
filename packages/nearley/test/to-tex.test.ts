@@ -57,21 +57,25 @@ const passedExamples: Examples = [
   { input: 'pp^3 f (x y^2)', output: '\\frac{ \\partial^3 f }{ \\partial x\\partial y^2 }' },
   { input: '|x|', output: '\\left|x\\right|' },
   { input: 'abs(x)', output: '\\left|x\\right|' },
-  { input: '|x| = { x, if x > 0; -x, otherwise :}', output: '\\left|x\\right| = \\left\\lbrace\\begin{array}{cc}x & \\text{\\if\\quad} x > 0 \\\\ - x & \\text{otherwise\\quad}\\end{array}\\right.' },
-]
-
-// no idea why this fails ˉ\_(ツ)_/ˉ
-const whyThisFails: Examples = [
-  // { input: '"\\"abc\\""', output: '\\text{"abc"}' },
+  { input: '{ a | b }', output: '\\left\\lbrace{}a \\mid b\\right\\rbrace' },
+  { input: '(a,b)', output: '\\left(a, b\\right)' },
+  { input: '{(x,y)|x^2+y^2<=1}', output: '\\left\\lbrace{}\\left(x, y\\right) \\mid x^2 + y^2 \\leqslant 1\\right\\rbrace' },
+  { input: '|a, b; c, d|', output: '\\left|\\begin{array}{cc}a & b \\\\ c & d\\end{array}\\right|' },
+  { input: '|x| = { x, if x > 0; -x, otherwise :}', output: '\\left|x\\right| = \\left\\lbrace{}\\begin{array}{ll}x & \\text{if\\quad} x > 0 \\\\ - x & \\text{otherwise\\quad}\\end{array}\\right.' },
 ]
 
 const todoExamples: Examples = [
 ]
 
+// no idea why this fails ˉ\_(ツ)_/ˉ
+const whyThisFails: Examples = [
+  { input: '"\\"abc\\""', output: '\\text{"abc"}' },
+]
+
 const examples: Examples = [
-  // ...whyThisFails,
   ...passedExamples,
   ...todoExamples,
+  // ...whyThisFails,
 ]
 
 // 打印 token 列表

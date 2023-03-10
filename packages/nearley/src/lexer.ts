@@ -25,8 +25,6 @@ const initLexer = (symbols: Symbols) => {
     space: /[ \t]+/,
     number: /[0-9]+\.[0-9]+|[0-9]+/,
     text: { match: /"/, push: 'text' },
-    // pipe: { match: loadSymbol(TokenTypes.pipe), push: 'pipe' },
-    pipe: loadSymbol(TokenTypes.pipe),
     lp: { match: loadSymbol(TokenTypes.lp), push: 'lp' },
     rp: { match: loadSymbol(TokenTypes.rp), pop: 1 },
     keyword: {
@@ -37,20 +35,17 @@ const initLexer = (symbols: Symbols) => {
 
   return moo.states({
     main: {
+      pipe: { match: loadSymbol(TokenTypes.pipe), push: 'lp' },
       ...main,
       literal: /\S/, // 放在最后, 用于捕获一切非空字符
     },
     lp: {
-      ...main,
       comma: /,/,
       semicolon: /;/,
+      pipe: { match: loadSymbol(TokenTypes.pipe), pop: 1 },
+      ...main,
       literal: /\S/,
     },
-    // pipe: {
-    //   pipeEnd: { match: /\|/, pop: 1 },
-    //   ...main,
-    //   literal: /\S/,
-    // },
     text: {
       textEnd: { match: /"/, pop: 1 },
       /**

@@ -6,7 +6,9 @@ const initGenerator = (symbols: Symbols) => {
   const genMatrix = (ast: Ast, strip = false) => {
     const { value, left, right } = ast
     const maxCol = Math.max(...value.map((row: Ast[]) => row.length))
-    const cols = 'c'.repeat(maxCol)
+    // 分段函数表达式向左对齐, 其它情况居中对齐
+    const alignType = (left.value === '{' && right.value === ':}') ? 'l' : 'c'
+    const cols = alignType.repeat(maxCol)
     const body = value.map((row: Ast[]) => {
       return row.map(v => toTex(v)).join(' & ')
     }).join(' \\\\ ')
@@ -15,10 +17,10 @@ const initGenerator = (symbols: Symbols) => {
       return res
     return [
       '\\left',
-      symbols.lp[left].tex,
+      (symbols.lp[left] || symbols.pipe[left]).tex,
       res,
       '\\right',
-      symbols.rp[right].tex,
+      (symbols.rp[right] || symbols.pipe[right]).tex,
     ].join('')
   }
 
@@ -33,8 +35,11 @@ const initGenerator = (symbols: Symbols) => {
   }
 
   const genParen = (ast: Ast, strip = false) => {
-    const { left, value, right } = ast
-    const res = toTex(value)
+    const { left, right, mid, leftItems, rightItems } = ast
+    const leftStr = leftItems.map(toTex).join(', ')
+    const midStr = mid ? ` ${toTex(mid)} ` : ''
+    const rightStr = rightItems.map(toTex).join(', ')
+    const res = leftStr + midStr + rightStr
     if (strip)
       return res
     return [
@@ -84,10 +89,12 @@ const initGenerator = (symbols: Symbols) => {
     // 偏微分的分母部分
     let subStr
     if (sub.type === 'paren') {
-      if (Array.isArray(sub.value))
-        subStr = sub.value.map(genSubGroup).join('') // 这里不带指数
+      if (sub.mid || sub.leftItems.length > 1)
+        throw new Error('pp expression cannot have pipe "|" or comma "," on denominator')
+      if (Array.isArray(sub.leftItems[0]))
+        subStr = sub.leftItems[0].map(genSubGroup).join('') // 这里不带指数
       else
-        subStr = genSubGroup(sub.value) + expStr // 这里带指数
+        subStr = genSubGroup(sub.leftItems[0]) + expStr // 这里带指数
     }
     else {
       subStr = genSubGroup(sub) + expStr // 这里带指数

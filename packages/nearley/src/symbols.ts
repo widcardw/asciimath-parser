@@ -208,9 +208,10 @@ const symbols: Symbols = {
     'laplace': { tex: '\\Delta' },
     'hline': { tex: '\\hline' },
     '#': { tex: '\\displaystyle' },
+    'mid': { tex: '\\mid' },
 
     // math text
-    'if': { tex: '\\text{\\if\\quad}' },
+    'if': { tex: '\\text{if\\quad}' },
     'otherwise': { tex: '\\text{otherwise\\quad}' },
     'and': { tex: '\\text{ and }' },
     'or': { tex: '\\text{ or }' },
@@ -347,11 +348,11 @@ const symbols: Symbols = {
   lp: {
     '(': { tex: '(' },
     '[': { tex: '[' },
-    '{': { tex: '\\lbrace' },
-    '(:': { tex: '\\langle' },
+    '{': { tex: '\\lbrace{}' },
+    '(:': { tex: '\\langle{}' },
     '{:': { tex: '.' },
-    '|__': { tex: '\\lfloor' },
-    '|~': { tex: '\\lceil' },
+    '|__': { tex: '\\lfloor{}' },
+    '|~': { tex: '\\lceil{}' },
   },
   rp: {
     ')': { tex: ')' },

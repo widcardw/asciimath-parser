@@ -34,24 +34,34 @@ subsup -> simple _ "_" _ simple _ "^" _ simple {% d => ({ type: 'subsup', value:
   | simple {% id %} # id 等价于 d => d[0]
 
 simple -> matrix {% id %} # 矩阵
-  # 括号表达式
-  | %lp _ expr:? %rp {% d => ({ type: 'paren', left: d[0], right: d[3], value: d[2] }) %}
+  # | %lp _ expr:? %rp {% d => ({ type: 'paren', left: d[0], right: d[3], value: d[2] }) %}
+  # 括号表达式, 形如 (a, b, c, | d, e)
+  | %lp _ matrixRow:? (%pipe _ matrixRow):? %rp {%
+    d => ({
+      type: 'paren',
+      left: d[0],
+      right: d[4],
+      leftItems: d[2] || [],
+      mid: d[3] ? { type: 'keyword', value: 'mid' } : null,
+      rightItems: d[3] ? d[3][2] : [],
+    })
+  %}
   # 一元操作符
   | %opOA _ simple {% d => ({ type:'opOA', value: d[0].value, $1: d[2] }) %}
   # 二元操作符
   | %opOAB _ simple _ simple {% d => ({ type: 'opOAB', value: d[0].value, $1: d[2], $2: d[4] }) %}
   # 文本
   | %text %textContent:? %textEnd {%d => ({ type: 'text', value: d[1] ? d[1].value : '' }) %}
-  # 竖杠
-  | %pipe _ expr %pipe {% d => ({ type: 'pipe', left: d[0], value: d[2], right: d[3] }) %}
+  # 竖线
+  | %pipe _ expr:? %pipe {% d => ({ type: 'pipe', left: d[0], value: d[2], right: d[3] }) %}
   | value {% id %}
 
 # 矩阵至少含有一个分号, 即: 矩阵至少有两行
-matrix -> %lp _ matrixRow (%semicolon _ matrixRow):+ (%semicolon _):? %rp {%
+matrix -> (%lp | %pipe) _ matrixRow (%semicolon _ matrixRow):+ (%semicolon _):? (%rp | %pipe) {%
     d => ({
       type: 'matrix',
-      left: d[0],
-      right: d[5],
+      left: d[0][0],
+      right: d[5][0],
       value: [d[2], ...d[3].map(row => row[2])]
     })
   %}
