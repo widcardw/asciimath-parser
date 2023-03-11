@@ -22,7 +22,7 @@
     "b:core": "cd packages/core && nr build",
     "b:cli": "cd packages/cli && nr build",
     "b:nearley": "cd packages/nearley && nr nearley && nr build",
-    "b:playground": "nr b:core && cd packages/playground && nr build",
+    "b:playground": "nr b:core && nr b:nearley && cd packages/playground && nr build",
     "t:core": "cd packages/core && nr test --run",
     "t:core-cov": "cd packages/core && nr cov",
     "t:nearley": "cd packages/nearley && nr test --run"
