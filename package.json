@@ -17,13 +17,15 @@
     "LaTeX"
   ],
   "scripts": {
-    "release": "nr b:core && nr b:cli && bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public",
+    "release": "nr b:core && nr b:cli && nr b:nearley && bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public",
     "d:playground": "cd packages/playground && nr dev",
     "b:core": "cd packages/core && nr build",
     "b:cli": "cd packages/cli && nr build",
+    "b:nearley": "cd packages/nearley && nr nearley && nr build",
     "b:playground": "nr b:core && cd packages/playground && nr build",
     "t:core": "cd packages/core && nr test --run",
-    "t:cov": "cd packages/core && nr cov"
+    "t:core-cov": "cd packages/core && nr cov",
+    "t:nearley": "cd packages/nearley && nr test --run"
   },
   "devDependencies": {
     "@antfu/ni": "^0.19.0",

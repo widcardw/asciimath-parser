@@ -74,7 +74,7 @@ importers:
       rehype-katex: ^6.0.2
       remark-gfm: ^3.0.1
       remark-math: ^5.1.1
-      solid-js: 1.6.10
+      solid-js: ^1.6.10
       solidjs-use: ^1.1.0
     dependencies:
       '@astrojs/solid-js': 2.1.0_zbynmt4kp3prfx6v2z3tz2uw6i
