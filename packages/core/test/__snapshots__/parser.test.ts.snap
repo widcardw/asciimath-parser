@@ -1,0 +1,1980 @@
+// Vitest Snapshot v1
+
+exports[`cases matrix > should parse cases 1`] = `
+{
+  "body": [
+    {
+      "tex": "f",
+      "type": "Const",
+      "value": "f",
+    },
+    {
+      "body": [
+        {
+          "tex": "\\\\left(",
+          "type": "Const",
+          "value": "(",
+        },
+        {
+          "tex": "x",
+          "type": "Const",
+          "value": "x",
+        },
+        {
+          "tex": "\\\\right)",
+          "type": "Const",
+          "value": ")",
+        },
+      ],
+      "type": "Flat",
+    },
+    {
+      "tex": "=",
+      "type": "Const",
+      "value": "=",
+    },
+    {
+      "alignment": "l",
+      "dividerIndices": [],
+      "lparen": "\\\\left\\\\lbrace",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "x",
+                    "type": "Const",
+                    "value": "x",
+                  },
+                  {
+                    "params": {
+                      "tex": "2",
+                      "type": "Const",
+                      "value": "2",
+                    },
+                    "tex": "^{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "\\\\text{if}\\\\quad",
+                "type": "Const",
+                "value": "if",
+              },
+              {
+                "tex": "x",
+                "type": "Const",
+                "value": "x",
+              },
+              {
+                "tex": ">",
+                "type": "Const",
+                "value": ">",
+              },
+              {
+                "tex": "0",
+                "type": "Const",
+                "value": "0",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "x",
+                "type": "Const",
+                "value": "x",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "\\\\text{otherwise}\\\\quad",
+                "type": "Const",
+                "value": "otherwise",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right.",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse aligned expressions > should parse an aligend expression of 2 lines 1`] = `
+{
+  "body": [
+    {
+      "tex": "x",
+      "type": "Const",
+      "value": "x",
+    },
+    {
+      "tex": "&",
+      "type": "Const",
+      "value": "&",
+    },
+    {
+      "tex": "\\\\mapsto",
+      "type": "Const",
+      "value": "|->",
+    },
+    {
+      "tex": "\\\\text{e}",
+      "type": "Const",
+      "value": "e",
+    },
+    {
+      "tex": "x",
+      "type": "Const",
+      "value": "x",
+    },
+    {
+      "tex": "\\\\\\\\",
+      "type": "Const",
+      "value": "
+
+",
+    },
+    {
+      "tex": "f",
+      "type": "Const",
+      "value": "f",
+    },
+    {
+      "body": [
+        {
+          "tex": "\\\\left(",
+          "type": "Const",
+          "value": "(",
+        },
+        {
+          "tex": "x",
+          "type": "Const",
+          "value": "x",
+        },
+        {
+          "tex": "\\\\right)",
+          "type": "Const",
+          "value": ")",
+        },
+      ],
+      "type": "Flat",
+    },
+    {
+      "tex": "&",
+      "type": "Const",
+      "value": "&",
+    },
+    {
+      "tex": "\\\\to",
+      "type": "Const",
+      "value": "->",
+    },
+    {
+      "tex": "g",
+      "type": "Const",
+      "value": "g",
+    },
+    {
+      "body": [
+        {
+          "tex": "\\\\left(",
+          "type": "Const",
+          "value": "(",
+        },
+        {
+          "tex": "x",
+          "type": "Const",
+          "value": "x",
+        },
+        {
+          "tex": "\\\\right)",
+          "type": "Const",
+          "value": ")",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse det > should parse a det with inner parens 1`] = `
+{
+  "body": [
+    {
+      "alignment": "c",
+      "dividerIndices": [],
+      "lparen": "\\\\left|",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "1",
+                "type": "Const",
+                "value": "1",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "2",
+                "type": "Const",
+                "value": "2",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "\\\\left(",
+                    "type": "Const",
+                    "value": "(",
+                  },
+                  {
+                    "tex": "3",
+                    "type": "Const",
+                    "value": "3",
+                  },
+                  {
+                    "tex": "+",
+                    "type": "Const",
+                    "value": "+",
+                  },
+                  {
+                    "tex": "4",
+                    "type": "Const",
+                    "value": "4",
+                  },
+                  {
+                    "tex": "\\\\right)",
+                    "type": "Const",
+                    "value": ")",
+                  },
+                  {
+                    "params": {
+                      "tex": "7",
+                      "type": "Const",
+                      "value": "7",
+                    },
+                    "tex": "^{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "4",
+                "type": "Const",
+                "value": "4",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right|",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse det > should parse a set expression 1`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "tex": "\\\\left\\\\lbrace",
+          "type": "Const",
+          "value": "{",
+        },
+        {
+          "body": [
+            {
+              "tex": "\\\\left(",
+              "type": "Const",
+              "value": "(",
+            },
+            {
+              "tex": "x",
+              "type": "Const",
+              "value": "x",
+            },
+            {
+              "tex": ",",
+              "type": "Const",
+              "value": ",",
+            },
+            {
+              "tex": "y",
+              "type": "Const",
+              "value": "y",
+            },
+            {
+              "tex": "\\\\right)",
+              "type": "Const",
+              "value": ")",
+            },
+          ],
+          "type": "Flat",
+        },
+        {
+          "tex": "\\\\mid",
+          "type": "Const",
+          "value": "|",
+        },
+        {
+          "body": [
+            {
+              "tex": "x",
+              "type": "Const",
+              "value": "x",
+            },
+            {
+              "params": {
+                "tex": "2",
+                "type": "Const",
+                "value": "2",
+              },
+              "tex": "^{ $1 }",
+              "type": "ParamOne",
+            },
+          ],
+          "type": "Flat",
+        },
+        {
+          "tex": "+",
+          "type": "Const",
+          "value": "+",
+        },
+        {
+          "body": [
+            {
+              "tex": "y",
+              "type": "Const",
+              "value": "y",
+            },
+            {
+              "params": {
+                "tex": "2",
+                "type": "Const",
+                "value": "2",
+              },
+              "tex": "^{ $1 }",
+              "type": "ParamOne",
+            },
+          ],
+          "type": "Flat",
+        },
+        {
+          "tex": "\\\\leqslant",
+          "type": "Const",
+          "value": "<=",
+        },
+        {
+          "tex": "1",
+          "type": "Const",
+          "value": "1",
+        },
+        {
+          "tex": "\\\\right\\\\rbrace",
+          "type": "Const",
+          "value": "}",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse det > should parse a simple det 1`] = `
+{
+  "body": [
+    {
+      "alignment": "c",
+      "dividerIndices": [],
+      "lparen": "\\\\left|",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "1",
+                "type": "Const",
+                "value": "1",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "2",
+                "type": "Const",
+                "value": "2",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "3",
+                "type": "Const",
+                "value": "3",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "4",
+                "type": "Const",
+                "value": "4",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right|",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse det > should parse absolute value 1`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "tex": "\\\\left|",
+          "type": "Const",
+          "value": "\\\\left|",
+        },
+        {
+          "tex": "1",
+          "type": "Const",
+          "value": "1",
+        },
+        {
+          "tex": ",",
+          "type": "Const",
+          "value": ",",
+        },
+        {
+          "tex": "2",
+          "type": "Const",
+          "value": "2",
+        },
+        {
+          "tex": "\\\\right|",
+          "type": "Const",
+          "value": "\\\\right|",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse det > should parse an inline det 1`] = `
+{
+  "body": [
+    {
+      "alignment": "c",
+      "dividerIndices": [],
+      "lparen": "\\\\left|",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "1",
+                "type": "Const",
+                "value": "1",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "2",
+                "type": "Const",
+                "value": "2",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right|",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse expression like sup and sub > should parse a complex sup expression 1`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "tex": "\\\\text{e}",
+          "type": "Const",
+          "value": "e",
+        },
+        {
+          "params": {
+            "body": [
+              {
+                "tex": "x",
+                "type": "Const",
+                "value": "x",
+              },
+              {
+                "tex": "+",
+                "type": "Const",
+                "value": "+",
+              },
+              {
+                "tex": "2",
+                "type": "Const",
+                "value": "2",
+              },
+              {
+                "tex": "x",
+                "type": "Const",
+                "value": "x",
+              },
+              {
+                "tex": "+",
+                "type": "Const",
+                "value": "+",
+              },
+              {
+                "tex": "4",
+                "type": "Const",
+                "value": "4",
+              },
+              {
+                "body": [
+                  {
+                    "tex": "x",
+                    "type": "Const",
+                    "value": "x",
+                  },
+                  {
+                    "params": {
+                      "tex": "2",
+                      "type": "Const",
+                      "value": "2",
+                    },
+                    "tex": "^{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+          "tex": "^{ $1 }",
+          "type": "ParamOne",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse expression like sup and sub > should parse a expression which has both sup and sub expression 1`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "tex": "x",
+          "type": "Const",
+          "value": "x",
+        },
+        {
+          "params": {
+            "tex": "2",
+            "type": "Const",
+            "value": "2",
+          },
+          "tex": "^{ $1 }",
+          "type": "ParamOne",
+        },
+        {
+          "params": {
+            "tex": "3",
+            "type": "Const",
+            "value": "3",
+          },
+          "tex": "_{ $1 }",
+          "type": "ParamOne",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse expression like sup and sub > should parse a expression which has both sup and sub expression 2`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "tex": "x",
+          "type": "Const",
+          "value": "x",
+        },
+        {
+          "params": {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "a",
+                    "type": "Const",
+                    "value": "a",
+                  },
+                  {
+                    "params": {
+                      "tex": "1",
+                      "type": "Const",
+                      "value": "1",
+                    },
+                    "tex": "_{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+          "tex": "^{ $1 }",
+          "type": "ParamOne",
+        },
+        {
+          "params": {
+            "tex": "2",
+            "type": "Const",
+            "value": "2",
+          },
+          "tex": "_{ $1 }",
+          "type": "ParamOne",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse expression like sup and sub > should parse a expression which has both sup and sub expression 3`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "tex": "x",
+          "type": "Const",
+          "value": "x",
+        },
+        {
+          "params": {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "x",
+                    "type": "Const",
+                    "value": "x",
+                  },
+                  {
+                    "params": {
+                      "body": [
+                        {
+                          "body": [
+                            {
+                              "tex": "x",
+                              "type": "Const",
+                              "value": "x",
+                            },
+                            {
+                              "params": {
+                                "tex": "x",
+                                "type": "Const",
+                                "value": "x",
+                              },
+                              "tex": "^{ $1 }",
+                              "type": "ParamOne",
+                            },
+                          ],
+                          "type": "Flat",
+                        },
+                      ],
+                      "type": "Flat",
+                    },
+                    "tex": "^{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+          "tex": "^{ $1 }",
+          "type": "ParamOne",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse expression like sup and sub > should parse an \`abs\` expression 1`] = `
+{
+  "body": [
+    {
+      "params": {
+        "tex": "x",
+        "type": "Const",
+        "value": "x",
+      },
+      "tex": "\\\\left|$1\\\\right|",
+      "type": "ParamOne",
+    },
+    {
+      "tex": "a",
+      "type": "Const",
+      "value": "a",
+    },
+    {
+      "tex": "y",
+      "type": "Const",
+      "value": "y",
+    },
+    {
+      "tex": "z",
+      "type": "Const",
+      "value": "z",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse expression like sup and sub > should parse e^x 1`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "tex": "\\\\text{e}",
+          "type": "Const",
+          "value": "e",
+        },
+        {
+          "params": {
+            "tex": "x",
+            "type": "Const",
+            "value": "x",
+          },
+          "tex": "^{ $1 }",
+          "type": "ParamOne",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse operator \`op a b\` > should parse frac 1`] = `
+{
+  "body": [
+    {
+      "params": [
+        {
+          "body": [
+            {
+              "tex": "a",
+              "type": "Const",
+              "value": "a",
+            },
+            {
+              "tex": "+",
+              "type": "Const",
+              "value": "+",
+            },
+            {
+              "body": [
+                {
+                  "tex": "b",
+                  "type": "Const",
+                  "value": "b",
+                },
+                {
+                  "params": {
+                    "tex": "2",
+                    "type": "Const",
+                    "value": "2",
+                  },
+                  "tex": "^{ $1 }",
+                  "type": "ParamOne",
+                },
+              ],
+              "type": "Flat",
+            },
+          ],
+          "type": "Flat",
+        },
+        {
+          "body": [
+            {
+              "tex": "b",
+              "type": "Const",
+              "value": "b",
+            },
+          ],
+          "type": "Flat",
+        },
+      ],
+      "tex": "\\\\frac{ $1 }{ $2 }",
+      "type": "ParamTwo",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse operator A op B > should parse \`!\` 1`] = `
+{
+  "body": [
+    {
+      "params": {
+        "tex": "n",
+        "type": "Const",
+        "value": "n",
+      },
+      "tex": "{$1 !!}",
+      "type": "ParamOne",
+    },
+    {
+      "params": {
+        "tex": "m",
+        "type": "Const",
+        "value": "m",
+      },
+      "tex": "{$1 !}",
+      "type": "ParamOne",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse operator A op B > should parse \`!\` 2`] = `
+{
+  "body": [
+    {
+      "params": [
+        {
+          "tex": "1",
+          "type": "Const",
+          "value": "1",
+        },
+        {
+          "params": {
+            "tex": "n",
+            "type": "Const",
+            "value": "n",
+          },
+          "tex": "{$1 !}",
+          "type": "ParamOne",
+        },
+      ],
+      "tex": "\\\\frac{ $1 }{ $2 }",
+      "type": "ParamTwo",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse operator A op B > should parse \`!\` 3`] = `
+{
+  "body": [
+    {
+      "params": {
+        "body": [
+          {
+            "tex": "\\\\left(",
+            "type": "Const",
+            "value": "(",
+          },
+          {
+            "tex": "n",
+            "type": "Const",
+            "value": "n",
+          },
+          {
+            "tex": "+",
+            "type": "Const",
+            "value": "+",
+          },
+          {
+            "tex": "m",
+            "type": "Const",
+            "value": "m",
+          },
+          {
+            "tex": "\\\\right)",
+            "type": "Const",
+            "value": ")",
+          },
+        ],
+        "type": "Flat",
+      },
+      "tex": "{$1 !}",
+      "type": "ParamOne",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse operator A op B > should parse \`/\` 1`] = `
+{
+  "body": [
+    {
+      "params": [
+        {
+          "tex": "a",
+          "type": "Const",
+          "value": "a",
+        },
+        {
+          "tex": "b",
+          "type": "Const",
+          "value": "b",
+        },
+      ],
+      "tex": "\\\\frac{ $1 }{ $2 }",
+      "type": "ParamTwo",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse operator A op B > should parse \`/\` 2`] = `
+{
+  "body": [
+    {
+      "tex": "a",
+      "type": "Const",
+      "value": "a",
+    },
+    {
+      "tex": "+",
+      "type": "Const",
+      "value": "+",
+    },
+    {
+      "params": [
+        {
+          "tex": "a",
+          "type": "Const",
+          "value": "a",
+        },
+        {
+          "tex": "b",
+          "type": "Const",
+          "value": "b",
+        },
+      ],
+      "tex": "\\\\frac{ $1 }{ $2 }",
+      "type": "ParamTwo",
+    },
+    {
+      "tex": "+",
+      "type": "Const",
+      "value": "+",
+    },
+    {
+      "tex": "c",
+      "type": "Const",
+      "value": "c",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse operator A op B > should parse more \`/\` 1`] = `
+{
+  "body": [
+    {
+      "params": [
+        {
+          "body": [
+            {
+              "tex": "a",
+              "type": "Const",
+              "value": "a",
+            },
+            {
+              "tex": "+",
+              "type": "Const",
+              "value": "+",
+            },
+            {
+              "tex": "c",
+              "type": "Const",
+              "value": "c",
+            },
+          ],
+          "type": "Flat",
+        },
+        {
+          "body": [
+            {
+              "tex": "b",
+              "type": "Const",
+              "value": "b",
+            },
+            {
+              "tex": "\\\\cdot",
+              "type": "Const",
+              "value": "*",
+            },
+            {
+              "tex": "d",
+              "type": "Const",
+              "value": "d",
+            },
+          ],
+          "type": "Flat",
+        },
+      ],
+      "tex": "\\\\frac{ $1 }{ $2 }",
+      "type": "ParamTwo",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse operator A op B > should parse more \`/\` 2`] = `
+{
+  "body": [
+    {
+      "params": [
+        {
+          "body": [
+            {
+              "tex": "a",
+              "type": "Const",
+              "value": "a",
+            },
+            {
+              "tex": "+",
+              "type": "Const",
+              "value": "+",
+            },
+            {
+              "tex": "c",
+              "type": "Const",
+              "value": "c",
+            },
+          ],
+          "type": "Flat",
+        },
+        {
+          "body": [
+            {
+              "body": [
+                {
+                  "tex": "b",
+                  "type": "Const",
+                  "value": "b",
+                },
+                {
+                  "params": {
+                    "tex": "d",
+                    "type": "Const",
+                    "value": "d",
+                  },
+                  "tex": "^{ $1 }",
+                  "type": "ParamOne",
+                },
+              ],
+              "type": "Flat",
+            },
+          ],
+          "type": "Flat",
+        },
+      ],
+      "tex": "\\\\frac{ $1 }{ $2 }",
+      "type": "ParamTwo",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse operator A op B > should parse more \`/\` 3`] = `
+{
+  "body": [
+    {
+      "params": [
+        {
+          "body": [
+            {
+              "tex": "a",
+              "type": "Const",
+              "value": "a",
+            },
+            {
+              "tex": "+",
+              "type": "Const",
+              "value": "+",
+            },
+            {
+              "tex": "c",
+              "type": "Const",
+              "value": "c",
+            },
+          ],
+          "type": "Flat",
+        },
+        {
+          "body": [
+            {
+              "params": [
+                {
+                  "tex": "b",
+                  "type": "Const",
+                  "value": "b",
+                },
+                {
+                  "tex": "d",
+                  "type": "Const",
+                  "value": "d",
+                },
+              ],
+              "tex": "\\\\frac{ $1 }{ $2 }",
+              "type": "ParamTwo",
+            },
+          ],
+          "type": "Flat",
+        },
+      ],
+      "tex": "\\\\frac{ $1 }{ $2 }",
+      "type": "ParamTwo",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse operator A op B > should parse more \`/\` 4`] = `
+{
+  "body": [
+    {
+      "params": [
+        {
+          "body": [
+            {
+              "tex": "a",
+              "type": "Const",
+              "value": "a",
+            },
+            {
+              "tex": "+",
+              "type": "Const",
+              "value": "+",
+            },
+            {
+              "tex": "c",
+              "type": "Const",
+              "value": "c",
+            },
+          ],
+          "type": "Flat",
+        },
+        {
+          "body": [
+            {
+              "params": [
+                {
+                  "tex": "b",
+                  "type": "Const",
+                  "value": "b",
+                },
+                {
+                  "tex": "d",
+                  "type": "Const",
+                  "value": "d",
+                },
+              ],
+              "tex": "\\\\frac{ $1 }{ $2 }",
+              "type": "ParamTwo",
+            },
+            {
+              "tex": "+",
+              "type": "Const",
+              "value": "+",
+            },
+            {
+              "tex": "e",
+              "type": "Const",
+              "value": "e",
+            },
+          ],
+          "type": "Flat",
+        },
+      ],
+      "tex": "\\\\frac{ $1 }{ $2 }",
+      "type": "ParamTwo",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parse operator A op B > should parse single right paren 1`] = `
+{
+  "body": [
+    {
+      "tex": ")",
+      "type": "Const",
+      "value": ")",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parser > should parse a const token 1`] = `
+{
+  "body": [
+    {
+      "tex": "\\\\sum",
+      "type": "Const",
+      "value": "sum",
+    },
+    {
+      "tex": "\\\\text{otherwise}\\\\quad",
+      "type": "Const",
+      "value": "otherwise",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parser > should parse a divided matrix 1`] = `
+{
+  "body": [
+    {
+      "alignment": "c",
+      "dividerIndices": [
+        2,
+      ],
+      "lparen": "\\\\left[",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "a",
+                "type": "Const",
+                "value": "a",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "b",
+                "type": "Const",
+                "value": "b",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "c",
+                "type": "Const",
+                "value": "c",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "d",
+                "type": "Const",
+                "value": "d",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "e",
+                "type": "Const",
+                "value": "e",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "f",
+                "type": "Const",
+                "value": "f",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right]",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parser > should parse a flat matrix 1`] = `
+{
+  "body": [
+    {
+      "alignment": "c",
+      "dividerIndices": [],
+      "lparen": "\\\\left[",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "a",
+                "type": "Const",
+                "value": "a",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "b",
+                "type": "Const",
+                "value": "b",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "c",
+                "type": "Const",
+                "value": "c",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "d",
+                "type": "Const",
+                "value": "d",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "e",
+                "type": "Const",
+                "value": "e",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "f",
+                "type": "Const",
+                "value": "f",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right]",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parser > should parse a mat without right paren 1`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "tex": "\\\\left[",
+          "type": "Const",
+          "value": "[",
+        },
+        {
+          "tex": "a",
+          "type": "Const",
+          "value": "a",
+        },
+        {
+          "tex": ",",
+          "type": "Const",
+          "value": ",",
+        },
+        {
+          "tex": "b",
+          "type": "Const",
+          "value": "b",
+        },
+        {
+          "tex": ";",
+          "type": "Const",
+          "value": ";",
+        },
+        {
+          "tex": "c",
+          "type": "Const",
+          "value": "c",
+        },
+        {
+          "tex": "\\\\right.",
+          "type": "Const",
+          "value": "[",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parser > should parse a recursive matirx 1`] = `
+{
+  "body": [
+    {
+      "tex": "B",
+      "type": "Const",
+      "value": "B",
+    },
+    {
+      "tex": "=",
+      "type": "Const",
+      "value": "=",
+    },
+    {
+      "alignment": "c",
+      "dividerIndices": [],
+      "lparen": "\\\\left[",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "\\\\left[",
+                    "type": "Const",
+                    "value": "[",
+                  },
+                  {
+                    "tex": "a",
+                    "type": "Const",
+                    "value": "a",
+                  },
+                  {
+                    "tex": ",",
+                    "type": "Const",
+                    "value": ",",
+                  },
+                  {
+                    "tex": "b",
+                    "type": "Const",
+                    "value": "b",
+                  },
+                  {
+                    "tex": "\\\\right]",
+                    "type": "Const",
+                    "value": "]",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "c",
+                "type": "Const",
+                "value": "c",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "d",
+                "type": "Const",
+                "value": "d",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "e",
+                "type": "Const",
+                "value": "e",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right]",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parser > should parse an upper triangle mat 1`] = `
+{
+  "body": [
+    {
+      "alignment": "c",
+      "dividerIndices": [],
+      "lparen": "\\\\left[",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "a",
+                "type": "Const",
+                "value": "a",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "b",
+                "type": "Const",
+                "value": "b",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "tex": "",
+            "type": "Const",
+            "value": "",
+          },
+          {
+            "body": [
+              {
+                "tex": "d",
+                "type": "Const",
+                "value": "d",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right]",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parser > should parse inline array 1`] = `
+{
+  "body": [
+    {
+      "tex": "A",
+      "type": "Const",
+      "value": "A",
+    },
+    {
+      "tex": "=",
+      "type": "Const",
+      "value": "=",
+    },
+    {
+      "body": [
+        {
+          "tex": "\\\\left[",
+          "type": "Const",
+          "value": "[",
+        },
+        {
+          "tex": "a",
+          "type": "Const",
+          "value": "a",
+        },
+        {
+          "tex": ",",
+          "type": "Const",
+          "value": ",",
+        },
+        {
+          "tex": "b",
+          "type": "Const",
+          "value": "b",
+        },
+        {
+          "tex": ",",
+          "type": "Const",
+          "value": ",",
+        },
+        {
+          "tex": "c",
+          "type": "Const",
+          "value": "c",
+        },
+        {
+          "tex": ",",
+          "type": "Const",
+          "value": ",",
+        },
+        {
+          "tex": "d",
+          "type": "Const",
+          "value": "d",
+        },
+        {
+          "tex": "\\\\right]",
+          "type": "Const",
+          "value": "]",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`parser > should parse unfinished matrix 1`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "tex": "\\\\left[",
+          "type": "Const",
+          "value": "[",
+        },
+        {
+          "tex": "a",
+          "type": "Const",
+          "value": "a",
+        },
+        {
+          "tex": ",",
+          "type": "Const",
+          "value": ",",
+        },
+        {
+          "tex": "b",
+          "type": "Const",
+          "value": "b",
+        },
+        {
+          "tex": ",",
+          "type": "Const",
+          "value": ",",
+        },
+        {
+          "tex": "c",
+          "type": "Const",
+          "value": "c",
+        },
+        {
+          "tex": ";",
+          "type": "Const",
+          "value": ";",
+        },
+        {
+          "tex": "d",
+          "type": "Const",
+          "value": "d",
+        },
+        {
+          "tex": ",",
+          "type": "Const",
+          "value": ",",
+        },
+        {
+          "tex": "e",
+          "type": "Const",
+          "value": "e",
+        },
+        {
+          "tex": ";",
+          "type": "Const",
+          "value": ";",
+        },
+        {
+          "tex": "f",
+          "type": "Const",
+          "value": "f",
+        },
+        {
+          "tex": "\\\\right.",
+          "type": "Const",
+          "value": "[",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`test color > should parse color 1`] = `
+[
+  {
+    "current": 5,
+    "isKeyWord": true,
+    "tex": "{ \\\\color{$1} $2 }",
+    "type": "OperatorOAB",
+    "value": "color",
+  },
+  {
+    "current": 12,
+    "isKeyWord": false,
+    "tex": "green",
+    "type": "Const",
+    "value": "green",
+  },
+  {
+    "current": 13,
+    "isKeyWord": true,
+    "tex": "[",
+    "type": "LParen",
+    "value": "[",
+  },
+  {
+    "current": 14,
+    "isKeyWord": false,
+    "tex": "1",
+    "type": "NumberLiteral",
+    "value": "1",
+  },
+  {
+    "current": 15,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 16,
+    "isKeyWord": false,
+    "tex": "2",
+    "type": "NumberLiteral",
+    "value": "2",
+  },
+  {
+    "current": 17,
+    "isKeyWord": true,
+    "tex": "]",
+    "type": "RParen",
+    "value": "]",
+  },
+  {
+    "current": 18,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 19,
+    "isKeyWord": false,
+    "tex": "3",
+    "type": "NumberLiteral",
+    "value": "3",
+  },
+]
+`;
+
+exports[`test color > should parse color 2`] = `
+{
+  "body": [
+    {
+      "params": [
+        {
+          "tex": "green",
+          "type": "Const",
+          "value": "green",
+        },
+        {
+          "body": [
+            {
+              "tex": "\\\\left[",
+              "type": "Const",
+              "value": "[",
+            },
+            {
+              "tex": "1",
+              "type": "Const",
+              "value": "1",
+            },
+            {
+              "tex": ",",
+              "type": "Const",
+              "value": ",",
+            },
+            {
+              "tex": "2",
+              "type": "Const",
+              "value": "2",
+            },
+            {
+              "tex": "\\\\right]",
+              "type": "Const",
+              "value": "]",
+            },
+          ],
+          "type": "Flat",
+        },
+      ],
+      "tex": "{ \\\\color{$1} $2 }",
+      "type": "ParamTwo",
+    },
+    {
+      "tex": ",",
+      "type": "Const",
+      "value": ",",
+    },
+    {
+      "tex": "3",
+      "type": "Const",
+      "value": "3",
+    },
+  ],
+  "type": "Root",
+}
+`;

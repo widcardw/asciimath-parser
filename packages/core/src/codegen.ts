@@ -1,30 +1,37 @@
 import type { ChildNode, MatrixNode, RootNode } from './parser'
-import { AlignDirection, NodeTypes } from './parser'
+import { NodeTypes } from './parser'
 
 function getArrayBoundary(node: MatrixNode) {
   const div = node.dividerIndices
   let beginArray = '\\begin{array}'
-  let ch = 'c'
-  if (node.alignment === AlignDirection.Left)
-    ch = 'l'
+  const ch = node.alignment
 
   if (div.length) {
     const divMax = div[div.length - 1]
+    // transform divider indices to col numbers between two divider
+    // [2, 4, 5] -> [2, 2, 1]
     for (let i = div.length - 1; i >= 1; i--)
       div[i] -= div[i - 1]
 
+    // [2, 2, 1] -> {cc|cc|c|
     beginArray += '{'
     for (let i = 0; i < div.length; i++)
-      beginArray += `${''.padEnd(div[i], ch)}|`
+      beginArray += `${ch.repeat(div[i])}|`
 
     // MathJax would complain if the array env arg
-    // is not consistent with the elements of the matrix.
+    // is not consistent with the number of elements of the matrix row.
+    // For example, the matrix is like
+    // [a, b | c;
+    //  d, e | f]
+    // if the array env arg is `\begin{array}{cc|}`, the bar won't render correctly.
+    // Change it to `\begin{array}{cc|c}` should fix this problem.
     const maxCol = Math.max(...node.params.map(i => i.length))
-    beginArray += `${''.padEnd(maxCol - divMax, ch)}}`
+    // {cc|cc|c| -> {cc|cc|c|...c}
+    beginArray += `${ch.repeat(maxCol - divMax)}}`
   }
   else {
     const maxCol = Math.max(...node.params.map(c => c.length))
-    beginArray += `{${''.padEnd(maxCol, ch)}}`
+    beginArray += `{${ch.repeat(maxCol)}}`
   }
   return [beginArray, '\\end{array}']
 }
