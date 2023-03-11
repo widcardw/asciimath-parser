@@ -74,13 +74,13 @@ importers:
       rehype-katex: ^6.0.2
       remark-gfm: ^3.0.1
       remark-math: ^5.1.1
-      solid-js: ^1.6.10
+      solid-js: 1.6.10
       solidjs-use: ^1.1.0
     dependencies:
-      '@astrojs/solid-js': 2.1.0_rxwbanh7i4kufkqgjazlioanm4
+      '@astrojs/solid-js': 2.1.0_zbynmt4kp3prfx6v2z3tz2uw6i
       '@types/node': 18.15.0
       astro: 1.9.2_@types+node@18.15.0
-      solid-js: 1.6.13
+      solid-js: 1.6.10
     devDependencies:
       '@babel/core': 7.21.0
       '@types/katex': 0.16.0
@@ -224,14 +224,14 @@ packages:
       prismjs: 1.29.0
     dev: false
 
-  /@astrojs/solid-js/2.1.0_rxwbanh7i4kufkqgjazlioanm4:
+  /@astrojs/solid-js/2.1.0_zbynmt4kp3prfx6v2z3tz2uw6i:
     resolution: {integrity: sha512-p07DP9NRWJPjtF+CzPZ9lzOMkoyw6wSs3S6g3OZUxR+DVQy3VIXXDqCcnZZVJI34VakkHuViZaoNNkBW/9I54w==}
     engines: {node: '>=16.12.0'}
     peerDependencies:
       solid-js: ^1.4.3
     dependencies:
       babel-preset-solid: 1.6.13_@babel+core@7.21.0
-      solid-js: 1.6.13
+      solid-js: 1.6.10
       vitefu: 0.2.4
     transitivePeerDependencies:
       - '@babel/core'
@@ -5620,8 +5620,8 @@ packages:
       is-fullwidth-code-point: 4.0.0
     dev: true
 
-  /solid-js/1.6.13:
-    resolution: {integrity: sha512-/zcyeect3QnmcD58754IpOU/SzX3s9N19RlRVoKRz3tNpzvel7QKO4FX/PpIFQH6n/pxWq6rSh6b9fwe20XUvw==}
+  /solid-js/1.6.10:
+    resolution: {integrity: sha512-Sf0e6PQCEFkFtbPq0L+93Ua81YQOefBEbvDJ0YXT92b6Lzw0k7UvzSd2l1BbYM+yzE3UmepU1tyMDc/3nIByjA==}
     dependencies:
       csstype: 3.1.1
     dev: false
