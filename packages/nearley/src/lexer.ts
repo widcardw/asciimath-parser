@@ -5,12 +5,13 @@ import type { Symbols } from './symbols'
 
 const initLexer = (symbols: Symbols) => {
   const loadSymbol = (key: TokenTypes) => {
-    return Object.keys(symbols[key]) // .sort().reverse() // 保证最长匹配
+    return Object.keys(symbols[key] as object) // .sort().reverse() // 保证最长匹配
   }
 
   const keywords = {
     keyword: loadSymbol(TokenTypes.keyword), // 即原版 am 的 const
-    subsup: loadSymbol(TokenTypes.subsup), // 上下标
+    sub: loadSymbol(TokenTypes.sub), // 下标
+    sup: loadSymbol(TokenTypes.sup), // 上标
     limits: loadSymbol(TokenTypes.limits), // 箭头上下叠合
     opOA: loadSymbol(TokenTypes.opOA), // 一元操作符
     opOAB: loadSymbol(TokenTypes.opOAB),
@@ -35,15 +36,22 @@ const initLexer = (symbols: Symbols) => {
 
   return moo.states({
     main: {
-      pipe: { match: loadSymbol(TokenTypes.pipe), push: 'lp' },
       ...main,
+      pipe: { match: loadSymbol(TokenTypes.pipe), push: 'pipe' },
       literal: /\S/, // 放在最后, 用于捕获一切非空字符
     },
     lp: {
       comma: /,/,
       semicolon: /;/,
-      pipe: { match: loadSymbol(TokenTypes.pipe), pop: 1 },
       ...main,
+      pipeEnd: loadSymbol(TokenTypes.pipe),
+      literal: /\S/,
+    },
+    pipe: {
+      comma: /,/,
+      semicolon: /;/,
+      ...main,
+      pipeEnd: { match: loadSymbol(TokenTypes.pipe), pop: 1 },
       literal: /\S/,
     },
     text: {

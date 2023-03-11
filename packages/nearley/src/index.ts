@@ -15,6 +15,11 @@ interface AsciiMathConfig {
    */
   display?: boolean
   /**
+   * @default false
+   * throws error on parse
+   */
+  throws?: boolean
+  /**
    * Add custom symbols.
    *
    * For example:
@@ -24,6 +29,8 @@ interface AsciiMathConfig {
    *     dy: { tex: '{\\text{d}y}' },
    *     dz: { tex: '{\\text{d}z}' },
    *     dt: { tex: '{\\text{d}t}' },
+   *     ee: { tex: '\\text{e}' },
+   *     ii: { tex: '\\text{i}' },
    *   }
    * }
    */
@@ -45,38 +52,40 @@ interface AsciiMathConfig {
 type RestrictedAmConfig = Required<AsciiMathConfig>
 
 function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
-  const defaultConfig: RestrictedAmConfig = {
-    display: true,
+  return {
+    display: config?.display ?? true,
+    throws: config?.throws ?? false,
     symbols: {
       keyword: {
         dx: { tex: '{\\text{d}x}' },
         dy: { tex: '{\\text{d}y}' },
         dz: { tex: '{\\text{d}z}' },
         dt: { tex: '{\\text{d}t}' },
+        ee: { tex: '\\text{e}' },
+        ii: { tex: '\\text{i}' },
       },
+      ...config?.symbols,
     },
     replaceBeforeTokenizing: [
+      // html entity
       [/&#(x?[0-9a-fA-F]+);/g, (_match, $1) =>
         String.fromCodePoint($1[0] === 'x' ? `0${$1}` : $1),
       ],
+      ...(config?.replaceBeforeTokenizing || []),
     ],
   }
-  if (typeof config?.display !== 'undefined')
-    defaultConfig.display = config?.display
-  if (config?.replaceBeforeTokenizing?.length)
-    defaultConfig.replaceBeforeTokenizing.push(...config.replaceBeforeTokenizing)
-
-  return defaultConfig
 }
 
 class AsciiMath {
   private display: boolean
+  private throws: boolean
   private replaceLaws: ReplaceLaw[]
   private compiledGrammar: Nearley.Grammar
   private generator: ((ast: Ast) => string)
   constructor(config?: AsciiMathConfig) {
-    const { display, symbols: extSymbols, replaceBeforeTokenizing: replaceBeforeParsing } = resolveConfig(config)
+    const { display, throws, symbols: extSymbols, replaceBeforeTokenizing: replaceBeforeParsing } = resolveConfig(config)
     this.display = display
+    this.throws = throws
     this.replaceLaws = replaceBeforeParsing
     const symbols = initSymbols(extSymbols)
     const lexer = initLexer(symbols)
@@ -105,6 +114,8 @@ class AsciiMath {
       return res
     }
     catch (e) {
+      if (this.throws)
+        throw e
       console.error(e)
       const message = String(e)
       const index = message.indexOf(':\n')

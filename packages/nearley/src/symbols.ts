@@ -5,7 +5,8 @@ export enum TokenTypes {
   lp = 'lp',
   rp = 'rp',
   limits = 'limits',
-  subsup = 'subsup',
+  sub = 'sub',
+  sup = 'sup',
   align = 'align',
   part = 'part',
   opAO = 'opAO',
@@ -13,22 +14,27 @@ export enum TokenTypes {
   pipe = 'pipe',
 }
 
-export interface Symbols {
-  keyword?: any
-  opOA?: any
-  opOAB?: any
-  lp?: any
-  rp?: any
-  limits?: any
-  subsup?: any
-  align?: any
-  part?: any
-  opAO?: any
-  opAOB?: any
-  pipe?: any
+interface SymbolConfig {
+  tex: string
 }
 
-const symbols: Symbols = {
+export interface Symbols {
+  keyword?: Record<string, SymbolConfig>
+  opOA?: Record<string, SymbolConfig>
+  opOAB?: Record<string, SymbolConfig>
+  lp?: Record<string, SymbolConfig>
+  rp?: Record<string, SymbolConfig>
+  limits?: Record<string, SymbolConfig>
+  sub?: Record<string, SymbolConfig>
+  sup?: Record<string, SymbolConfig>
+  align?: Record<string, SymbolConfig>
+  part?: Record<string, SymbolConfig>
+  opAO?: Record<string, SymbolConfig>
+  opAOB?: Record<string, SymbolConfig>
+  pipe?: Record<string, SymbolConfig>
+}
+
+const symbols: Required<Symbols> = {
   keyword: {
     // greek letters
     'alpha': { tex: '\\alpha' },
@@ -123,7 +129,6 @@ const symbols: Symbols = {
     '~=': { tex: '\\cong' },
     '~': { tex: '\\sim' },
     '~~': { tex: '\\approx' },
-    '||': { tex: '\\Vert' },
     '!||': { tex: '\u2226' },
     'S=': { tex: '\u224C' },
     'S~': { tex: '\u223D' },
@@ -305,10 +310,6 @@ const symbols: Symbols = {
     cancel: { tex: '\\cancel{ $1 }' },
     hspace: { tex: '\\hspace{$1}' },
 
-    // unary minus and plus
-    // '-': { tex: '{-$1 }' },
-    // '+': { tex: '{+$1 }' },
-
     // font command
     bb: { tex: '\\mathbf{ $1 }' },
     mathbf: { tex: '\\mathbf{ $1 }' },
@@ -337,9 +338,6 @@ const symbols: Symbols = {
   opOAB: {
     root: { tex: '\\sqrt[ $1 ]{ $2 }' },
     frac: { tex: '\\frac{ $1 }{ $2 }' },
-    over: { tex: '{ $1 \\over $2 }' },
-    atop: { tex: '{ $1 \\atop $2 }' },
-    choose: { tex: '{ $1 \\choose $2 }' },
     stackrel: { tex: '\\stackrel{ $1 }{ $2 }' },
     overset: { tex: '\\overset{ $1 }{ $2 }' },
     underset: { tex: '\\under{ $1 }{ $2 }' },
@@ -367,9 +365,15 @@ const symbols: Symbols = {
     '==': { tex: '\\xlongequal[ $2 ]{ $1 }' },
     '-->': { tex: '\\xrightarrow[ $2 ]{ $1 }' },
   },
-  subsup: {
-    '_': { tex: '_' },
-    '^': { tex: '^' },
+  sub: {
+    '_+': { tex: '_{ +$1 }' },
+    '_-': { tex: '_{ -$1 }' },
+    '_': { tex: '_$1' },
+  },
+  sup: {
+    '^+': { tex: '^{ +$1 }' },
+    '^-': { tex: '^{ -$1 }' },
+    '^': { tex: '^$1' },
   },
   align: {
     '&&': { tex: '&&' },
@@ -385,13 +389,17 @@ const symbols: Symbols = {
   },
   opAOB: {
     '/': { tex: '\\frac{ $1 }{ $2 }' },
+    'over': { tex: '{ $1 \\over $2 }' },
+    'atop': { tex: '{ $1 \\atop $2 }' },
+    'choose': { tex: '{ $1 \\choose $2 }' },
   },
   pipe: {
     '|': { tex: '|' },
+    '||': { tex: '\\Vert' },
   },
 }
 
-const initSymbols = (extSymbols: Symbols = {}): Symbols => {
+const initSymbols = (extSymbols: Symbols = {}): Required<Symbols> => {
   const res: Symbols = {}
   Object.keys(symbols).forEach((key) => {
     res[key as TokenTypes] = {
@@ -399,7 +407,7 @@ const initSymbols = (extSymbols: Symbols = {}): Symbols => {
       ...extSymbols[key as TokenTypes],
     }
   })
-  return res
+  return res as Required<Symbols>
 }
 
 export default initSymbols

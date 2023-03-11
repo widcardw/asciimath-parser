@@ -1,6 +1,41 @@
-# @{%
-# const lexer = require('./lexer')
-# %}
+@{%
+const matrixPostProcess = (d, pipeIndex) => {
+  if (d[3].length) { // 至少有两行
+    const rows = [d[2], ...d[3].map(row => row[2])]
+    return {
+      type: 'matrix',
+      left: d[0],
+      right: d[4],
+      value: rows.map(row => row.value),
+      pipeIndex: pipeIndex ? new Set(rows.map(row => row.pipeIndex).flat()) : null,
+    }
+  } else { // 只有一行
+    return {
+      type: 'paren',
+      left: d[0],
+      right: d[4],
+      value: d[2].value,
+      pipeIndex: pipeIndex ? new Set(d[2].pipeIndex) : null
+    }
+  }
+}
+
+const matrixRowPostProcess = (d) => {
+  const pipeIndex = []
+  const offset = d[0] ? 1 : 0
+  d[1].forEach((item, index) => {
+    if (item[0][0].type === 'pipeEnd') {
+      pipeIndex.push(index + offset)
+    }
+  })
+  let value = [d[0], ...d[1].map(item => item[2])]
+  // 允许 [|a, b|; c, d] => \begin{array}{|cc|}
+  const begin = pipeIndex[0] === 0 ? 1 : 0
+  const lastItem = d[1][d[1].length - 1]
+  const end = lastItem?.[0]?.[0]?.type === 'pipeEnd' && lastItem?.[2] === null ? -1 : undefined
+  return { value: value.slice(begin, end), pipeIndex }
+}
+%}
 
 @lexer lexer # Pass your lexer object using the @lexer option:
 @builtin "whitespace.ne" # _ means optional whitespace
@@ -23,51 +58,37 @@ expr -> ((subsup | infix | part) _):+ {% d => d[0].map(e => e[0]) %}
 # 偏微分
 part -> %part (_ "^" _ simple):? _ subsup _ subsup {% d => ({ type: 'part', value: d[0], exp: d[1] ? d[1][3] : '', sup: d[3], sub: d[5] }) %}
 
-# 分数
-infix -> subsup _ %opAOB _ subsup {% d => ({ type: 'opOAB', value: 'frac', $1: d[0], $2: d[4] }) %}
+# 中缀运算符, 如分数
+infix -> subsup _ %opAOB _ subsup {% d => ({ type: 'opAOB', value: d[2].value, $1: d[0], $2: d[4] }) %}
 
 # 上下标
-subsup -> simple _ "_" _ simple _ "^" _ simple {% d => ({ type: 'subsup', value: d[0], sub: d[4], sup: d[8] }) %}
-  | simple _ "^" _ simple _ "_" _ simple {% d => ({ type: 'subsup', value: d[0], sub: d[8], sup: d[4] }) %}
-  | simple _ "_" _ simple {% d => ({ type: 'subsup', value: d[0], sub: d[4] }) %}
-  | simple _ "^" _ simple {% d => ({ type: 'subsup', value: d[0], sup: d[4] }) %}
+subsup -> simple _ %sub _ simple _ %sup _ simple {% d => ({ type: 'subsup', value: d[0], sub: d[2].value, sup: d[6].value, $1: d[4], $2: d[8] }) %}
+  | simple _ %sup _ simple _ %sub _ simple {% d => ({ type: 'subsup', value: d[0], sub: d[6].value, sup: d[2].value, $1: d[8], $2: d[4] }) %}
+  | simple _ %sub _ simple {% d => ({ type: 'subsup', value: d[0], sub: d[2].value, $1: d[4] }) %}
+  | simple _ %sup _ simple {% d => ({ type: 'subsup', value: d[0], sup: d[2].value, $2: d[4] }) %}
   | simple {% id %} # id 等价于 d => d[0]
 
+# 简单表达式
 simple -> matrix {% id %} # 矩阵
   # | %lp _ expr:? %rp {% d => ({ type: 'paren', left: d[0], right: d[3], value: d[2] }) %}
-  # 括号表达式, 形如 (a, b, c, | d, e)
-  | %lp _ matrixRow:? (%pipe _ matrixRow):? %rp {%
-    d => ({
-      type: 'paren',
-      left: d[0],
-      right: d[4],
-      leftItems: d[2] || [],
-      mid: d[3] ? { type: 'keyword', value: 'mid' } : null,
-      rightItems: d[3] ? d[3][2] : [],
-    })
-  %}
   # 一元操作符
-  | %opOA _ simple {% d => ({ type:'opOA', value: d[0].value, $1: d[2] }) %}
+  | %opOA _ simple {% d => ({ type: 'opOA', value: d[0].value, $1: d[2] }) %}
+  # 后缀一元操作符 https://nearley.js.org/docs/how-to-grammar-good#dont-shy-away-from-left-recursion
+  | simple _ %opAO {% d => ({ type: 'opAO', value: d[2].value, $1: d[0] }) %}
   # 二元操作符
   | %opOAB _ simple _ simple {% d => ({ type: 'opOAB', value: d[0].value, $1: d[2], $2: d[4] }) %}
   # 文本
   | %text %textContent:? %textEnd {%d => ({ type: 'text', value: d[1] ? d[1].value : '' }) %}
-  # 竖线
-  | %pipe _ expr:? %pipe {% d => ({ type: 'pipe', left: d[0], value: d[2], right: d[3] }) %}
   | value {% id %}
 
-# 矩阵至少含有一个分号, 即: 矩阵至少有两行
-matrix -> (%lp | %pipe) _ matrixRow (%semicolon _ matrixRow):+ (%semicolon _):? (%rp | %pipe) {%
-    d => ({
-      type: 'matrix',
-      left: d[0][0],
-      right: d[5][0],
-      value: [d[2], ...d[3].map(row => row[2])]
-    })
-  %}
+matrix -> %lp _ matrixRow (%semicolon _ matrixRow):* %rp {% d => matrixPostProcess(d, true) %}
+  | %pipe _ detRow (%semicolon _ detRow):* %pipeEnd {% d => matrixPostProcess(d, false) %}
 
-# 矩阵每行至少有一元素
-matrixRow -> expr (%comma _ expr):* (%comma _):? {% d => [d[0], ...d[1].map(item => item[2])] %}
+# 矩阵行, 可以为空
+matrixRow -> expr:? ((%comma | %pipeEnd) _ expr:?):* {% matrixRowPostProcess %}
+
+# 行列式的一行, 可以为空. 里面不能有竖线
+detRow -> expr:? (%comma _ expr:?):* {% d => ({ value: [d[0], ...d[1].map(item => item[2])] }) %}
 
 value -> %literal {% id %}
   | %number {% id %}

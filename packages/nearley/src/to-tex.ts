@@ -1,18 +1,27 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import type { Symbols } from './symbols'
+import type { Symbols, TokenTypes } from './symbols'
 import type { Ast } from './index'
 
-const initGenerator = (symbols: Symbols) => {
+const initGenerator = (symbols: Required<Symbols>) => {
   const genMatrix = (ast: Ast, strip = false) => {
-    const { value, left, right } = ast
+    const { value, left, right, pipeIndex } = ast
     const maxCol = Math.max(...value.map((row: Ast[]) => row.length))
     // 分段函数表达式向左对齐, 其它情况居中对齐
     const alignType = (left.value === '{' && right.value === ':}') ? 'l' : 'c'
-    const cols = alignType.repeat(maxCol)
+    const cols = alignType.repeat(maxCol).split('')
+    const colsBuf = []
+    cols.forEach((col, index) => {
+      if (pipeIndex?.has(index))
+        colsBuf.push('|')
+      colsBuf.push(col)
+    })
+    if (pipeIndex?.has(cols.length))
+      colsBuf.push('|')
+
     const body = value.map((row: Ast[]) => {
       return row.map(v => toTex(v)).join(' & ')
     }).join(' \\\\ ')
-    const res = `\\begin{array}{${cols}}${body}\\end{array}`
+    const res = `\\begin{array}{${colsBuf.join('')}}${body}\\end{array}`
     if (strip)
       return res
     return [
@@ -24,49 +33,55 @@ const initGenerator = (symbols: Symbols) => {
     ].join('')
   }
 
-  const genSubSup = (ast: Ast) => {
-    const { sub, sup } = ast
-    let res = toTex(ast.value)
-    if (sub)
-      res += `_${braced(sub)}`
-    if (sup)
-      res += `^${braced(sup)}`
-    return res
-  }
-
   const genParen = (ast: Ast, strip = false) => {
-    const { left, right, mid, leftItems, rightItems } = ast
-    const leftStr = leftItems.map(toTex).join(', ')
-    const midStr = mid ? ` ${toTex(mid)} ` : ''
-    const rightStr = rightItems.map(toTex).join(', ')
-    const res = leftStr + midStr + rightStr
+    const { left, right, value, pipeIndex } = ast
+    const res: string[] = []
+    value.forEach((item: Ast, index: number) => {
+      if (pipeIndex?.has(index))
+        res.push(' \\mid ')
+      else if (index > 0)
+        res.push(', ')
+      res.push(toTex(item))
+    })
+    if (pipeIndex?.has(value.length))
+      res.push(' \\mid ')
     if (strip)
-      return res
+      return res.join('')
     return [
       '\\left',
-      symbols.lp[left].tex,
-      res,
+      (symbols.lp[left] || symbols.pipe[left]).tex,
+      ...res,
       '\\right',
-      symbols.rp[right].tex,
+      (symbols.rp[right] || symbols.pipe[right]).tex,
     ].join('')
   }
 
   const braced = (ast: Ast) => {
-    return (['paren', 'matrix'].includes(ast.type) || (ast.type === 'number' && ast.value.length > 1))
-      ? `{ ${toTex(ast, true)} }`
-      : toTex(ast)
+    if (['paren', 'matrix'].includes(ast.type)
+      || (ast.type === 'number' && ast.value.length > 1)
+    )
+      return `{ ${toTex(ast, true)} }`
+    return toTex(ast)
   }
 
-  const genOpOA = (ast: Ast) => {
-    const { value, $1 } = ast
-    const res = symbols.opOA[value].tex
-    return res.replace('$1', toTex($1, true))
+  const genSubSup = (ast: Ast) => {
+    const { value, sub, sup, $1, $2 } = ast
+    let res = toTex(value)
+    if (sub)
+      res += symbols.sub[sub].tex.replace('$1', sub === '_' ? braced($1) : toTex($1))
+    if (sup)
+      res += symbols.sup[sup].tex.replace('$1', sup === '^' ? braced($2) : toTex($2))
+    return res
   }
 
-  const genOpOAB = (ast: Ast) => {
-    const { value, $1, $2 } = ast
-    const res = symbols.opOAB[value].tex
-    return res.replace('$1', toTex($1, true)).replace('$2', toTex($2, true))
+  const genOp = (ast: Ast) => {
+    const { type, value, $1, $2 } = ast
+    let res = symbols[type as TokenTypes][value].tex
+    if ($1)
+      res = res.replace('$1', toTex($1, true))
+    if ($2)
+      res = res.replace('$2', toTex($2, true))
+    return res
   }
 
   const genText = (ast: Ast, strip = false) => {
@@ -89,12 +104,10 @@ const initGenerator = (symbols: Symbols) => {
     // 偏微分的分母部分
     let subStr
     if (sub.type === 'paren') {
-      if (sub.mid || sub.leftItems.length > 1)
-        throw new Error('pp expression cannot have pipe "|" or comma "," on denominator')
-      if (Array.isArray(sub.leftItems[0]))
-        subStr = sub.leftItems[0].map(genSubGroup).join('') // 这里不带指数
+      if (Array.isArray(sub.value[0]))
+        subStr = sub.value[0].map(genSubGroup).join('') // 这里不带指数
       else
-        subStr = genSubGroup(sub.leftItems[0]) + expStr // 这里带指数
+        subStr = genSubGroup(sub.value[0]) + expStr // 这里带指数
     }
     else {
       subStr = genSubGroup(sub) + expStr // 这里带指数
@@ -136,8 +149,7 @@ const initGenerator = (symbols: Symbols) => {
       case 'literal': return ast.value
       case 'keyword': return symbols.keyword[ast.value].tex
       case 'subsup': return genSubSup(ast)
-      case 'opOA': return genOpOA(ast)
-      case 'opOAB': return genOpOAB(ast)
+      case 'opOA': case 'opAO': case 'opOAB': case 'opAOB': return genOp(ast)
       case 'part': return genPart(ast)
       default: {
         console.error(ast)
