@@ -622,10 +622,14 @@ function generateMinusNode(tokens: TokenizedValue[], current: number): { node: C
   if (nextToken.type === TokenTypes.RParen)
     return { node: createConstNode(token.value), current }
 
+  // get the next node of operator minus
   const walkRes = walk(tokens, current, true)
   current = walkRes.current
-  if (walkRes.node.type === NodeTypes.Flat)
-    walkRes.node = removeParenOfFlatExpr(walkRes.node)
+  // // However, we should not remove the node's parens, since there is a `-` before it.
+  // // Removing the parens would transform `-(x+y)` to `-x+y`
+  // if (walkRes.node.type === NodeTypes.Flat
+  //   && token.type !== TokenTypes.OperatorMinus)
+  //   walkRes.node = removeParenOfFlatExpr(walkRes.node)
   const node = createParamOneNode()
   node.tex = token.tex
   node.params = walkRes.node
