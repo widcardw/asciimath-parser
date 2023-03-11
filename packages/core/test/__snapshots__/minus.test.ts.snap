@@ -1,0 +1,343 @@
+// Vitest Snapshot v1
+
+exports[`minus edge cases > should parse \`e^-x\` 1`] = `
+[
+  {
+    "current": 1,
+    "isKeyWord": false,
+    "tex": "e",
+    "type": "StringLiteral",
+    "value": "e",
+  },
+  {
+    "current": 2,
+    "isKeyWord": true,
+    "tex": "^{ $1 }",
+    "type": "OperatorSup",
+    "value": "^",
+  },
+  {
+    "current": 3,
+    "isKeyWord": true,
+    "tex": "{-$1 }",
+    "type": "OperatorMinus",
+    "value": "-",
+  },
+  {
+    "current": 4,
+    "isKeyWord": false,
+    "tex": "x",
+    "type": "StringLiteral",
+    "value": "x",
+  },
+]
+`;
+
+exports[`minus edge cases > should parse \`e^-x\` 2`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "tex": "e",
+          "type": "Const",
+          "value": "e",
+        },
+        {
+          "params": {
+            "params": {
+              "tex": "x",
+              "type": "Const",
+              "value": "x",
+            },
+            "tex": "{-$1 }",
+            "type": "ParamOne",
+          },
+          "tex": "^{ $1 }",
+          "type": "ParamOne",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`minus edge cases > should parse \`e^-x\` 3`] = `"e ^{ {-x } }"`;
+
+exports[`minus edge cases > should parse common minus expressions 1`] = `"a - b + c"`;
+
+exports[`minus edge cases > should parse common minus expressions 2`] = `"a - b - c"`;
+
+exports[`minus edge cases > should parse int_(0_-) 1`] = `
+[
+  {
+    "current": 3,
+    "isKeyWord": true,
+    "tex": "\\\\int",
+    "type": "Const",
+    "value": "int",
+  },
+  {
+    "current": 4,
+    "isKeyWord": true,
+    "tex": "_{ $1 }",
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "current": 5,
+    "isKeyWord": true,
+    "tex": "(",
+    "type": "LParen",
+    "value": "(",
+  },
+  {
+    "current": 6,
+    "isKeyWord": false,
+    "tex": "0",
+    "type": "NumberLiteral",
+    "value": "0",
+  },
+  {
+    "current": 7,
+    "isKeyWord": true,
+    "tex": "_{ $1 }",
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "current": 8,
+    "isKeyWord": true,
+    "tex": "{-$1 }",
+    "type": "OperatorMinus",
+    "value": "-",
+  },
+  {
+    "current": 9,
+    "isKeyWord": true,
+    "tex": ")",
+    "type": "RParen",
+    "value": ")",
+  },
+  {
+    "current": 11,
+    "isKeyWord": true,
+    "tex": "(",
+    "type": "LParen",
+    "value": "(",
+  },
+  {
+    "current": 13,
+    "isKeyWord": false,
+    "tex": "as",
+    "type": "StringLiteral",
+    "value": "as",
+  },
+  {
+    "current": 14,
+    "isKeyWord": false,
+    "tex": "d",
+    "type": "StringLiteral",
+    "value": "d",
+  },
+  {
+    "current": 15,
+    "isKeyWord": true,
+    "tex": ")",
+    "type": "RParen",
+    "value": ")",
+  },
+]
+`;
+
+exports[`minus edge cases > should parse int_(0_-) 2`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "tex": "\\\\int",
+          "type": "Const",
+          "value": "int",
+        },
+        {
+          "params": {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "0",
+                    "type": "Const",
+                    "value": "0",
+                  },
+                  {
+                    "params": {
+                      "tex": "-",
+                      "type": "Const",
+                      "value": "-",
+                    },
+                    "tex": "_{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+          "tex": "_{ $1 }",
+          "type": "ParamOne",
+        },
+      ],
+      "type": "Flat",
+    },
+    {
+      "body": [
+        {
+          "tex": "\\\\left(",
+          "type": "Const",
+          "value": "(",
+        },
+        {
+          "tex": "as",
+          "type": "Const",
+          "value": "as",
+        },
+        {
+          "tex": "d",
+          "type": "Const",
+          "value": "d",
+        },
+        {
+          "tex": "\\\\right)",
+          "type": "Const",
+          "value": ")",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`minus edge cases > should parse int_(0_-) 3`] = `"\\\\int _{ 0 _{ - } } \\\\left( as d \\\\right)"`;
+
+exports[`superscript with parens > should generate "e"^-(x+y) 1`] = `
+[
+  {
+    "current": 3,
+    "isKeyWord": false,
+    "tex": "e",
+    "type": "Text",
+    "value": "e",
+  },
+  {
+    "current": 4,
+    "isKeyWord": true,
+    "tex": "^{ $1 }",
+    "type": "OperatorSup",
+    "value": "^",
+  },
+  {
+    "current": 5,
+    "isKeyWord": true,
+    "tex": "{-$1 }",
+    "type": "OperatorMinus",
+    "value": "-",
+  },
+  {
+    "current": 6,
+    "isKeyWord": true,
+    "tex": "(",
+    "type": "LParen",
+    "value": "(",
+  },
+  {
+    "current": 7,
+    "isKeyWord": false,
+    "tex": "x",
+    "type": "StringLiteral",
+    "value": "x",
+  },
+  {
+    "current": 8,
+    "isKeyWord": true,
+    "tex": "{+$1 }",
+    "type": "OperatorMinus",
+    "value": "+",
+  },
+  {
+    "current": 9,
+    "isKeyWord": false,
+    "tex": "y",
+    "type": "StringLiteral",
+    "value": "y",
+  },
+  {
+    "current": 10,
+    "isKeyWord": true,
+    "tex": ")",
+    "type": "RParen",
+    "value": ")",
+  },
+]
+`;
+
+exports[`superscript with parens > should generate "e"^-(x+y) 2`] = `
+{
+  "body": [
+    {
+      "body": [
+        {
+          "tex": "\\\\text{e}",
+          "type": "Const",
+          "value": "e",
+        },
+        {
+          "params": {
+            "params": {
+              "body": [
+                {
+                  "tex": "\\\\left(",
+                  "type": "Const",
+                  "value": "(",
+                },
+                {
+                  "tex": "x",
+                  "type": "Const",
+                  "value": "x",
+                },
+                {
+                  "tex": "+",
+                  "type": "Const",
+                  "value": "+",
+                },
+                {
+                  "tex": "y",
+                  "type": "Const",
+                  "value": "y",
+                },
+                {
+                  "tex": "\\\\right)",
+                  "type": "Const",
+                  "value": ")",
+                },
+              ],
+              "type": "Flat",
+            },
+            "tex": "{-$1 }",
+            "type": "ParamOne",
+          },
+          "tex": "^{ $1 }",
+          "type": "ParamOne",
+        },
+      ],
+      "type": "Flat",
+    },
+  ],
+  "type": "Root",
+}
+`;

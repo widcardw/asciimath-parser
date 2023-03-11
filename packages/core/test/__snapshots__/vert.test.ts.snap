@@ -1,0 +1,130 @@
+// Vitest Snapshot v1
+
+exports[`left and right vert > should generate left and right vert 1`] = `
+[
+  {
+    "current": 2,
+    "isKeyWord": true,
+    "tex": "\\\\Vert",
+    "type": "Paren",
+    "value": "||",
+  },
+  {
+    "current": 3,
+    "isKeyWord": false,
+    "tex": "a",
+    "type": "StringLiteral",
+    "value": "a",
+  },
+  {
+    "current": 4,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 5,
+    "isKeyWord": false,
+    "tex": "b",
+    "type": "StringLiteral",
+    "value": "b",
+  },
+  {
+    "current": 6,
+    "isKeyWord": true,
+    "tex": ";",
+    "type": "Split",
+    "value": ";",
+  },
+  {
+    "current": 7,
+    "isKeyWord": false,
+    "tex": "c",
+    "type": "StringLiteral",
+    "value": "c",
+  },
+  {
+    "current": 8,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 9,
+    "isKeyWord": false,
+    "tex": "d",
+    "type": "StringLiteral",
+    "value": "d",
+  },
+  {
+    "current": 11,
+    "isKeyWord": true,
+    "tex": "\\\\Vert",
+    "type": "Paren",
+    "value": "||",
+  },
+]
+`;
+
+exports[`left and right vert > should generate left and right vert 2`] = `
+{
+  "body": [
+    {
+      "alignment": "c",
+      "dividerIndices": [],
+      "lparen": "\\\\left\\\\Vert",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "a",
+                "type": "Const",
+                "value": "a",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "b",
+                "type": "Const",
+                "value": "b",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "c",
+                "type": "Const",
+                "value": "c",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "d",
+                "type": "Const",
+                "value": "d",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right\\\\Vert",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;

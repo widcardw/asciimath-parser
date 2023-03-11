@@ -1,0 +1,28 @@
+// Vitest Snapshot v1
+
+exports[`backslash > should parse backslash 1`] = `
+[
+  {
+    "current": 1,
+    "isKeyWord": false,
+    "tex": "\\\\",
+    "type": "StringLiteral",
+    "value": "\\\\",
+  },
+]
+`;
+
+exports[`backslash > should parse backslash 2`] = `
+{
+  "body": [
+    {
+      "tex": "\\\\",
+      "type": "Const",
+      "value": "\\\\",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`matrix > should parse matrix without right paren 1`] = `"\\\\left[ \\\\left[ \\\\begin{array}{cc} a & b\\\\\\\\c & d \\\\\\\\ \\\\end{array} \\\\right] \\\\right."`;

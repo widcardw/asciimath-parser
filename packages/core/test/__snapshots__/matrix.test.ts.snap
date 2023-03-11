@@ -1,0 +1,800 @@
+// Vitest Snapshot v1
+
+exports[`centered matrix with no braces > should generate centered matrix 1`] = `
+[
+  {
+    "current": 2,
+    "isKeyWord": true,
+    "tex": ".",
+    "type": "LParen",
+    "value": "{:",
+  },
+  {
+    "current": 4,
+    "isKeyWord": false,
+    "tex": "a",
+    "type": "StringLiteral",
+    "value": "a",
+  },
+  {
+    "current": 5,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 7,
+    "isKeyWord": false,
+    "tex": "b",
+    "type": "StringLiteral",
+    "value": "b",
+  },
+  {
+    "current": 8,
+    "isKeyWord": true,
+    "tex": ";",
+    "type": "Split",
+    "value": ";",
+  },
+  {
+    "current": 10,
+    "isKeyWord": false,
+    "tex": "c",
+    "type": "StringLiteral",
+    "value": "c",
+  },
+  {
+    "current": 11,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 13,
+    "isKeyWord": false,
+    "tex": "d",
+    "type": "StringLiteral",
+    "value": "d",
+  },
+  {
+    "current": 16,
+    "isKeyWord": true,
+    "tex": ".",
+    "type": "RParen",
+    "value": ":}",
+  },
+]
+`;
+
+exports[`centered matrix with no braces > should generate centered matrix 2`] = `
+{
+  "body": [
+    {
+      "alignment": "c",
+      "dividerIndices": [],
+      "lparen": "\\\\left.",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "a",
+                "type": "Const",
+                "value": "a",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "b",
+                "type": "Const",
+                "value": "b",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "c",
+                "type": "Const",
+                "value": "c",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "d",
+                "type": "Const",
+                "value": "d",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right.",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`matrix with empty el > should generate ast 1`] = `
+[
+  {
+    "current": 2,
+    "isKeyWord": true,
+    "tex": "[",
+    "type": "LParen",
+    "value": "[",
+  },
+  {
+    "current": 3,
+    "isKeyWord": false,
+    "tex": "1",
+    "type": "NumberLiteral",
+    "value": "1",
+  },
+  {
+    "current": 4,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 6,
+    "isKeyWord": false,
+    "tex": "0",
+    "type": "NumberLiteral",
+    "value": "0",
+  },
+  {
+    "current": 7,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 13,
+    "isKeyWord": true,
+    "tex": "\\\\cdots",
+    "type": "Const",
+    "value": "cdots",
+  },
+  {
+    "current": 14,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 16,
+    "isKeyWord": false,
+    "tex": "0",
+    "type": "NumberLiteral",
+    "value": "0",
+  },
+  {
+    "current": 17,
+    "isKeyWord": true,
+    "tex": ";",
+    "type": "Split",
+    "value": ";",
+  },
+  {
+    "current": 19,
+    "isKeyWord": false,
+    "tex": "s",
+    "type": "StringLiteral",
+    "value": "s",
+  },
+  {
+    "current": 20,
+    "isKeyWord": true,
+    "tex": "_{ $1 }",
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "current": 21,
+    "isKeyWord": false,
+    "tex": "1",
+    "type": "NumberLiteral",
+    "value": "1",
+  },
+  {
+    "current": 22,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 24,
+    "isKeyWord": false,
+    "tex": "b",
+    "type": "StringLiteral",
+    "value": "b",
+  },
+  {
+    "current": 25,
+    "isKeyWord": true,
+    "tex": "_{ $1 }",
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "current": 27,
+    "isKeyWord": false,
+    "tex": "11",
+    "type": "NumberLiteral",
+    "value": "11",
+  },
+  {
+    "current": 28,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 34,
+    "isKeyWord": true,
+    "tex": "\\\\cdots",
+    "type": "Const",
+    "value": "cdots",
+  },
+  {
+    "current": 35,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 37,
+    "isKeyWord": false,
+    "tex": "b",
+    "type": "StringLiteral",
+    "value": "b",
+  },
+  {
+    "current": 38,
+    "isKeyWord": true,
+    "tex": "_{ $1 }",
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "current": 39,
+    "isKeyWord": true,
+    "tex": "(",
+    "type": "LParen",
+    "value": "(",
+  },
+  {
+    "current": 40,
+    "isKeyWord": false,
+    "tex": "1",
+    "type": "NumberLiteral",
+    "value": "1",
+  },
+  {
+    "current": 41,
+    "isKeyWord": false,
+    "tex": "n",
+    "type": "StringLiteral",
+    "value": "n",
+  },
+  {
+    "current": 42,
+    "isKeyWord": true,
+    "tex": ")",
+    "type": "RParen",
+    "value": ")",
+  },
+  {
+    "current": 43,
+    "isKeyWord": true,
+    "tex": ";",
+    "type": "Split",
+    "value": ";",
+  },
+  {
+    "current": 49,
+    "isKeyWord": true,
+    "tex": "\\\\vdots",
+    "type": "Const",
+    "value": "vdots",
+  },
+  {
+    "current": 50,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 56,
+    "isKeyWord": true,
+    "tex": "\\\\vdots",
+    "type": "Const",
+    "value": "vdots",
+  },
+  {
+    "current": 57,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 59,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 65,
+    "isKeyWord": true,
+    "tex": "\\\\vdots",
+    "type": "Const",
+    "value": "vdots",
+  },
+  {
+    "current": 66,
+    "isKeyWord": true,
+    "tex": ";",
+    "type": "Split",
+    "value": ";",
+  },
+  {
+    "current": 68,
+    "isKeyWord": false,
+    "tex": "s",
+    "type": "StringLiteral",
+    "value": "s",
+  },
+  {
+    "current": 69,
+    "isKeyWord": true,
+    "tex": "_{ $1 }",
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "current": 70,
+    "isKeyWord": false,
+    "tex": "n",
+    "type": "StringLiteral",
+    "value": "n",
+  },
+  {
+    "current": 71,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 73,
+    "isKeyWord": false,
+    "tex": "b",
+    "type": "StringLiteral",
+    "value": "b",
+  },
+  {
+    "current": 74,
+    "isKeyWord": true,
+    "tex": "_{ $1 }",
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "current": 75,
+    "isKeyWord": true,
+    "tex": "(",
+    "type": "LParen",
+    "value": "(",
+  },
+  {
+    "current": 76,
+    "isKeyWord": false,
+    "tex": "n",
+    "type": "StringLiteral",
+    "value": "n",
+  },
+  {
+    "current": 77,
+    "isKeyWord": false,
+    "tex": "1",
+    "type": "NumberLiteral",
+    "value": "1",
+  },
+  {
+    "current": 78,
+    "isKeyWord": true,
+    "tex": ")",
+    "type": "RParen",
+    "value": ")",
+  },
+  {
+    "current": 79,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 85,
+    "isKeyWord": true,
+    "tex": "\\\\cdots",
+    "type": "Const",
+    "value": "cdots",
+  },
+  {
+    "current": 86,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 88,
+    "isKeyWord": false,
+    "tex": "b",
+    "type": "StringLiteral",
+    "value": "b",
+  },
+  {
+    "current": 89,
+    "isKeyWord": true,
+    "tex": "_{ $1 }",
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "current": 90,
+    "isKeyWord": true,
+    "tex": "(",
+    "type": "LParen",
+    "value": "(",
+  },
+  {
+    "current": 91,
+    "isKeyWord": false,
+    "tex": "n",
+    "type": "StringLiteral",
+    "value": "n",
+  },
+  {
+    "current": 93,
+    "isKeyWord": false,
+    "tex": "n",
+    "type": "StringLiteral",
+    "value": "n",
+  },
+  {
+    "current": 94,
+    "isKeyWord": true,
+    "tex": ")",
+    "type": "RParen",
+    "value": ")",
+  },
+  {
+    "current": 95,
+    "isKeyWord": true,
+    "tex": "]",
+    "type": "RParen",
+    "value": "]",
+  },
+]
+`;
+
+exports[`matrix with empty el > should generate ast 2`] = `
+{
+  "body": [
+    {
+      "alignment": "c",
+      "dividerIndices": [],
+      "lparen": "\\\\left[",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "1",
+                "type": "Const",
+                "value": "1",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "0",
+                "type": "Const",
+                "value": "0",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "\\\\cdots",
+                "type": "Const",
+                "value": "cdots",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "0",
+                "type": "Const",
+                "value": "0",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "s",
+                    "type": "Const",
+                    "value": "s",
+                  },
+                  {
+                    "params": {
+                      "tex": "1",
+                      "type": "Const",
+                      "value": "1",
+                    },
+                    "tex": "_{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "b",
+                    "type": "Const",
+                    "value": "b",
+                  },
+                  {
+                    "params": {
+                      "tex": "11",
+                      "type": "Const",
+                      "value": "11",
+                    },
+                    "tex": "_{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "\\\\cdots",
+                "type": "Const",
+                "value": "cdots",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "b",
+                    "type": "Const",
+                    "value": "b",
+                  },
+                  {
+                    "params": {
+                      "body": [
+                        {
+                          "tex": "1",
+                          "type": "Const",
+                          "value": "1",
+                        },
+                        {
+                          "tex": "n",
+                          "type": "Const",
+                          "value": "n",
+                        },
+                      ],
+                      "type": "Flat",
+                    },
+                    "tex": "_{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "\\\\vdots",
+                "type": "Const",
+                "value": "vdots",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "\\\\vdots",
+                "type": "Const",
+                "value": "vdots",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "tex": "",
+            "type": "Const",
+            "value": "",
+          },
+          {
+            "body": [
+              {
+                "tex": "\\\\vdots",
+                "type": "Const",
+                "value": "vdots",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "s",
+                    "type": "Const",
+                    "value": "s",
+                  },
+                  {
+                    "params": {
+                      "tex": "n",
+                      "type": "Const",
+                      "value": "n",
+                    },
+                    "tex": "_{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "b",
+                    "type": "Const",
+                    "value": "b",
+                  },
+                  {
+                    "params": {
+                      "body": [
+                        {
+                          "tex": "n",
+                          "type": "Const",
+                          "value": "n",
+                        },
+                        {
+                          "tex": "1",
+                          "type": "Const",
+                          "value": "1",
+                        },
+                      ],
+                      "type": "Flat",
+                    },
+                    "tex": "_{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "\\\\cdots",
+                "type": "Const",
+                "value": "cdots",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "b",
+                    "type": "Const",
+                    "value": "b",
+                  },
+                  {
+                    "params": {
+                      "body": [
+                        {
+                          "tex": "n",
+                          "type": "Const",
+                          "value": "n",
+                        },
+                        {
+                          "tex": "n",
+                          "type": "Const",
+                          "value": "n",
+                        },
+                      ],
+                      "type": "Flat",
+                    },
+                    "tex": "_{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right]",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;

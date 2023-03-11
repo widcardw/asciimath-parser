@@ -51,3 +51,25 @@ describe('minus with other operators', () => {
     expect(am.toTex('int_0^+oo')).toMatchInlineSnapshot('"\\\\int _{ 0 } ^{ {+\\\\infty } }"')
   })
 })
+
+describe('superscript with parens', () => {
+  it('should generate "e"^-(x+y)', () => {
+    const trie = createTrie()
+    const code = '"e"^-(x+y)'
+    const tokens = trie.tryParsingAll(code)
+    expect(tokens).toMatchSnapshot()
+    const ast = parser(tokens)
+    expect(ast).toMatchSnapshot()
+    const res = codegen(ast)
+    expect(res).toMatchInlineSnapshot('"\\\\text{e} ^{ {-\\\\left( x + y \\\\right) } }"')
+  })
+
+  it('should not remove the parens', () => {
+    const am = new AsciiMath({ display: false })
+    expect(am.toTex('(-(x+y))/2')).toMatchInlineSnapshot('"\\\\frac{ - \\\\left( x + y \\\\right) }{ 2 }"')
+    expect(am.toTex('(x+y)/-(z+w)')).toMatchInlineSnapshot('"\\\\frac{ x + y }{ {-\\\\left( z + w \\\\right) } }"')
+    expect(am.toTex('(z-((x+y)-(w-q)))')).toMatchInlineSnapshot('"\\\\left( z - \\\\left( \\\\left( x + y \\\\right) - \\\\left( w - q \\\\right) \\\\right) \\\\right)"')
+    expect(am.toTex('(z-((x+y)+(w+q)))')).toMatchInlineSnapshot('"\\\\left( z - \\\\left( \\\\left( x + y \\\\right) + \\\\left( w + q \\\\right) \\\\right) \\\\right)"')
+    expect(am.toTex('a^-(b+c)+d-e^-(f-(g+h)-(i+j))')).toMatchInlineSnapshot('"a ^{ {-\\\\left( b + c \\\\right) } } + d - e ^{ {-\\\\left( f - \\\\left( g + h \\\\right) - \\\\left( i + j \\\\right) \\\\right) } }"')
+  })
+})

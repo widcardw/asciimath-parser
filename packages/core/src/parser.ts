@@ -11,8 +11,8 @@ enum NodeTypes {
 }
 
 enum AlignDirection {
-  Left = 'Left',
-  Center = 'Center',
+  Left = 'l',
+  Center = 'c',
 }
 
 interface Node {
@@ -236,7 +236,7 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
   if (current < tokens.length) {
     current++
     node.rparen = `\\right${token.tex}`
-    if (token.value === ':}' && !node.lparen.endsWith('.'))
+    if (token.value === ':}' && node.lparen.endsWith('lbrace'))
       node.alignment = AlignDirection.Left
   }
   // unreachable
@@ -353,14 +353,15 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
   current: number
 } {
   let token = tokens[current]
-  // in fact only `|` matches `TokenTypes.Paren`
+  // in fact only `|` and `||` matches `TokenTypes.Paren`
   const { semiIndex, barIndex } = findPairedBar(tokens, current + 1, tokens.length, token.value)
 
   /**
-     * case 1: not matrix
-     * there isn't any `;` split pattern before a Paren or a RParen
-     * for example `{ (x, y) | x^2 + y^2 <= 1 }`
-     */
+   * case 1: not matrix
+   * there isn't any `;` split pattern before a Paren or a RParen
+   * for example `{ (x, y) | x^2 + y^2 <= 1 }`
+   * then render as `\mid`
+   */
   if (barIndex === -1)
     return createSingleBarNode(current, token)
 
@@ -376,17 +377,17 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
   }
 
   /**
-     * case 2: matrix
-     * there is one or more than one `;` before a Paren ~~or a RParen~~
-     *
-     * common cases:
-     * `| 1, 2; |` or `| 1, 2; 3, 4 |`
-     *
-     * special case:
-     * `| 1, 2, | 3, 4; 5, 6 |, 4; ... |`
-     * maybe I should use a `stack` to store the parens
-     * however, the case is too complex, so I won't implement it ¯\_(ツ)_/¯
-     */
+   * case 2: matrix
+   * there is one or more than one `;` before a Paren or a RParen
+   *
+   * common cases:
+   * `| 1, 2; |` or `| 1, 2; 3, 4 |`
+   *
+   * special case:
+   * `| 1, 2, | 3, 4; 5, 6 |, 4; ... |`
+   * maybe I should use a `stack` to store the parens
+   * however, the case is too complex, so I won't implement it ¯\_(ツ)_/¯
+   */
   const node = createMatrixNode()
   node.lparen = `\\left${token.tex}`
   node.rparen = `\\right${token.tex}`
@@ -419,6 +420,7 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
       token = tokens[++current]
       continue
     }
+    // get the elements of the matrix cells
     tempNode = createFlatNode()
     token = tokens[current]
     while (current < barIndex
@@ -475,6 +477,9 @@ function removeParenOfFlatExpr(node: FlatNode): FlatNode {
 }
 
 function lookForwardOperatorOptionalTwoParams(tokens: TokenizedValue[], current: number, token: TokenizedValue) {
+  // cases for `-->_a^b` or `==_c^d`
+  // they can have both `^` and `_`, either of them, none of them
+  // so it is a little complex
   let nextToken = tokens[current]
   let p1: ChildNode = createConstNode()
   let nextShouldBe = ''
@@ -599,7 +604,8 @@ function getParamOneNode(tokens: TokenizedValue[], current: number, lookForward:
 function generateMinusNode(tokens: TokenizedValue[], current: number): { node: ChildNode; current: number } {
   // the minus token
   const token = tokens[current]
-  // the previous token is not `_` ot `^`
+  // the previous token is not `_`, `^` or some other operators
+  // just throw `-` as a ConstNode
   if (current > 0) {
     const prevToken = tokens[current - 1]
     if (prevToken.type !== TokenTypes.OperatorSup
@@ -617,15 +623,19 @@ function generateMinusNode(tokens: TokenizedValue[], current: number): { node: C
   if (current >= tokens.length)
     return { node: createConstNode(token.value), current }
 
-  // the next token is right paren, just skip
+  // the next token is right paren, just skip and throw as `-`
   const nextToken = tokens[current]
   if (nextToken.type === TokenTypes.RParen)
     return { node: createConstNode(token.value), current }
 
+  // get the next node of operator minus
   const walkRes = walk(tokens, current, true)
   current = walkRes.current
-  if (walkRes.node.type === NodeTypes.Flat)
-    walkRes.node = removeParenOfFlatExpr(walkRes.node)
+  // // However, we should not remove the node's parens, since there is a `-` before it.
+  // // Removing the parens would transform `-(x+y)` to `-x+y`
+  // if (walkRes.node.type === NodeTypes.Flat
+  //   && token.type !== TokenTypes.OperatorMinus)
+  //   walkRes.node = removeParenOfFlatExpr(walkRes.node)
   const node = createParamOneNode()
   node.tex = token.tex
   node.params = walkRes.node
@@ -652,6 +662,7 @@ function getPartialDerivativeExpressionNode(tokens: TokenizedValue[], current: n
   const node = createParamTwoNode()
   let token = tokens[current]
   node.tex = '\\frac{ $1 }{ $2 }'
+  // the operator should be `\partial` or `\mathrm{d}`
   const operator = token.tex
   let sup: ChildNode | null = null
   // find if there is any superscript
@@ -666,26 +677,35 @@ function getPartialDerivativeExpressionNode(tokens: TokenizedValue[], current: n
     sup = walkRes.node
   }
 
-  // find the upper
+  // pp^2 f (x y)
+  //      ^
   const fnRes = walk(tokens, current, true)
   current = fnRes.current
   if (fnRes.node.type === NodeTypes.Flat)
     fnRes.node = removeParenOfFlatExpr(fnRes.node)
+  // generate `\partial f`
   node.params[0] = createDeriUpperNode(operator, sup, fnRes.node)
 
-  // find the variables
+  // out of boundary
   if (current >= tokens.length)
     return { node, current }
 
+  // pp^2 f (x y)
+  //        ^^^^^
   const underRes = walk(tokens, current)
   current = underRes.current
   if (underRes.node.type === NodeTypes.Flat) {
     underRes.node = removeParenOfFlatExpr(underRes.node)
+    // generate `\partial x \patrial y`
     underRes.node = insertOperatorsForDenominator(underRes.node, operator)
   }
   else {
+    // pp f x
     underRes.node = createFlatNode(underRes.node)
+    // pp f x => (partial f) / (partial x)
     underRes.node.body.unshift(createConstNode(operator))
+    // pp^2 f x => (partial^2 f) / (partial x^2)
+    //   ^^   ^
     if (sup)
       underRes.node.body.push(sup)
   }
