@@ -253,7 +253,8 @@ th {
 	font-weight: bold;
 }
 
-.theme-dark thead, .theme-dark th {
+.theme-dark thead,
+.theme-dark th {
 	background-color: hsla(var(--color-gray-40), 1);
 }
 
@@ -405,16 +406,29 @@ h2.heading {
 .mb-4 {
 	margin-bottom: 1rem;
 }
+
 .justify-between {
-  justify-content: space-between;
+	justify-content: space-between;
 }
+
 .mb-1rem {
-  margin-bottom: 1rem;
+	margin-bottom: 1rem;
 }
+
 table {
 	width: 100%;
 }
 
 td:nth-child(odd) {
 	background-color: hsla(var(--color-gray-40), 0.1);
+}
+
+.space-x-2> :not([hidden])~ :not([hidden]) {
+	--tw-space-x-reverse: 0;
+	margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+	margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.mb-2 {
+	margin-bottom: 0.5rem;
 }

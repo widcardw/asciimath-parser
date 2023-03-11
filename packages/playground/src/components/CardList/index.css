@@ -33,3 +33,7 @@ button:focus-visible {
 .flex-no {
   display: flex;
 }
+
+.core-activated {
+  color: var(--theme-accent) !important;
+}
