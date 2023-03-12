@@ -129,6 +129,205 @@ exports[`centered matrix with no braces > should generate centered matrix 2`] = 
 }
 `;
 
+exports[`grid like matrix > should generate grid like matrix 1`] = `
+[
+  {
+    "current": 2,
+    "isKeyWord": true,
+    "tex": ".",
+    "type": "LParen",
+    "value": "{:",
+  },
+  {
+    "current": 4,
+    "isKeyWord": true,
+    "tex": "|",
+    "type": "Paren",
+    "value": "|",
+  },
+  {
+    "current": 10,
+    "isKeyWord": true,
+    "tex": "\\\\hline",
+    "type": "Const",
+    "value": "hline",
+  },
+  {
+    "current": 12,
+    "isKeyWord": false,
+    "tex": "a",
+    "type": "StringLiteral",
+    "value": "a",
+  },
+  {
+    "current": 13,
+    "isKeyWord": true,
+    "tex": ",",
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "current": 15,
+    "isKeyWord": false,
+    "tex": "b",
+    "type": "StringLiteral",
+    "value": "b",
+  },
+  {
+    "current": 16,
+    "isKeyWord": true,
+    "tex": ";",
+    "type": "Split",
+    "value": ";",
+  },
+  {
+    "current": 21,
+    "isKeyWord": true,
+    "tex": "\\\\hline",
+    "type": "Const",
+    "value": "hline",
+  },
+  {
+    "current": 23,
+    "isKeyWord": false,
+    "tex": "c",
+    "type": "StringLiteral",
+    "value": "c",
+  },
+  {
+    "current": 24,
+    "isKeyWord": true,
+    "tex": "|",
+    "type": "Paren",
+    "value": "|",
+  },
+  {
+    "current": 25,
+    "isKeyWord": false,
+    "tex": "d",
+    "type": "StringLiteral",
+    "value": "d",
+  },
+  {
+    "current": 26,
+    "isKeyWord": true,
+    "tex": "|",
+    "type": "Paren",
+    "value": "|",
+  },
+  {
+    "current": 27,
+    "isKeyWord": true,
+    "tex": ";",
+    "type": "Split",
+    "value": ";",
+  },
+  {
+    "current": 33,
+    "isKeyWord": true,
+    "tex": "\\\\hline",
+    "type": "Const",
+    "value": "hline",
+  },
+  {
+    "current": 36,
+    "isKeyWord": true,
+    "tex": ".",
+    "type": "RParen",
+    "value": ":}",
+  },
+]
+`;
+
+exports[`grid like matrix > should generate grid like matrix 2`] = `
+{
+  "body": [
+    {
+      "alignment": "c",
+      "dividerIndices": [
+        0,
+        1,
+        2,
+      ],
+      "lparen": "\\\\left.",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "\\\\hline",
+                "type": "Const",
+                "value": "hline",
+              },
+              {
+                "tex": "a",
+                "type": "Const",
+                "value": "a",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "b",
+                "type": "Const",
+                "value": "b",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "\\\\hline",
+                "type": "Const",
+                "value": "hline",
+              },
+              {
+                "tex": "c",
+                "type": "Const",
+                "value": "c",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "d",
+                "type": "Const",
+                "value": "d",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "\\\\hline",
+                "type": "Const",
+                "value": "hline",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right.",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`grid like matrix > should generate grid like matrix 3`] = `"\\\\left. \\\\begin{array}{|c|c|} \\\\hline a & b\\\\\\\\\\\\hline c & d\\\\\\\\\\\\hline \\\\end{array} \\\\right."`;
+
 exports[`matrix with empty el > should generate ast 1`] = `
 [
   {

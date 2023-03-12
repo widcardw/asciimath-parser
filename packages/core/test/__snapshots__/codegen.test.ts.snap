@@ -2,17 +2,17 @@
 
 exports[`codegen align > should generate aligend environment 1`] = `"\\\\begin{aligned}\\\\varphi \\\\left( x \\\\right) & = \\\\Phi ^{\\\\prime} \\\\left( x \\\\right) \\\\\\\\ & = \\\\frac{ 1 }{ \\\\sqrt{ 2 \\\\pi } \\\\sigma } \\\\text{e} ^{ - \\\\frac{ \\\\left( x - \\\\mu \\\\right) ^{ 2 } }{ 2 \\\\sigma ^{ 2 } } }\\\\end{aligned}"`;
 
-exports[`codegen matrix > should generate cases 1`] = `"f \\\\left( x \\\\right) = \\\\left\\\\lbrace \\\\begin{array}{ll} x ^{ 2 } & \\\\text{if}\\\\quad x > 0\\\\\\\\x & \\\\text{otherwise}\\\\quad \\\\\\\\ \\\\end{array} \\\\right."`;
+exports[`codegen matrix > should generate cases 1`] = `"f \\\\left( x \\\\right) = \\\\left\\\\lbrace \\\\begin{array}{ll} x ^{ 2 } & \\\\text{if}\\\\quad x > 0\\\\\\\\x & \\\\text{otherwise}\\\\quad \\\\end{array} \\\\right."`;
 
-exports[`codegen matrix > should generate det 1`] = `"\\\\left| \\\\begin{array}{cc} a & b\\\\\\\\d & e \\\\\\\\ \\\\end{array} \\\\right|"`;
+exports[`codegen matrix > should generate det 1`] = `"\\\\left| \\\\begin{array}{cc} a & b\\\\\\\\d & e \\\\end{array} \\\\right|"`;
 
-exports[`codegen matrix > should generate divided matrix 1`] = `"\\\\left[ \\\\begin{array}{cc|c} a & b & c\\\\\\\\d & e & f \\\\\\\\ \\\\end{array} \\\\right]"`;
+exports[`codegen matrix > should generate divided matrix 1`] = `"\\\\left[ \\\\begin{array}{cc|c} a & b & c\\\\\\\\d & e & f \\\\end{array} \\\\right]"`;
 
-exports[`codegen matrix > should generate divided matrix 2`] = `"\\\\left[ \\\\begin{array}{cc|cc|c} a & b & c & d & e\\\\\\\\f & g & h & i & j \\\\\\\\ \\\\end{array} \\\\right]"`;
+exports[`codegen matrix > should generate divided matrix 2`] = `"\\\\left[ \\\\begin{array}{cc|cc|c} a & b & c & d & e\\\\\\\\f & g & h & i & j \\\\end{array} \\\\right]"`;
 
-exports[`codegen matrix > should generate matrix 1`] = `"\\\\left[ \\\\begin{array}{cc} a & b\\\\\\\\c & d \\\\\\\\ \\\\end{array} \\\\right]"`;
+exports[`codegen matrix > should generate matrix 1`] = `"\\\\left[ \\\\begin{array}{cc} a & b\\\\\\\\c & d \\\\end{array} \\\\right]"`;
 
-exports[`codegen matrix > should generate recursive matrix 1`] = `"\\\\left[ \\\\begin{array}{cc} \\\\left( \\\\begin{array}{c} 0\\\\\\\\0 \\\\\\\\ \\\\end{array} \\\\right) & \\\\left( \\\\begin{array}{c} 0\\\\\\\\1 \\\\\\\\ \\\\end{array} \\\\right)\\\\\\\\\\\\left( \\\\begin{array}{c} 1\\\\\\\\0 \\\\\\\\ \\\\end{array} \\\\right) & \\\\left( \\\\begin{array}{c} 1\\\\\\\\1 \\\\\\\\ \\\\end{array} \\\\right) \\\\\\\\ \\\\end{array} \\\\right]"`;
+exports[`codegen matrix > should generate recursive matrix 1`] = `"\\\\left[ \\\\begin{array}{cc} \\\\left( \\\\begin{array}{c} 0\\\\\\\\0 \\\\end{array} \\\\right) & \\\\left( \\\\begin{array}{c} 0\\\\\\\\1 \\\\end{array} \\\\right)\\\\\\\\\\\\left( \\\\begin{array}{c} 1\\\\\\\\0 \\\\end{array} \\\\right) & \\\\left( \\\\begin{array}{c} 1\\\\\\\\1 \\\\end{array} \\\\right) \\\\end{array} \\\\right]"`;
 
 exports[`codegen superfluous \`^\` > should generate correct sup and sub 1`] = `"\\\\sum _{ n = 1 } ^{ + \\\\infty } \\\\frac{ 1 }{ n ^{ 2 } } = \\\\frac{ \\\\pi ^{ 2 } }{ 6 }"`;
 

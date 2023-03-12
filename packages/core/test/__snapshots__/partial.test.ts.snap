@@ -481,7 +481,7 @@ exports[`partial and derivative > should parse matrix 2`] = `
 }
 `;
 
-exports[`partial and derivative > should parse matrix 3`] = `"\\\\left[ \\\\begin{array}{cc} \\\\frac{ \\\\partial ^{ 2 } f }{ \\\\partial x ^{ 2 } } & \\\\frac{ \\\\partial ^{ 2 } f }{ \\\\partial x \\\\partial y }\\\\\\\\\\\\frac{ \\\\partial ^{ 2 } f }{ \\\\partial y \\\\partial x } & \\\\frac{ \\\\partial ^{ 2 } f }{ \\\\partial y ^{ 2 } } \\\\\\\\ \\\\end{array} \\\\right]"`;
+exports[`partial and derivative > should parse matrix 3`] = `"\\\\left[ \\\\begin{array}{cc} \\\\frac{ \\\\partial ^{ 2 } f }{ \\\\partial x ^{ 2 } } & \\\\frac{ \\\\partial ^{ 2 } f }{ \\\\partial x \\\\partial y }\\\\\\\\\\\\frac{ \\\\partial ^{ 2 } f }{ \\\\partial y \\\\partial x } & \\\\frac{ \\\\partial ^{ 2 } f }{ \\\\partial y ^{ 2 } } \\\\end{array} \\\\right]"`;
 
 exports[`partial and derivative > should parse x^2 1`] = `
 {
