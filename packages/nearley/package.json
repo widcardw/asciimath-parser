@@ -2,7 +2,7 @@
   "name": "asciimath-parser-nearley",
   "private": true,
   "type": "module",
-  "version": "0.5.0",
+  "version": "0.5.4",
   "description": "Transform asciimath to LaTeX",
   "author": "widcardw",
   "license": "MIT",
