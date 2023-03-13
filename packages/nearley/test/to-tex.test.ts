@@ -97,8 +97,21 @@ const passedExamples: Examples = [
   { input: '"\\\\abc"', output: '\\text{\\abc}' },
   { input: '==^b_a', output: '\\xlongequal[ a ]{ b }' },
   { input: '-->^114_5', output: '\\xrightarrow[ 5 ]{ 114 }' },
+  { input: '==^b', output: '\\xlongequal[  ]{ b }' },
+  { input: '==_a', output: '\\xlongequal[ a ]{  }' },
   { input: '& 1111\n\n& 2222', output: '\\begin{aligned}& 1111 \\\\ & 2222\\end{aligned}' },
   { input: 'hline\na && 111 && 333\n\nhline\nb && 222\n\nhline', output: '\\begin{aligned}\\hline a && 111 && 333 \\\\ \\hline b && 222 \\\\ \\hline\\end{aligned}' },
+  { input: '[hline|a|b|;]', output: '\\left[\\begin{array}{|c|c|}\\hline a & b \\\\ \\end{array}\\right]' },
+  {
+    input: `{:
+  --
+  |a|b|;
+  --
+  c, d;
+  --
+:}`,
+    output: '\\left.\\begin{array}{|c|c|}\\hline a & b \\\\ \\hline c & d \\\\ \\hline\\end{array}\\right.',
+  },
 ]
 
 const todoExamples: Examples = [

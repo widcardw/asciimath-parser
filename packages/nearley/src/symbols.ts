@@ -69,6 +69,7 @@ const symbols: Required<Symbols> = {
     'phi': { tex: '\\phi' },
     'varphi': { tex: '\\varphi' },
     'Phi': { tex: '\\Phi' },
+    'varPhi': { tex: '\\varPhi' },
     'chi': { tex: '\\chi' },
     'psi': { tex: '\\psi' },
     'Psi': { tex: '\\Psi' },
@@ -151,6 +152,7 @@ const symbols: Required<Symbols> = {
     '%': { tex: '\\%' },
     '\\_': { tex: '\\_' },
     '\\$': { tex: '\\$' },
+    '$': { tex: '\\$' },
     '\\^': { tex: '\\^' },
     '\\`': { tex: '\\`' },
 
@@ -212,6 +214,7 @@ const symbols: Required<Symbols> = {
     '\'\'\'': { tex: '^{\\prime\\prime\\prime}' },
     'laplace': { tex: '\\Delta' },
     'hline': { tex: '\\hline' },
+    '--': { tex: '\\hline' },
     '#': { tex: '\\displaystyle' },
     'mid': { tex: '\\mid' },
 

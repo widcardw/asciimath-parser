@@ -65,9 +65,12 @@ const initGenerator = (symbols: Required<Symbols>) => {
   }
 
   const genLimits = (ast: Ast) => {
-    const { value, $1, $2 } = ast
+    const { value, sub, sup, $1, $2 } = ast
     const res = symbols.limits[value.value].tex
-    return res.replace('$1', toTex($1, true)).replace('$2', toTex($2, true))
+    const tex1 = sub ? toTex($1, true) : ''
+    const tex2 = sup ? toTex($2, true) : ''
+    return res.replace('$1', tex1)
+      .replace('$2', tex2)
   }
 
   const genSubSup = (ast: Ast) => {

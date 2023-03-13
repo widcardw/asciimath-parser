@@ -22,17 +22,34 @@ const matrixPostProcess = (d, pipeIndex) => {
 
 const matrixRowPostProcess = (d) => {
   const pipeIndex = []
-  const offset = d[0] ? 1 : 0
+  const firstItem = String(d[0])
+  const hasHeadline = firstItem === 'hline' || firstItem === '--'
+  const offset = d[0] && !hasHeadline ? 1 : 0
   d[1].forEach((item, index) => {
     if (item[0][0].type === 'pipeEnd') {
       pipeIndex.push(index + offset)
     }
   })
   let value = [d[0], ...d[1].map(item => item[2])]
+
   // 允许 [|a, b|; c, d] => \begin{array}{|cc|}
   const begin = pipeIndex[0] === 0 ? 1 : 0
   const lastItem = d[1][d[1].length - 1]
   const end = lastItem?.[0]?.[0]?.type === 'pipeEnd' && lastItem?.[2] === null ? -1 : undefined
+
+  /* 允许 hline 写在竖线前, 如
+   * [
+   * hline
+   * |a|b|;
+   * ]
+   * 要实现这个功能, 只需把 hline 和竖线位置交换
+   */
+  if (hasHeadline && begin === 1) {
+    if (value[1])
+      value[1] = [d[0][0], ...value[1]]
+    else
+      value[1] = d[0]
+  }
   return { value: value.slice(begin, end), pipeIndex }
 }
 %}
