@@ -22,6 +22,7 @@ const initLexer = (symbols: Symbols) => {
   }
 
   const main = {
+    newlines: { match: /\n{2,}/, lineBreaks: true },
     newline: { match: '\n', lineBreaks: true },
     space: /[ \t]+/,
     number: /[0-9]+\.[0-9]+|[0-9]+/,

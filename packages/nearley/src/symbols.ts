@@ -362,8 +362,8 @@ const symbols: Required<Symbols> = {
     '~|': { tex: '\\rceil' },
   },
   limits: {
-    '==': { tex: '\\xlongequal[ $2 ]{ $1 }' },
-    '-->': { tex: '\\xrightarrow[ $2 ]{ $1 }' },
+    '==': { tex: '\\xlongequal[ $1 ]{ $2 }' },
+    '-->': { tex: '\\xrightarrow[ $1 ]{ $2 }' },
   },
   sub: {
     '_+': { tex: '_{ +$1 }' },

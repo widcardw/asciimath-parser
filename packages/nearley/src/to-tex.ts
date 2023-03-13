@@ -64,8 +64,17 @@ const initGenerator = (symbols: Required<Symbols>) => {
     return toTex(ast)
   }
 
+  const genLimits = (ast: Ast) => {
+    const { value, $1, $2 } = ast
+    const res = symbols.limits[value.value].tex
+    return res.replace('$1', toTex($1, true)).replace('$2', toTex($2, true))
+  }
+
   const genSubSup = (ast: Ast) => {
     const { value, sub, sup, $1, $2 } = ast
+    if (value.type === 'limits')
+      return genLimits(ast)
+
     let res = toTex(value)
     if (sub)
       res += symbols.sub[sub].tex.replace('$1', sub === '_' ? braced($1) : toTex($1))
@@ -85,7 +94,7 @@ const initGenerator = (symbols: Required<Symbols>) => {
   }
 
   const genText = (ast: Ast, strip = false) => {
-    const value = ast.value.replace(/\\"/g, '"')
+    const value = ast.value.replace(/\\"/g, '"').replace(/\\\\/g, '\\')
     return strip ? value : `\\text{${value}}`
   }
 
@@ -128,6 +137,13 @@ const initGenerator = (symbols: Required<Symbols>) => {
     ].join('')
   }
 
+  const genAm = (ast: Ast) => {
+    const { value } = ast
+    const aligned = value.length > 1
+    const res = value.map((v: Ast) => toTex(v))
+    return aligned ? `\\begin{aligned}${res.join(' \\\\ ')}\\end{aligned}` : res[0]
+  }
+
   /**
    * @param {Ast} ast nearley 生成的抽象语法树
    * @param {boolean} strip 是否去掉最外层矩阵的括号、括号表达式的括号或文本的引号
@@ -144,13 +160,13 @@ const initGenerator = (symbols: Required<Symbols>) => {
       case 'paren': return genParen(ast, strip)
       case 'text': return genText(ast, strip)
       case 'pipe': return genPipe(ast)
-      case 'number': return ast.value
-      case 'lp': return ast.value
-      case 'literal': return ast.value
+      case 'number': case 'lp': case 'literal': case 'limits': case 'align':
+        return ast.value
       case 'keyword': return symbols.keyword[ast.value].tex
       case 'subsup': return genSubSup(ast)
       case 'opOA': case 'opAO': case 'opOAB': case 'opAOB': return genOp(ast)
       case 'part': return genPart(ast)
+      case 'am': return genAm(ast)
       default: {
         console.error(ast)
         throw new Error('cannot parse')

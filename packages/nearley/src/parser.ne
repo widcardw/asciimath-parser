@@ -38,7 +38,7 @@ const matrixRowPostProcess = (d) => {
 %}
 
 @lexer lexer # Pass your lexer object using the @lexer option:
-@builtin "whitespace.ne" # _ means optional whitespace
+# @builtin "whitespace.ne" # _ means optional whitespace
 
 # Parsing ASCII math expressions with the following grammar
 # v ::= [A-Za-z] | greek letters | numbers | other constant symbols
@@ -50,9 +50,17 @@ const matrixRowPostProcess = (d) => {
 # I ::= S_S | S^S | S_S^S | S          Intermediate expression
 # E ::= IE | I/I                       Expression
 
-am -> _ expr:? {% d => d[1] %}
+# 多行公式
+am -> _ expr:? (%newlines _ expr):* {% d => {
+    const rows = d[2].map(row => row[2])
+    return { type: 'am', value: d[1] ? [d[1], ...rows] : rows }
+  }
+  %}
 
-# 一系列非空的表达式
+# 空格, tab 以及换行, 但不含连续换行
+_ -> (%space | %newline):* {% d => ' ' %}
+
+# 一行非空的表达式
 expr -> ((subsup | infix | part) _):+ {% d => d[0].map(e => e[0]) %}
 
 # 偏微分
@@ -79,6 +87,8 @@ simple -> matrix {% id %} # 矩阵
   | %opOAB _ simple _ simple {% d => ({ type: 'opOAB', value: d[0].value, $1: d[2], $2: d[4] }) %}
   # 文本
   | %text %textContent:? %textEnd {%d => ({ type: 'text', value: d[1] ? d[1].value : '' }) %}
+  | %limits {% id %}
+  | %align {% id %}
   | value {% id %}
 
 matrix -> %lp _ matrixRow (%semicolon _ matrixRow):* %rp {% d => matrixPostProcess(d, true) %}

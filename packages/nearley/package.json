@@ -39,7 +39,7 @@
   ],
   "scripts": {
     "test": "vitest --run",
-    "build": "tsup",
+    "build": "nearleyc src/parser.ne -o src/grammar.js && node src/after-build.js && tsup",
     "nearley": "nearleyc src/parser.ne -o src/grammar.js && node src/after-build.js",
     "cov": "vitest --run --coverage"
   },
