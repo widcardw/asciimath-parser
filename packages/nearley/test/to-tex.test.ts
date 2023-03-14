@@ -112,6 +112,8 @@ const passedExamples: Examples = [
 :}`,
     output: '\\left.\\begin{array}{|c|c|}\\hline a & b \\\\ \\hline c & d \\\\ \\hline\\end{array}\\right.',
   },
+  { input: '\uD83D\uDC40', output: '\uD83D\uDC40' },
+  { input: '🍎/(🍌+🍍) + 🍌/(🍍+🍎) + 🍍/(🍎+🍌) = 4', output: '\\frac{ 🍎 }{ 🍌 + 🍍 } + \\frac{ 🍌 }{ 🍍 + 🍎 } + \\frac{ 🍍 }{ 🍎 + 🍌 } = 4' },
 ]
 
 const todoExamples: Examples = [

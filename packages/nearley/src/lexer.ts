@@ -22,15 +22,19 @@ const initLexer = (symbols: Symbols) => {
   }
 
   const main = {
-    newlines: { match: /\n{2,}/, lineBreaks: true },
+    newlines: { match: /\n{2,}/u, lineBreaks: true },
     newline: { match: '\n', lineBreaks: true },
-    space: /[ \t]+/,
-    number: /[0-9]+\.[0-9]+|[0-9]+/,
-    text: { match: /"/, push: 'text' },
+    space: /[ \t]+/u,
+    number: /[0-9]+\.[0-9]+|[0-9]+/u,
+    text: { match: /"/u, push: 'text' },
     lp: { match: loadSymbol(TokenTypes.lp), push: 'lp' },
     rp: { match: loadSymbol(TokenTypes.rp), pop: 1 },
     keyword: {
-      match: Object.values(keywords).flat(),
+      // match: Object.values(keywords).flat(), // moo bug: /\-/u 是非法正则
+      match: new RegExp(
+        Object.values(keywords).flat().sort().reverse().map(e => e.replace(/[\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|'),
+        'u',
+      ),
       type: moo.keywords(keywords),
     },
   }
@@ -39,24 +43,24 @@ const initLexer = (symbols: Symbols) => {
     main: {
       ...main,
       pipe: { match: loadSymbol(TokenTypes.pipe), push: 'pipe' },
-      literal: /\S/, // 放在最后, 用于捕获一切非空字符
+      literal: /\S/u, // 放在最后, 用于捕获一切非空字符
     },
     lp: {
-      comma: /,/,
-      semicolon: /;/,
+      comma: /,/u,
+      semicolon: /;/u,
       ...main,
       pipeEnd: loadSymbol(TokenTypes.pipe),
-      literal: /\S/,
+      literal: /\S/u,
     },
     pipe: {
-      comma: /,/,
-      semicolon: /;/,
+      comma: /,/u,
+      semicolon: /;/u,
       ...main,
       pipeEnd: { match: loadSymbol(TokenTypes.pipe), pop: 1 },
-      literal: /\S/,
+      literal: /\S/u,
     },
     text: {
-      textEnd: { match: /"/, pop: 1 },
+      textEnd: { match: /"/u, pop: 1 },
       /**
        * 匹配一个非空串，允许包含所有非换行的字符，即 /.+/
        * 但是，串里面的双引号必须紧跟在反斜杠后面，即 \"
@@ -65,7 +69,7 @@ const initLexer = (symbols: Symbols) => {
        * 下面这个不满足，因为 " 没有紧跟在 \ 后面:
        * ab"c
        */
-      textContent: /(?:\\"|[^\n"])+/,
+      textContent: /(?:\\"|[^\n"])+/u,
     },
   })
 }
