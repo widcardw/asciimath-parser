@@ -54,6 +54,7 @@ const SYMBOLMAP: Map<string, {
   ['upsilon', { type: TokenTypes.Const, tex: '\\upsilon' }],
   ['phi', { type: TokenTypes.Const, tex: '\\phi' }],
   ['varphi', { type: TokenTypes.Const, tex: '\\varphi' }],
+  ['varPhi', { type: TokenTypes.Const, tex: '\\varPhi' }],
   ['Phi', { type: TokenTypes.Const, tex: '\\Phi' }],
   ['chi', { type: TokenTypes.Const, tex: '\\chi' }],
   ['psi', { type: TokenTypes.Const, tex: '\\psi' }],
@@ -308,6 +309,7 @@ const SYMBOLMAP: Map<string, {
   ['rnormal', { type: TokenTypes.Const, tex: '\\unrhd' }],
 
   ['hline', { type: TokenTypes.Const, tex: '\\hline' }],
+  ['--', { type: TokenTypes.Const, tex: '\\hline' }],
 
   ['(', { type: TokenTypes.LParen, tex: '(' }],
   [')', { type: TokenTypes.RParen, tex: ')' }],

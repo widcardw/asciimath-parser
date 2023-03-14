@@ -328,6 +328,365 @@ exports[`grid like matrix > should generate grid like matrix 2`] = `
 
 exports[`grid like matrix > should generate grid like matrix 3`] = `"\\\\left. \\\\begin{array}{|c|c|} \\\\hline a & b\\\\\\\\\\\\hline c & d\\\\\\\\\\\\hline \\\\end{array} \\\\right."`;
 
+exports[`hline of matrix > should add hline over matrix 1`] = `
+[
+  {
+    "current": 2,
+    "isKeyWord": true,
+    "tex": ".",
+    "type": "LParen",
+    "value": "{:",
+  },
+  {
+    "current": 10,
+    "isKeyWord": true,
+    "tex": "|",
+    "type": "Paren",
+    "value": "|",
+  },
+  {
+    "current": 8,
+    "isKeyWord": true,
+    "tex": "\\\\hline",
+    "type": "Const",
+    "value": "hline",
+  },
+  {
+    "current": 12,
+    "isKeyWord": false,
+    "tex": "a",
+    "type": "StringLiteral",
+    "value": "a",
+  },
+  {
+    "current": 14,
+    "isKeyWord": true,
+    "tex": "|",
+    "type": "Paren",
+    "value": "|",
+  },
+  {
+    "current": 16,
+    "isKeyWord": false,
+    "tex": "b",
+    "type": "StringLiteral",
+    "value": "b",
+  },
+  {
+    "current": 18,
+    "isKeyWord": true,
+    "tex": "|",
+    "type": "Paren",
+    "value": "|",
+  },
+  {
+    "current": 19,
+    "isKeyWord": true,
+    "tex": ";",
+    "type": "Split",
+    "value": ";",
+  },
+  {
+    "current": 22,
+    "isKeyWord": true,
+    "tex": ".",
+    "type": "RParen",
+    "value": ":}",
+  },
+]
+`;
+
+exports[`hline of matrix > should add hline over matrix 2`] = `
+{
+  "body": [
+    {
+      "alignment": "c",
+      "dividerIndices": [
+        0,
+        1,
+        2,
+      ],
+      "lparen": "\\\\left.",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "\\\\hline",
+                "type": "Const",
+                "value": "hline",
+              },
+              {
+                "tex": "a",
+                "type": "Const",
+                "value": "a",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "b",
+                "type": "Const",
+                "value": "b",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right.",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`hline of matrix > should add hline over matrix 3`] = `"\\\\left. \\\\begin{array}{|c|c|} \\\\hline a & b \\\\end{array} \\\\right."`;
+
+exports[`hline of matrix > should not cause infinite loop 1`] = `
+[
+  {
+    "current": 2,
+    "isKeyWord": true,
+    "tex": ".",
+    "type": "LParen",
+    "value": "{:",
+  },
+  {
+    "current": 7,
+    "isKeyWord": true,
+    "tex": "|",
+    "type": "Paren",
+    "value": "|",
+  },
+  {
+    "current": 5,
+    "isKeyWord": true,
+    "tex": "\\\\hline",
+    "type": "Const",
+    "value": "--",
+  },
+  {
+    "current": 8,
+    "isKeyWord": false,
+    "tex": "a",
+    "type": "StringLiteral",
+    "value": "a",
+  },
+  {
+    "current": 9,
+    "isKeyWord": true,
+    "tex": "|",
+    "type": "Paren",
+    "value": "|",
+  },
+  {
+    "current": 10,
+    "isKeyWord": false,
+    "tex": "b",
+    "type": "StringLiteral",
+    "value": "b",
+  },
+  {
+    "current": 11,
+    "isKeyWord": true,
+    "tex": "|",
+    "type": "Paren",
+    "value": "|",
+  },
+  {
+    "current": 12,
+    "isKeyWord": true,
+    "tex": ";",
+    "type": "Split",
+    "value": ";",
+  },
+  {
+    "current": 15,
+    "isKeyWord": true,
+    "tex": "\\\\hline",
+    "type": "Const",
+    "value": "--",
+  },
+  {
+    "current": 17,
+    "isKeyWord": true,
+    "tex": "\\\\\\\\",
+    "type": "Align",
+    "value": "
+
+",
+  },
+  {
+    "current": 21,
+    "isKeyWord": true,
+    "tex": "|",
+    "type": "Paren",
+    "value": "|",
+  },
+  {
+    "current": 19,
+    "isKeyWord": true,
+    "tex": "\\\\hline",
+    "type": "Const",
+    "value": "--",
+  },
+  {
+    "current": 22,
+    "isKeyWord": false,
+    "tex": "c",
+    "type": "StringLiteral",
+    "value": "c",
+  },
+  {
+    "current": 23,
+    "isKeyWord": true,
+    "tex": "|",
+    "type": "Paren",
+    "value": "|",
+  },
+  {
+    "current": 24,
+    "isKeyWord": false,
+    "tex": "d",
+    "type": "StringLiteral",
+    "value": "d",
+  },
+  {
+    "current": 25,
+    "isKeyWord": true,
+    "tex": "|",
+    "type": "Paren",
+    "value": "|",
+  },
+  {
+    "current": 26,
+    "isKeyWord": true,
+    "tex": ";",
+    "type": "Split",
+    "value": ";",
+  },
+  {
+    "current": 29,
+    "isKeyWord": true,
+    "tex": "\\\\hline",
+    "type": "Const",
+    "value": "--",
+  },
+  {
+    "current": 32,
+    "isKeyWord": true,
+    "tex": ".",
+    "type": "RParen",
+    "value": ":}",
+  },
+]
+`;
+
+exports[`hline of matrix > should not cause infinite loop 2`] = `
+{
+  "body": [
+    {
+      "alignment": "c",
+      "dividerIndices": [
+        0,
+        1,
+        2,
+      ],
+      "lparen": "\\\\left.",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "\\\\hline",
+                "type": "Const",
+                "value": "--",
+              },
+              {
+                "tex": "a",
+                "type": "Const",
+                "value": "a",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "b",
+                "type": "Const",
+                "value": "b",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "\\\\hline",
+                "type": "Const",
+                "value": "--",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "\\\\hline",
+                "type": "Const",
+                "value": "--",
+              },
+              {
+                "tex": "c",
+                "type": "Const",
+                "value": "c",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "tex": "d",
+                "type": "Const",
+                "value": "d",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "\\\\hline",
+                "type": "Const",
+                "value": "--",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right.",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
+
+exports[`hline of matrix > should not cause infinite loop 3`] = `"\\\\left. \\\\begin{array}{|c|c|} \\\\hline a & b\\\\\\\\\\\\hline\\\\\\\\\\\\hline c & d\\\\\\\\\\\\hline \\\\end{array} \\\\right."`;
+
 exports[`matrix with empty el > should generate ast 1`] = `
 [
   {

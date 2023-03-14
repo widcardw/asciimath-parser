@@ -2,7 +2,7 @@
 
 Another asciimath parser based on [nearley](https://nearley.js.org).
 
-> **Warning**:
+> **Warning**
 > This library is heavily working in progress, so currently there is no npm package available.
 > In addition, some rules are not consistent with `asciimath-parser`.
 
