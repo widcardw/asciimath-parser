@@ -4,7 +4,8 @@ Another asciimath parser based on [nearley](https://nearley.js.org).
 
 > **Warning**
 > This library is heavily working in progress, so currently there is no npm package available.
-> In addition, some rules are not consistent with `asciimath-parser`.
+> In addition, some rules are not consistent with `asciimath-parser`, and it does not support
+> unicode currently.
 
 If want to preview this library, you can visit https://asciimath.widcard.win and click on the <kbd>Nearley<sup>Beta</sup></kbd> button, then the formulas will be parsed by Asciimath Parser Nearley.
 
@@ -14,6 +15,7 @@ If want to preview this library, you can visit https://asciimath.widcard.win and
 - [x] multiline formulas
 - [ ] backslashes in backtick
 - [ ] single paren
+- [ ] unicode support
 
 ## Differences
 
