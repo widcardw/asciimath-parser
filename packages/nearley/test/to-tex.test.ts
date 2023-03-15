@@ -4,7 +4,7 @@ import initSymbols from '../src/symbols'
 import initLexer from '../src/lexer'
 import initGrammar from '../src/grammar.js'
 import initGenerator from '../src/to-tex'
-import { AsciiMath } from '../../core/src/index'
+import { AsciiMath } from '../src/index'
 
 const symbols = initSymbols({
   keyword: {
@@ -114,6 +114,8 @@ const passedExamples: Examples = [
   },
   { input: '\uD83D\uDC40', output: '\uD83D\uDC40' },
   { input: '🍎/(🍌+🍍) + 🍌/(🍍+🍎) + 🍍/(🍎+🍌) = 4', output: '\\frac{ 🍎 }{ 🍌 + 🍍 } + \\frac{ 🍌 }{ 🍍 + 🍎 } + \\frac{ 🍍 }{ 🍎 + 🍌 } = 4' },
+  { input: 'verb"114514\n1919810"', output: '\\begin{aligned}\n& \\texttt{114514}\\\\\n& \\texttt{1919810}\n\\end{aligned}' },
+  { input: '"\\\\"', output: '\\text{\\}' },
 ]
 
 const todoExamples: Examples = [
@@ -122,6 +124,20 @@ const todoExamples: Examples = [
 // no idea why this fails ˉ\_(ツ)_/ˉ
 const whyThisFails: Examples = [
   { input: '"\\"abc\\""', output: '\\text{"abc"}' },
+  {
+    input: String.raw`verb"#include<stdio.h>
+int main() {
+  printf(\"hello, world!\n\");
+  return 0;
+}"`,
+    output: String.raw`\begin{aligned}
+& \texttt{\#include<stdio.h>}\\
+& \texttt{int\ main()\ \{}\\
+& \texttt{\ \ printf("hello,\ world!\textbackslash{}n");}\\
+& \texttt{\ \ return\ 0;}\\
+& \texttt{\}}
+\end{aligned}`,
+  },
 ]
 
 const examples: Examples = [
@@ -165,6 +181,19 @@ describe('test nearley', () => {
     })
   })
 })
+
+// describe('test error', () => {
+//   const am = new AsciiMath()
+//   it('syntax error', () => {
+//     expect(am.toTex('/')).toBe(String.raw`\begin{aligned}
+// & \texttt{Error:\ Syntax\ error\ at\ line\ 1\ col\ 1:}\\
+// & \texttt{}\\
+// & \texttt{1\ \ /}\\
+// & \texttt{\ \ \ \textasciicircum{}}\\
+// & \texttt{Unexpected\ opAOB\ token:\ "/"}
+// \end{aligned}`)
+//   })
+// })
 
 // describe('test core', () => {
 //   const am = new AsciiMath({ display: false })

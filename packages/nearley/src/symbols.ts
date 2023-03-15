@@ -308,6 +308,7 @@ const symbols: Required<Symbols> = {
     phantom: { tex: '\\phantom{ $1 }' },
     text: { tex: '\\text{$1}' },
     tex: { tex: '{ $1 }' },
+    verb: { tex: '' }, // 这里 tex 没有实际意义, verb 需特殊处理
     mbox: { tex: '\\mbox{$1}' },
     op: { tex: '\\operatorname{ $1 }' },
     cancel: { tex: '\\cancel{ $1 }' },

@@ -60,16 +60,15 @@ const initLexer = (symbols: Symbols) => {
       literal: /\S/u,
     },
     text: {
-      textEnd: { match: /"/u, pop: 1 },
       /**
-       * 匹配一个非空串，允许包含所有非换行的字符，即 /.+/
+       * 匹配一个非空串，允许包含所有字符，即 /[^]+/
        * 但是，串里面的双引号必须紧跟在反斜杠后面，即 \"
        * 比如下面这个串满足条件:
        * ab\"c
        * 下面这个不满足，因为 " 没有紧跟在 \ 后面:
        * ab"c
        */
-      textContent: /(?:\\"|[^\n"])+/u,
+      textEnd: { match: /(?:\\"|[^"])*"/u, lineBreaks: true, pop: 1 },
     },
   })
 }

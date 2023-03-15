@@ -88,6 +88,8 @@ const initGenerator = (symbols: Required<Symbols>) => {
 
   const genOp = (ast: Ast) => {
     const { type, value, $1, $2 } = ast
+    if (value === 'verb')
+      return genVerb(ast)
     let res = symbols[type as TokenTypes][value].tex
     if ($1)
       res = res.replace('$1', toTex($1, true))
@@ -96,8 +98,12 @@ const initGenerator = (symbols: Required<Symbols>) => {
     return res
   }
 
+  const escapeText = (str: string): string => {
+    return str.slice(0, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\')
+  }
+
   const genText = (ast: Ast, strip = false) => {
-    const value = ast.value.replace(/\\"/g, '"').replace(/\\\\/g, '\\')
+    const value = escapeText(ast.value)
     return strip ? value : `\\text{${value}}`
   }
 
@@ -147,6 +153,25 @@ const initGenerator = (symbols: Required<Symbols>) => {
     return aligned ? `\\begin{aligned}${res.join(' \\\\ ')}\\end{aligned}` : res[0]
   }
 
+  const escapeTex = (tex: string): string => {
+    return tex.split('\\').map((s) => {
+      return s.replace(/[{}]/g, '\\$&')
+        .replace(/~/g, '\\textasciitilde{}')
+        .replace(/\^/g, '\\textasciicircum{}')
+        .replace(/[#$%&_ ]/g, '\\$&')
+    }).join('\\textbackslash{}')
+  }
+
+  // verbatim
+  const genVerb = (ast: Ast) => {
+    const { $1 } = ast
+    return [
+      '\\begin{aligned}\n& \\texttt{',
+      escapeTex(escapeText($1.value)).split('\n').join('}\\\\\n& \\texttt{'),
+      '}\n\\end{aligned}',
+    ].join('')
+  }
+
   /**
    * @param {Ast} ast nearley 生成的抽象语法树
    * @param {boolean} strip 是否去掉最外层矩阵的括号、括号表达式的括号或文本的引号
@@ -170,6 +195,7 @@ const initGenerator = (symbols: Required<Symbols>) => {
       case 'opOA': case 'opAO': case 'opOAB': case 'opAOB': return genOp(ast)
       case 'part': return genPart(ast)
       case 'am': return genAm(ast)
+      case 'verb': return genVerb(ast)
       default: {
         console.error(ast)
         throw new Error('cannot parse')
