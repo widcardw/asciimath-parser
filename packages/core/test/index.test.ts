@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { AsciiMath } from '../src'
+import { AsciiMath, TokenTypes } from '../src'
 
 describe('asciimath', () => {
   const am = new AsciiMath({
-    extConst: [['d0', '{\\text{d}\\theta}']],
+    symbols: [['d0', { type: TokenTypes.Const, tex: '{\\text{d}\\theta}' }]],
     replaceBeforeTokenizing: [
       [/dp/g, '{:"d"p:}'],
     ],

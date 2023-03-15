@@ -1,3 +1,4 @@
+import type { SymbolValueType } from './symbols'
 import { SYMBOLMAP, TokenTypes } from './symbols'
 
 interface TokenizedValue {
@@ -384,12 +385,26 @@ class TrieNode {
 }
 
 function createTrie(config: {
-  extConst?: Array<[string, string]>
+  // extConst?: Array<[string, string]>
+  symbols?: Array<[string, SymbolValueType]> | Record<string, SymbolValueType>
 } = {}) {
   const charset: Set<string> = new Set([])
-  config.extConst?.forEach(([k, v]) => {
-    SYMBOLMAP.set(k, { type: TokenTypes.Const, tex: v })
-  })
+  if (config.symbols) {
+    if (Array.isArray(config.symbols)) {
+      config.symbols.forEach(([k, v]) => {
+        if (k.length === 0)
+          throw new Error(`Cannot insert empty token! Token value: ${v}`)
+        SYMBOLMAP.set(k, v)
+      })
+    }
+    else {
+      Object.entries(config.symbols).forEach(([k, v]) => {
+        if (k.length === 0)
+          throw new Error(`Cannot insert empty token! Token value: ${v}`)
+        SYMBOLMAP.set(k, v)
+      })
+    }
+  }
   for (const k of SYMBOLMAP.keys())
     [...k].forEach(i => charset.add(i))
   const chars = Array.from(charset)

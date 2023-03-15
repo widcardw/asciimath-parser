@@ -1,9 +1,10 @@
 import { codegen } from './codegen'
 import { parser } from './parser'
+import type { SymbolValueType } from './symbols'
+import { TokenTypes } from './symbols'
 import type { Trie } from './trie'
 import { createTrie } from './trie'
 
-type ConstLaw = [string, string]
 type ReplaceLaw = [RegExp | string, string | ((substring: string, ...args: any[]) => string)]
 
 interface AsciiMathConfig {
@@ -21,7 +22,7 @@ interface AsciiMathConfig {
    *   ['dy', '\text{d}y']
    * ]
    */
-  extConst?: ConstLaw[]
+  symbols?: Array<[string, SymbolValueType]> | Record<string, SymbolValueType>
   /**
    * Replace target expressions before tokenizing
    *
@@ -36,18 +37,20 @@ interface AsciiMathConfig {
   replaceBeforeTokenizing?: ReplaceLaw[]
 }
 
-type RestrictedAmConfig = Required<AsciiMathConfig>
+interface RestrictedAmConfig extends Required<AsciiMathConfig> {
+  symbols: Record<string, SymbolValueType>
+}
 
 function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
   const defaultConfig: RestrictedAmConfig = {
     display: true,
-    extConst: [
-      ['dx', '{\\text{d}x}'],
-      ['dy', '{\\text{d}y}'],
-      ['dz', '{\\text{d}z}'],
-      ['dt', '{\\text{d}t}'],
-      ['#', '\\displaystyle'],
-    ],
+    symbols: {
+      'dx': { type: TokenTypes.Const, tex: '{\\text{d}x}' },
+      'dy': { type: TokenTypes.Const, tex: '{\\text{d}y}' },
+      'dz': { type: TokenTypes.Const, tex: '{\\text{d}z}' },
+      'dt': { type: TokenTypes.Const, tex: '{\\text{d}t}' },
+      '#': { type: TokenTypes.Const, tex: '\\displaystyle' },
+    },
     replaceBeforeTokenizing: [
       [/&#(x?[0-9a-fA-F]+);/g, (_match, $1) =>
         String.fromCodePoint($1[0] === 'x' ? `0${$1}` : $1),
@@ -56,8 +59,16 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
   }
   if (typeof config?.display !== 'undefined')
     defaultConfig.display = config?.display
-  if (config?.extConst?.length)
-    defaultConfig.extConst.push(...config.extConst)
+  if (config?.symbols) {
+    if (Array.isArray(config.symbols)) {
+      config.symbols.forEach(([k, v]) => {
+        defaultConfig.symbols[k] = v
+      })
+    }
+    else {
+      defaultConfig.symbols = { ...defaultConfig.symbols, ...config.symbols }
+    }
+  }
   if (config?.replaceBeforeTokenizing?.length)
     defaultConfig.replaceBeforeTokenizing.push(...config.replaceBeforeTokenizing)
 
@@ -69,8 +80,8 @@ class AsciiMath {
   private display: boolean
   private replaceLaws: ReplaceLaw[]
   constructor(config?: AsciiMathConfig) {
-    const { display, extConst, replaceBeforeTokenizing: replaceBeforeParsing } = resolveConfig(config)
-    this.trie = createTrie({ extConst })
+    const { display, symbols, replaceBeforeTokenizing: replaceBeforeParsing } = resolveConfig(config)
+    this.trie = createTrie({ symbols })
     this.display = display
     this.replaceLaws = replaceBeforeParsing
   }
@@ -78,11 +89,8 @@ class AsciiMath {
   toTex(code: string): string {
     try {
       code = this.replaceLaws.reduce((prev, curLaw) => {
-      // in fact the judgement is no use...
-        if (typeof curLaw[1] === 'function')
-          return prev.replaceAll(curLaw[0], curLaw[1])
-        else
-          return prev.replaceAll(curLaw[0], curLaw[1])
+        // @ts-expect-error do not check replacement type
+        return prev.replaceAll(curLaw[0], curLaw[1])
       }, code)
       let res = codegen(parser(this.trie.tryParsingAll(code)))
       if (this.display)
@@ -98,4 +106,5 @@ class AsciiMath {
 export {
   AsciiMath,
   AsciiMathConfig,
+  TokenTypes,
 }
