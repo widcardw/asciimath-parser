@@ -118,8 +118,17 @@ class AsciiMath {
         throw e
       console.error(e)
       const message = String(e)
-      const index = message.indexOf(':\n')
-      const end = index === -1 ? undefined : index
+      let index = message.indexOf(' Instead, I was expecting to see one of the following:')
+      if (index > -1) {
+        return this.generator({
+          type: 'opOA',
+          value: 'verb',
+          $1: { value: message.slice(0, index) },
+        })
+      }
+
+      index = message.indexOf(':\n')
+      const end = index > -1 ? index : undefined
       return `\\text{${message.slice(0, end)}}`
     }
   }
