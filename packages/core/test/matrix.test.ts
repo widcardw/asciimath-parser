@@ -53,3 +53,33 @@ describe('grid like matrix', () => {
     expect(codegen(ast)).toMatchSnapshot()
   })
 })
+
+const code2 = `{:
+--
+|a|b|;
+--
+
+--
+|c|d|;
+--
+:}`
+
+describe('hline of matrix', () => {
+  it('should add hline over matrix', () => {
+    const trie = createTrie()
+    const tokens = trie.tryParsingAll('{: hline | a | b |; :}')
+    const ast = parser(tokens)
+    expect(tokens).toMatchSnapshot()
+    expect(ast).toMatchSnapshot()
+    expect(codegen(ast)).toMatchSnapshot()
+  })
+
+  it('should not cause infinite loop', () => {
+    const trie = createTrie()
+    const tokens = trie.tryParsingAll(code2)
+    const ast = parser(tokens)
+    expect(tokens).toMatchSnapshot()
+    expect(ast).toMatchSnapshot()
+    expect(codegen(ast)).toMatchSnapshot()
+  })
+})

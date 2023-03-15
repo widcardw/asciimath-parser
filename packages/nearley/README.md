@@ -2,26 +2,49 @@
 
 Another asciimath parser based on [nearley](https://nearley.js.org).
 
-> **Warning**:
+> **Warning**
 > This library is heavily working in progress, so currently there is no npm package available.
-> In addition, some rules are not consistent with `asciimath-parser`.
+> In addition, some rules are not consistent with `asciimath-parser`, and it does not support
+> unicode currently.
 
 If want to preview this library, you can visit https://asciimath.widcard.win and click on the <kbd>Nearley<sup>Beta</sup></kbd> button, then the formulas will be parsed by Asciimath Parser Nearley.
 
 ## TODO
 
-- [ ] `==_a^b`
-- [ ] multiline formulas
+- [x] `==_a^b`
+- [x] multiline formulas
 - [ ] backslashes in backtick
 - [ ] single paren
+- [ ] unicode support
 
 ## Differences
+
+Asciimath Parser **Core** version is written in pure TypeScript, and we may 
+fail to consider some edge cases, so please report any issue if you run into
+any error.
+
+Asciimath Parser **Nearley** version is parsed with nearley grammar, so it is
+**strict** and you **have to write correct formulas**.
 
 | output | asciimath parser | AM nearley version |
 | ------ | ---------------- | ------------------ |
 | ${\color{red} a}$ | `color(red)(a)` | `color"red" a` |
 | $\text{text}$ | `text(text)` | `text"text"` |
 | $\frac{\partial L}{\partial \sigma^2}$ | `pp L (sigma^2)` | `pp L sigma^2` or `pp L (sigma^2)` |
+
+## New Grammar
+
+Added new symbol `--` which will be transformed into `\hline`. You can draw a table like this
+
+```
+{:
+--
+|a|b|;
+--
+c, d;
+--
+:}
+```
 
 ## How to dev
 

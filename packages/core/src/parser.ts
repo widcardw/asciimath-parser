@@ -168,35 +168,56 @@ function readParenedExpression2(tokens: TokenizedValue[], current: number): {
   }
 }
 
+function supportHlineFirstMatrix(tokens: TokenizedValue[], current: number) {
+  // support table like
+  // {:
+  // --
+  // | a | b |;
+  // --
+  // :}
+  if (current + 1 >= tokens.length)
+    return
+  const t0 = tokens[current]
+  const t1 = tokens[current + 1]
+  if (t0.type === TokenTypes.Const
+    && t0.tex === '\\hline'
+    && t1.type === TokenTypes.Paren)
+    [tokens[current], tokens[current + 1]] = [t1, t0]
+}
+
 function generateMatrixNode(tokens: TokenizedValue[], current: number, end: number) {
   let token = tokens[current]
   const node = createMatrixNode()
   const dividerIndices = new Set<number>()
   node.lparen = `\\left${token.tex}`
-  token = tokens[++current]
+  current++
   let tempArr: ChildNode[] = []
   let tempNode: ChildNode | null = null
+  supportHlineFirstMatrix(tokens, current)
+  token = tokens[current]
   // inside a matrix
   while (current < end) {
-    if (token.type === TokenTypes.Split) {
-      if (token.value === ',') {
-        if (tempNode) {
-          tempArr.push(tempNode)
-          tempNode = null
-        }
-        else {
-          tempArr.push(createConstNode())
-        }
+    token = tokens[current]
+    if (token.value === ',') {
+      if (tempNode) {
+        tempArr.push(tempNode)
+        tempNode = null
       }
-      else if (token.value === ';') {
-        if (tempNode) {
-          tempArr.push(tempNode)
-          tempNode = null
-        }
-        node.params.push(tempArr)
-        tempArr = []
+      else {
+        tempArr.push(createConstNode())
       }
-      token = tokens[++current]
+      ++current
+      continue
+    }
+    else if (token.value === ';' || token.tex === '\\\\') {
+      if (tempNode) {
+        tempArr.push(tempNode)
+        tempNode = null
+      }
+      node.params.push(tempArr)
+      tempArr = []
+      current++
+      supportHlineFirstMatrix(tokens, current)
       continue
     }
     else if (token.type === TokenTypes.Paren) {
@@ -205,14 +226,14 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
         tempNode = null
       }
       dividerIndices.add(tempArr.length)
-      token = tokens[++current]
+      current++
       continue
     }
     tempNode = createFlatNode()
-    token = tokens[current]
     while (current < end
       && token.type !== TokenTypes.Split
-      && token.type !== TokenTypes.Paren) {
+      && token.type !== TokenTypes.Paren
+      && token.type !== TokenTypes.Align) {
       const walkRes = walk(tokens, current)
       current = walkRes.current
       tempNode.body.push(walkRes.node)
