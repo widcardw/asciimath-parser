@@ -54,8 +54,6 @@ any error.
 Asciimath Parser **Nearley** version is parsed with nearley grammar, so it is
 **strict** and you **have to write correct formulas**.
 
-About string literal: In **Nearley** version, text have to be quoted with `"` to skip tokenize, for example the argument of `color`, `tex`, and `hspace` command must be quoted. You can use escape sequences `\"` and `\\` in a string literal.
-
 | output | AM core | AM nearley |
 | ------ | ---------------- | ------------------ |
 | ${\color{red} a}$ | `color(red)(a)` | `color"red" a` |
@@ -63,7 +61,43 @@ About string literal: In **Nearley** version, text have to be quoted with `"` to
 | $a\hspace{12pt}b$ | `a hspace(12pt) b` | `a hspace"12pt" b` |
 | $\frac{\partial L}{\partial \sigma^2}$ | `pp L (sigma^2)` | `pp L sigma^2` or `pp L (sigma^2)` |
 
-## New Grammar
+### Performance
+
+Nearley version is about 40% slower than core version; the tokenization step take about half time.
+
+### String Literal
+
+In Nearley version, text have to be quoted with `"` to skip tokenize, for example the argument of `color`, `tex`, and `hspace` command must be quoted. You can use escape sequences `\"` and `\\` in a string literal.
+
+### Different params
+
+- **symbols: Symbols**
+
+  In Nearley version, We removed the `extConst` param, and added `symbols` param:
+  ```ts
+  const am = new AsciiMath({
+    symbols: {
+      keyword: {
+        dx: { tex: '{\\text{d}x}' },
+        dy: { tex: '{\\text{d}y}' },
+        dz: { tex: '{\\text{d}z}' },
+        dt: { tex: '{\\text{d}t}' },
+        ee: { tex: '\\text{e}' },
+        ii: { tex: '\\text{i}' },
+      },
+      opOAB: {
+        fbox: { tex: '\\fbox[ $2 ]{ $1 }' },
+      },
+    },
+  })
+  ```
+- **throws: boolean**
+
+  If true, throws error when parser encounters any syntax error.
+  If false, just output error message as a text string.
+  Default is false.
+
+### New Grammar
 
 Added new infix symbol `over`, `atop` and `choose`:
 
@@ -113,29 +147,3 @@ const tex = am.toTex('sum_(n=1)^(+oo)1/n^2=pi^2/6')
 console.log(tex)
 // \displaystyle{ \sum_{ n = 1 }^{ + \infty } \frac{ 1 }{ n^2 } = \frac{ \pi^2 }{ 6 } }
 ```
-
-### Different params
-
-- **symbols: Symbols**
-
-  In AsciiMath Nearley version, We removed the `extConst` param, and added `symbols` param:
-  ```ts
-  const am = new AsciiMath({
-    keyword: {
-      dx: { tex: '{\\text{d}x}' },
-      dy: { tex: '{\\text{d}y}' },
-      dz: { tex: '{\\text{d}z}' },
-      dt: { tex: '{\\text{d}t}' },
-      ee: { tex: '\\text{e}' },
-      ii: { tex: '\\text{i}' },
-    },
-    opOAB: {
-      fbox: { tex: '\\fbox[ $2 ]{ $1 }' },
-    },
-  })
-  ```
-- **throws: boolean**
-
-  If true, throws error when parser encounters any syntax error.
-  If false, just output error message as a text string.
-  Default is false.
