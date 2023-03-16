@@ -1,3 +1,4 @@
+import type { SymbolValueType } from './symbols'
 import { SYMBOLMAP, TokenTypes } from './symbols'
 
 interface TokenizedValue {
@@ -6,6 +7,7 @@ interface TokenizedValue {
   current: number
   tex: string
   type: TokenTypes
+  eatNext?: boolean
 }
 
 const NUMBERPATTERN = /[0-9]/
@@ -15,14 +17,6 @@ type GeneTokenFn = (config: {
   current: number
   value?: string
 }) => TokenizedValue
-
-const createTextToken: GeneTokenFn = (config: {
-  current: number
-  value?: string
-}) => {
-  const { value = '', current } = config
-  return { value, isKeyWord: false, current, tex: value, type: TokenTypes.Text }
-}
 
 const createConstToken: GeneTokenFn = (config: {
   current: number
@@ -204,19 +198,6 @@ class Trie {
     return { value, isKeyWord: false, current: newCurrent, tex: value, type: TokenTypes.Text }
   }
 
-  private getColorString(letters: string[], current: number): TokenizedValue {
-    let color = ''
-    while (current < letters.length) {
-      const ch = letters[current]
-      if (!/[#\da-z]/i.test(ch))
-        break
-      color += ch
-      current++
-    }
-
-    return { value: color, isKeyWord: false, current, tex: color, type: TokenTypes.Const }
-  }
-
   private skipSpaces(letters: string[], current: number): number {
     while (current < letters.length) {
       const ch = letters[current]
@@ -227,58 +208,45 @@ class Trie {
     return current
   }
 
-  private processColor(letters: string[], current: number): TokenizedValue {
-    let existParen = false
-    let res = { value: '', isKeyWord: false, current, tex: '', type: TokenTypes.Const }
+  private eatNext(letters: string[], current: number): TokenizedValue {
     current = this.skipSpaces(letters, current)
+    const res = createConstToken({ current })
     if (current >= letters.length)
       return res
-    { // detect paren
-      const ch = letters[current]
-      if (/[\(\{\[]/.test(ch)) {
-        existParen = true
+    let letter = letters[current]
+    let value = ''
+    switch (letter) {
+      case '"': {
+        letter = letters[++current]
+        while (current < letters.length && letter !== '"') {
+          value += letter
+          letter = letters[++current]
+        }
+        // skip the right paren
         current++
+        break
+      }
+      case '(': {
+        letter = letters[++current]
+        while (current < letters.length && letter !== ')') {
+          value += letter
+          letter = letters[++current]
+        }
+        // skip the right paren
+        current++
+        break
+      }
+      default: {
+        while (current < letters.length && /\S/.test(letter)) {
+          letter = letters[current++]
+          value += letter
+        }
+        break
       }
     }
-    current = this.skipSpaces(letters, current)
-    res = this.getColorString(letters, current)
-    current = res.current
-    current = this.skipSpaces(letters, current)
-    res.current = current
-    if (current >= letters.length)
-      return res
-    {
-      const ch = letters[current]
-      if (/[\)\}\]]/.test(ch) && existParen)
-        current++
-    }
+    res.tex = res.value = value
     res.current = current
     return res
-  }
-
-  private getPlainText(letters: string[], current: number, fn: GeneTokenFn): TokenizedValue {
-    let useParen = false
-    let ch = letters[current]
-    while (/\s/.test(ch))
-      ch = letters[++current]
-
-    useParen = ch === '('
-    let value = ''
-    if (useParen) {
-      ch = letters[++current]
-      while (current < letters.length && ch !== ')') {
-        value += ch
-        ch = letters[++current]
-      }
-      current++
-      return fn({ current, value })
-    }
-    // do not use paren, then read a word
-    while (current < letters.length && /\S/.test(ch)) {
-      value += ch
-      ch = letters[++current]
-    }
-    return fn({ current, value })
   }
 
   public tryParsingAll(word: string) {
@@ -301,9 +269,18 @@ class Trie {
         continue
       }
       // process potential keywords
-      let t = this.tryParsing(letters, current)
+      const t = this.tryParsing(letters, current)
       current = t.current
       if (t.value !== '') {
+        tokens.push(t)
+        if (t.eatNext) {
+          const nt = this.eatNext(letters, current)
+          current = nt.current
+          tokens.push(nt)
+        }
+        continue
+      }
+      /* if (t.value !== '') {
         switch (t.value) {
           case 'text': {
             t = this.getPlainText(letters, current, createTextToken)
@@ -339,7 +316,7 @@ class Trie {
           }
         }
         continue
-      }
+      } */
       // process numbers
       {
         const t = this.tryParsingNumber(letters, current)
@@ -384,12 +361,26 @@ class TrieNode {
 }
 
 function createTrie(config: {
-  extConst?: Array<[string, string]>
+  // extConst?: Array<[string, string]>
+  symbols?: Array<[string, SymbolValueType]> | Record<string, SymbolValueType>
 } = {}) {
   const charset: Set<string> = new Set([])
-  config.extConst?.forEach(([k, v]) => {
-    SYMBOLMAP.set(k, { type: TokenTypes.Const, tex: v })
-  })
+  if (config.symbols) {
+    if (Array.isArray(config.symbols)) {
+      config.symbols.forEach(([k, v]) => {
+        if (k.length === 0)
+          throw new Error(`Cannot insert empty token! Token value: ${v}`)
+        SYMBOLMAP.set(k, v)
+      })
+    }
+    else {
+      Object.entries(config.symbols).forEach(([k, v]) => {
+        if (k.length === 0)
+          throw new Error(`Cannot insert empty token! Token value: ${v}`)
+        SYMBOLMAP.set(k, v)
+      })
+    }
+  }
   for (const k of SYMBOLMAP.keys())
     [...k].forEach(i => charset.add(i))
   const chars = Array.from(charset)

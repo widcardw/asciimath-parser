@@ -25,4 +25,4 @@ exports[`backslash > should parse backslash 2`] = `
 }
 `;
 
-exports[`matrix > should parse matrix without right paren 1`] = `"\\\\left[ \\\\left[ \\\\begin{array}{cc} a & b\\\\\\\\c & d \\\\end{array} \\\\right] \\\\right."`;
+exports[`matrix > should parse matrix without right paren 1`] = `"\\\\left[ \\\\left[ \\\\begin{array}{cc} a & b \\\\\\\\ c & d \\\\end{array} \\\\right] \\\\right."`;

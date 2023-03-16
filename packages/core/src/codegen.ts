@@ -55,7 +55,7 @@ function codegen(node: ChildNode | RootNode): string {
       return [
         node.lparen,
         arrayBegin,
-        node.params.map(i => i.map(codegen).join(' & ')).join('\\\\'),
+        node.params.map(i => i.map(codegen).join(' & ')).join(' \\\\ '),
         arrayEnd,
         node.rparen,
       ].join(' ')

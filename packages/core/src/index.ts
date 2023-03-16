@@ -1,9 +1,10 @@
 import { codegen } from './codegen'
 import { parser } from './parser'
+import type { SymbolValueType } from './symbols'
+import { TokenTypes } from './symbols'
 import type { Trie } from './trie'
 import { createTrie } from './trie'
 
-type ConstLaw = [string, string]
 type ReplaceLaw = [RegExp | string, string | ((substring: string, ...args: any[]) => string)]
 
 interface AsciiMathConfig {
@@ -13,41 +14,53 @@ interface AsciiMathConfig {
    */
   display?: boolean
   /**
-   * Translate custom keywords into LaTeX expressions
+   * Extend tokens of asciimath
+   * ```ts
+   * {
+   *   // Simply transform `d0` to `d theta`
+   *   'd0': { type: TokenTypes.Const, tex: '{\\text{d}\\theta}' },
+   *   // Token with unary symbol, the `$1` will be replaced with the following symbol
+   *   'tsc': { type: TokenTypes.OperatorOA, tex: '\\textsc{$1}' },
+   *   // Token with binary symbols, the `$1` and `$2` will be replaced with the following two symbols
+   *   'frac': { type: TokenTypes.OperatorOAB, tex: '\\frac{ $1 }{ $2 }' },
+   *   // Infix expression, the `$1` and `$2` will be replaced with the previous symbol and next symbol respectively
+   *   'over': { type: TokenTypes.OperatorAOB, tex: '{ $1 \\over $2 }' },
+   * }
+   * ```
    *
-   * For example:
-   * [
-   *   ['dx', '\text{d}x'],
-   *   ['dy', '\text{d}y']
-   * ]
+   * You can extend the token types mentioned above, but it is *not recommended* to extend all types of [`enum TokenTypes`](https://github.com/widcardw/asciimath-parser/blob/main/packages/core/src/symbols.ts#L1-L20).
    */
-  extConst?: ConstLaw[]
+  symbols?: Array<[string, SymbolValueType]> | Record<string, SymbolValueType>
   /**
    * Replace target expressions before tokenizing
-   *
-   * For example:
+   * ```ts
    * [
    *   [/&#(x?[0-9a-fA-F]+);/g, (match, $1) =>
    *     String.fromCodePoint($1[0] === 'x' ? '0' + $1 : $1)
    *   ],
    *   ...
    * ]
+   * ```
    */
   replaceBeforeTokenizing?: ReplaceLaw[]
 }
 
-type RestrictedAmConfig = Required<AsciiMathConfig>
+interface RestrictedAmConfig extends Required<AsciiMathConfig> {
+  symbols: Record<string, SymbolValueType>
+}
 
 function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
   const defaultConfig: RestrictedAmConfig = {
     display: true,
-    extConst: [
-      ['dx', '{\\text{d}x}'],
-      ['dy', '{\\text{d}y}'],
-      ['dz', '{\\text{d}z}'],
-      ['dt', '{\\text{d}t}'],
-      ['#', '\\displaystyle'],
-    ],
+    symbols: {
+      'dx': { type: TokenTypes.Const, tex: '{\\text{d}x}' },
+      'dy': { type: TokenTypes.Const, tex: '{\\text{d}y}' },
+      'dz': { type: TokenTypes.Const, tex: '{\\text{d}z}' },
+      'dt': { type: TokenTypes.Const, tex: '{\\text{d}t}' },
+      '#': { type: TokenTypes.Const, tex: '\\displaystyle' },
+      'choose': { type: TokenTypes.OperatorAOB, tex: '{ $1 \\choose $2 }' },
+      'atop': { type: TokenTypes.OperatorAOB, tex: '{ $1 \\atop $2 }' },
+    },
     replaceBeforeTokenizing: [
       [/&#(x?[0-9a-fA-F]+);/g, (_match, $1) =>
         String.fromCodePoint($1[0] === 'x' ? `0${$1}` : $1),
@@ -55,9 +68,17 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
     ],
   }
   if (typeof config?.display !== 'undefined')
-    defaultConfig.display = config?.display
-  if (config?.extConst?.length)
-    defaultConfig.extConst.push(...config.extConst)
+    defaultConfig.display = config.display
+  if (config?.symbols) {
+    if (Array.isArray(config.symbols)) {
+      config.symbols.forEach(([k, v]) => {
+        defaultConfig.symbols[k] = v
+      })
+    }
+    else {
+      defaultConfig.symbols = { ...defaultConfig.symbols, ...config.symbols }
+    }
+  }
   if (config?.replaceBeforeTokenizing?.length)
     defaultConfig.replaceBeforeTokenizing.push(...config.replaceBeforeTokenizing)
 
@@ -69,8 +90,8 @@ class AsciiMath {
   private display: boolean
   private replaceLaws: ReplaceLaw[]
   constructor(config?: AsciiMathConfig) {
-    const { display, extConst, replaceBeforeTokenizing: replaceBeforeParsing } = resolveConfig(config)
-    this.trie = createTrie({ extConst })
+    const { display, symbols, replaceBeforeTokenizing: replaceBeforeParsing } = resolveConfig(config)
+    this.trie = createTrie({ symbols })
     this.display = display
     this.replaceLaws = replaceBeforeParsing
   }
@@ -78,13 +99,14 @@ class AsciiMath {
   toTex(code: string): string {
     try {
       code = this.replaceLaws.reduce((prev, curLaw) => {
-      // in fact the judgement is no use...
-        if (typeof curLaw[1] === 'function')
-          return prev.replaceAll(curLaw[0], curLaw[1])
-        else
-          return prev.replaceAll(curLaw[0], curLaw[1])
+        // @ts-expect-error do not check replacement type
+        return prev.replaceAll(curLaw[0], curLaw[1])
       }, code)
-      let res = codegen(parser(this.trie.tryParsingAll(code)))
+      let res = codegen(
+        parser(
+          this.trie.tryParsingAll(code),
+        ),
+      )
       if (this.display)
         res = `\\displaystyle{ ${res} }`
       return res
@@ -98,4 +120,5 @@ class AsciiMath {
 export {
   AsciiMath,
   AsciiMathConfig,
+  TokenTypes,
 }

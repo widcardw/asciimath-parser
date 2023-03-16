@@ -1,11 +1,25 @@
 ---
-import type { Frontmatter } from '../../config';
-import type { MarkdownHeading } from 'astro';
-import { getLanguageFromURL } from '../../languages';
-import LanguageSelect from '../LanguageSelect/LanguageSelect';
-import ThemeToggle from '../ThemeToggle/ThemeToggleButton';
-import { Shield } from '../Shield/Shield';
-import { CardList } from '../CardList';
+import type { Frontmatter } from "../../config";
+import type { MarkdownHeading } from "astro";
+import { getLanguageFromURL } from "../../languages";
+import LanguageSelect from "../LanguageSelect/LanguageSelect";
+import ThemeToggle from "../ThemeToggle/ThemeToggleButton";
+import { Shield } from "../Shield/Shield";
+import { CardList } from "../CardList";
+import { Code } from "astro/components";
+import { SymbolTable } from "../SymbolTable";
+import {
+  alignedSection,
+  displaySymbol,
+  examples,
+  symbols,
+  TitleType,
+} from "../../utils/symbols";
+import { titles } from "../../utils/i18n";
+import { ExampleTable } from "../ExampleTable";
+import { DisplayMode } from "../DisplayMode";
+import { amcToDomDisplay } from "../../utils/am-to-dom";
+import { SpaceSymbols } from "../SpaceSymbols";
 
 type Props = {
   frontmatter: Frontmatter;
@@ -19,10 +33,25 @@ const { currentPage } = Astro.props as Props;
 const lang = getLanguageFromURL(currentPage);
 
 const bandages = [
-  { href: 'https://npmjs.com/package/asciimath-parser', src: 'https://img.shields.io/npm/v/asciimath-parser?color=a1b858&label=npm' },
-  { href: 'https://npmjs.com/package/asciimath-parser-cli', src: 'https://img.shields.io/static/v1?label=npm&message=cli&color=orange' },
-  { href: 'https://github.com/widcardw/asciimath-parser', src: 'https://img.shields.io/badge/GitHub-blue?logo=github' },
-]
+  {
+    href: "https://npmjs.com/package/asciimath-parser",
+    src: "https://img.shields.io/npm/v/asciimath-parser?color=a1b858&label=npm",
+  },
+  {
+    href: "https://npmjs.com/package/asciimath-parser-cli",
+    src: "https://img.shields.io/static/v1?label=npm&message=cli&color=orange",
+  },
+  {
+    href: "https://github.com/widcardw/asciimath-parser",
+    src: "https://img.shields.io/badge/GitHub-blue?logo=github",
+  },
+];
+
+function t(title: TitleType) {
+  let lang = currentPage.split("/")[1] || "en";
+  if (lang !== "zh") lang = "en";
+  return title[lang as keyof TitleType];
+}
 ---
 
 <article id="article" class="content">
@@ -34,9 +63,39 @@ const bandages = [
         <ThemeToggle client:idle />
       </div>
     </div>
-    {bandages.map(s => (<><Shield href={s.href} src={s.src} />&nbsp;</>))}
+    {
+      bandages.map((s) => (
+        <>
+          <Shield href={s.href} src={s.src} />
+          &nbsp;
+        </>
+      ))
+    }
     <CardList client:idle />
     <slot />
+    <h2>{t(titles.examples)}</h2>
+    <ExampleTable examples={examples} currentPage={currentPage} />
+    <h2>{t(titles.manual)}</h2>
+    {
+      Object.values(symbols).map((s) => (
+        <>
+          <h3>{t(s.title)}</h3>
+          <SymbolTable
+            symbols={s.symbols}
+            cols={s.cols}
+            currentPage={currentPage}
+          />
+        </>
+      ))
+    }
+    <h3 set:html={t(displaySymbol.title)} />
+    <DisplayMode currentPage={currentPage} />
+    <h3 set:html={t(alignedSection.title)} />
+    <Code code={t(alignedSection.code)} />
+    <Fragment set:html={amcToDomDisplay(alignedSection.res)} />
+    <blockquote set:html={t(alignedSection.caution)} />
+    <h3>{t(titles.spaces)}</h3>
+    <SpaceSymbols currentPage={currentPage} />
   </section>
 </article>
 

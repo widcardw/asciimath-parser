@@ -84,7 +84,7 @@ function createConstNode(arg?: TokenizedValue | string) {
   }
   let tex
   if (arg.type === TokenTypes.Text) {
-    tex = arg.tex.replace(/^(\\quad)?([^\\]+)(\\quad)?$/, (_match, $1, $2, $3) => {
+    tex = arg.tex.replace(/^(\\quad)?(.+?)(\\quad)?$/, (_match, $1, $2, $3) => {
       return `${$1 || ''}\\text{${$2}}${$3 || ''}`
     })
   }
@@ -424,6 +424,9 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
             tempArr.push(tempNode)
             tempNode = null
           }
+          else {
+            tempArr.push(createConstNode())
+          }
           break
         }
         case ';': {
@@ -630,7 +633,7 @@ function generateMinusNode(tokens: TokenizedValue[], current: number): { node: C
   if (current > 0) {
     const prevToken = tokens[current - 1]
     if (prevToken.type !== TokenTypes.OperatorSup
-      && prevToken.type !== TokenTypes.OperatorA
+      && prevToken.type !== TokenTypes.OperatorOA
       && prevToken.type !== TokenTypes.OperatorOAB
       && prevToken.type !== TokenTypes.OperatorAOB)
       return { node: createConstNode(token.value), current: current + 1 }
@@ -763,7 +766,7 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): Walk
       break
     }
     case TokenTypes.OperatorSup:
-    case TokenTypes.OperatorA: {
+    case TokenTypes.OperatorOA: {
       // high priority, do not look forward
       ({ node, current } = getParamOneNode(tokens, current, false))
       break

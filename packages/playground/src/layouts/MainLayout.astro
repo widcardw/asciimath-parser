@@ -1,9 +1,9 @@
 ---
-import HeadCommon from '../components/HeadCommon.astro';
-import HeadSEO from '../components/HeadSEO.astro';
-import PageContent from '../components/PageContent/PageContent.astro';
-import * as CONFIG from '../config';
-import type { MarkdownHeading } from 'astro';
+import HeadCommon from "../components/HeadCommon.astro";
+import HeadSEO from "../components/HeadSEO.astro";
+import PageContent from "../components/PageContent/PageContent.astro";
+import * as CONFIG from "../config";
+import type { MarkdownHeading } from "astro";
 
 type Props = {
   frontmatter: CONFIG.Frontmatter;
@@ -15,12 +15,20 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const currentPage = Astro.url.pathname;
 ---
 
-<html dir={frontmatter.dir ?? 'ltr'} lang={frontmatter.lang ?? 'en-us'} class="initial">
+<html
+  dir={frontmatter.dir ?? "ltr"}
+  lang={frontmatter.lang ?? "en-us"}
+  class="initial"
+>
   <head>
     <HeadCommon />
     <HeadSEO frontmatter={frontmatter} canonicalUrl={canonicalURL} />
     <title>
-      {frontmatter.title ? `${frontmatter.title} 🚀 ${CONFIG.SITE.title}` : CONFIG.SITE.title}
+      {
+        frontmatter.title
+          ? `${frontmatter.title} 🚀 ${CONFIG.SITE.title}`
+          : CONFIG.SITE.title
+      }
     </title>
     <style>
       body {
@@ -38,12 +46,17 @@ const currentPage = Astro.url.pathname;
 
   <body>
     <main class="layout">
-      <PageContent frontmatter={frontmatter} headings={headings} currentPage={currentPage}>
+      <PageContent
+        frontmatter={frontmatter}
+        headings={headings}
+        currentPage={currentPage}
+      >
         <slot />
-        <div style="text-align: center; opacity: 50%; margin: 2rem auto;">
-          Playground built with <a href="https://astro.build">Astro</a> &nbsp;&nbsp;&nbsp; Deploys on <a href="https://netlify.app">Netlify</a>
-        </div>
       </PageContent>
+      <div style="text-align: center; opacity: 50%; margin: 2rem auto;">
+        Playground built with <a href="https://astro.build">Astro</a> &nbsp;&nbsp;&nbsp;
+        Deploys on <a href="https://netlify.app">Netlify</a>
+      </div>
     </main>
   </body>
 </html>

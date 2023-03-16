@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js'
 import { For, Show, createMemo, createSignal } from 'solid-js'
 import { useStorage } from 'solidjs-use'
-import { AsciiMathCore, AsciiMathNearley } from '../../asciimath'
+import { amc, amn } from '../../asciimath'
 import { Card } from '../Card'
 import './index.css'
 
@@ -23,8 +23,6 @@ const Badge: Component = () => {
 
 const CardList: Component = () => {
   const [items, setItems] = createSignal([0])
-  const amc = new AsciiMathCore()
-  const amn = new AsciiMathNearley()
   const selection = {
     Core: { isBeta: false, am: amc },
     Nearley: { isBeta: true, am: amn },
