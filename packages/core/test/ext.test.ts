@@ -7,7 +7,7 @@ describe('extend tokens in asciimath', () => {
   const am = new AsciiMath({
     symbols: [
       ['d0', { type: TokenTypes.Const, tex: $_`{\mathrm{d}\theta}` }],
-      ['atop', { type: TokenTypes.OperatorAOB, tex: $_`{ $1 \atop $2 }` }],
+      ['over', { type: TokenTypes.OperatorAOB, tex: $_`{ $1 \over $2 }` }],
       ['tsc', { type: TokenTypes.OperatorOA, tex: $_`\textsc{$1}`, eatNext: true }],
     ],
     display: false,

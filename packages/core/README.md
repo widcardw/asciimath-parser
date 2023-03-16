@@ -43,25 +43,33 @@ const cfg: AsciiMathConfig = {
    */
   display: true,
   /**
-   * Translate custom keywords into LaTeX expressions
+   * Extend tokens of asciimath
+   * ```ts
+   * {
+   *   // Simply transform `d0` to `d theta`
+   *   'd0': { type: TokenTypes.Const, tex: '{\\text{d}\\theta}' },
+   *   // Token with unary symbol, the `$1` will be replaced with the following symbol
+   *   'tsc': { type: TokenTypes.OperatorOA, tex: '\\textsc{$1}' },
+   *   // Token with binary symbols, the `$1` and `$2` will be replaced with the following two symbols
+   *   'frac': { type: TokenTypes.OperatorOAB, tex: '\\frac{ $1 }{ $2 }' },
+   *   // Infix expression, the `$1` and `$2` will be replaced with the previous symbol and next symbol respectively
+   *   'over': { type: TokenTypes.OperatorAOB, tex: '{ $1 \\over $2 }' },
+   * }
+   * ```
    *
-   * For example:
-   * [
-   *   ['dx', '\text{d}x'],
-   *   ['dy', '\text{d}y']
-   * ]
+   * You can extend the token types mentioned above, but it is *not recommended* to extend all types of [`enum TokenTypes`](https://github.com/widcardw/asciimath-parser/blob/main/packages/core/src/symbols.ts#L1-L20).
    */
-  extConst: [],
+  symbols: {},
   /**
    * Replace target expressions before tokenizing
-   *
-   * For example:
+   * ```ts
    * [
    *   [/&#(x?[0-9a-fA-F]+);/g, (match, $1) =>
    *     String.fromCodePoint($1[0] === 'x' ? '0' + $1 : $1)
    *   ],
    *   ...
    * ]
+   * ```
    */
   replaceBeforeTokenizing: []
 }

@@ -14,25 +14,33 @@ interface AsciiMathConfig {
    */
   display?: boolean
   /**
-   * Translate custom keywords into LaTeX expressions
+   * Extend tokens of asciimath
+   * ```ts
+   * {
+   *   // Simply transform `d0` to `d theta`
+   *   'd0': { type: TokenTypes.Const, tex: '{\\text{d}\\theta}' },
+   *   // Token with unary symbol, the `$1` will be replaced with the following symbol
+   *   'tsc': { type: TokenTypes.OperatorOA, tex: '\\textsc{$1}' },
+   *   // Token with binary symbols, the `$1` and `$2` will be replaced with the following two symbols
+   *   'frac': { type: TokenTypes.OperatorOAB, tex: '\\frac{ $1 }{ $2 }' },
+   *   // Infix expression, the `$1` and `$2` will be replaced with the previous symbol and next symbol respectively
+   *   'over': { type: TokenTypes.OperatorAOB, tex: '{ $1 \\over $2 }' },
+   * }
+   * ```
    *
-   * For example:
-   * [
-   *   ['dx', '\text{d}x'],
-   *   ['dy', '\text{d}y']
-   * ]
+   * You can extend the token types mentioned above, but it is *not recommended* to extend all types of [`enum TokenTypes`](https://github.com/widcardw/asciimath-parser/blob/main/packages/core/src/symbols.ts#L1-L20).
    */
   symbols?: Array<[string, SymbolValueType]> | Record<string, SymbolValueType>
   /**
    * Replace target expressions before tokenizing
-   *
-   * For example:
+   * ```ts
    * [
    *   [/&#(x?[0-9a-fA-F]+);/g, (match, $1) =>
    *     String.fromCodePoint($1[0] === 'x' ? '0' + $1 : $1)
    *   ],
    *   ...
    * ]
+   * ```
    */
   replaceBeforeTokenizing?: ReplaceLaw[]
 }
@@ -51,6 +59,7 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
       'dt': { type: TokenTypes.Const, tex: '{\\text{d}t}' },
       '#': { type: TokenTypes.Const, tex: '\\displaystyle' },
       'choose': { type: TokenTypes.OperatorAOB, tex: '{ $1 \\choose $2 }' },
+      'atop': { type: TokenTypes.OperatorAOB, tex: '{ $1 \\atop $2 }' },
     },
     replaceBeforeTokenizing: [
       [/&#(x?[0-9a-fA-F]+);/g, (_match, $1) =>
@@ -59,7 +68,7 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
     ],
   }
   if (typeof config?.display !== 'undefined')
-    defaultConfig.display = config?.display
+    defaultConfig.display = config.display
   if (config?.symbols) {
     if (Array.isArray(config.symbols)) {
       config.symbols.forEach(([k, v]) => {
