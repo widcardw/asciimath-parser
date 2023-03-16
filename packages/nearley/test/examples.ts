@@ -94,8 +94,22 @@ const passedExamples: Examples = [
   },
   { input: '\uD83D\uDC40', output: '\uD83D\uDC40' },
   { input: '🍎/(🍌+🍍) + 🍌/(🍍+🍎) + 🍍/(🍎+🍌) = 4', output: '\\frac{ 🍎 }{ 🍌 + 🍍 } + \\frac{ 🍌 }{ 🍍 + 🍎 } + \\frac{ 🍍 }{ 🍎 + 🍌 } = 4' },
-  { input: 'verb"114514\n1919810"', output: '\\begin{aligned}\n& \\texttt{114514}\\\\\n& \\texttt{1919810}\n\\end{aligned}' },
+  { input: 'verb"114514\n1919810"', output: '\\begin{aligned}\n& \\verb|114514|\\\\\n& \\verb|1919810|\n\\end{aligned}' },
   { input: '"\\\\"', output: '\\text{\\}' },
+  {
+    input: String.raw`verb"#include<stdio.h>
+int main() {
+  if (a || b) printf(b);
+  return 0;
+}"`,
+    output: String.raw`\begin{aligned}
+& \verb|#include<stdio.h>|\\
+& \verb|int main() {|\\
+& \verb|  if (a |\verb%|%\verb||\verb%|%\verb| b) printf(b);|\\
+& \verb|  return 0;|\\
+& \verb|}|
+\end{aligned}`,
+  },
 ]
 
 // no idea why this fails ˉ\_(ツ)_/ˉ
@@ -108,11 +122,11 @@ int main() {
   return 0;
 }"`,
     output: String.raw`\begin{aligned}
-& \texttt{\#include<stdio.h>}\\
-& \texttt{int\ main()\ \{}\\
-& \texttt{\ \ printf("hello,\ world!\textbackslash{}n");}\\
-& \texttt{\ \ return\ 0;}\\
-& \texttt{\}}
+& \verb|\#include<stdio.h>|\\
+& \verb|int\ main()\ \{|\\
+& \verb|\ \ printf("hello,\ world!\textbackslash{}n");|\\
+& \verb|\ \ return\ 0;|\\
+& \verb|\}|
 \end{aligned}`,
   },
 ]
@@ -122,6 +136,6 @@ const todoExamples: Examples = [
 
 export const examples: Examples = [
   ...passedExamples,
-  // ...todoExamples,
+  ...todoExamples,
   // ...whyThisFails,
 ]

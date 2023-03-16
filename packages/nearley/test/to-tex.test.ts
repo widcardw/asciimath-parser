@@ -13,6 +13,7 @@ export const traceLex = (input: string, lexer: Nearley.Lexer) => {
     res = lexer.next()
   }
   console.error('traceLex:', buf)
+  return true
 }
 
 describe('test nearley', () => {
@@ -26,16 +27,3 @@ describe('test nearley', () => {
     })
   })
 })
-
-// describe('test error', () => {
-//   const am = new AmNearley.AsciiMath()
-//   it('syntax error', () => {
-//     expect(am.toTex('/')).toBe(String.raw`\begin{aligned}
-// & \texttt{Error:\ Syntax\ error\ at\ line\ 1\ col\ 1:}\\
-// & \texttt{}\\
-// & \texttt{1\ \ /}\\
-// & \texttt{\ \ \ \textasciicircum{}}\\
-// & \texttt{Unexpected\ opAOB\ token:\ "/"}
-// \end{aligned}`)
-//   })
-// })
