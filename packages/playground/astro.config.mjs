@@ -6,7 +6,7 @@ import rehypeKatex from 'rehype-katex'
 // https://astro.build/config
 export default defineConfig({
   integrations: [solidJs()],
-  site: 'http://asciimath.widcard.win/',
+  site: 'https://asciimath.widcard.win/',
   markdown: {
     gfm: true,
     smartypants: true,
