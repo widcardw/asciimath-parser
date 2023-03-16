@@ -77,38 +77,43 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
 }
 
 class AsciiMath {
-  private display: boolean
-  private throws: boolean
-  private replaceLaws: ReplaceLaw[]
-  private compiledGrammar: Nearley.Grammar
-  private generator: ((ast: Ast) => string)
+  public display: boolean
+  public throws: boolean
+  public replaceBeforeTokenizing: ReplaceLaw[]
+  public lexer: Nearley.Lexer
+  public parser: Nearley.Parser
+  private genTex: ((ast: Ast) => string)
+  private initState: { [key: string]: any; lexerState: Nearley.LexerState }
   constructor(config?: AsciiMathConfig) {
-    const { display, throws, symbols: extSymbols, replaceBeforeTokenizing: replaceBeforeParsing } = resolveConfig(config)
+    const { display, throws, symbols, replaceBeforeTokenizing } = resolveConfig(config)
     this.display = display
     this.throws = throws
-    this.replaceLaws = replaceBeforeParsing
-    const symbols = initSymbols(extSymbols)
-    const lexer = initLexer(symbols)
+    this.replaceBeforeTokenizing = replaceBeforeTokenizing
+    const allSymbols = initSymbols(symbols)
+    const lexer = this.lexer = initLexer(allSymbols)
     const grammar = initGrammar(lexer)
-    this.generator = initGenerator(symbols)
-    this.compiledGrammar = Nearley.Grammar.fromCompiled(grammar)
+    const compiledGrammar = Nearley.Grammar.fromCompiled(grammar)
+    this.parser = new Nearley.Parser(compiledGrammar)
+    this.initState = this.parser.save()
+    this.genTex = initGenerator(allSymbols)
   }
 
   toTex(code: string): string {
+    this.parser.restore(this.initState)
     try {
-      code = this.replaceLaws.reduce((prev, curLaw) => {
-        return prev.replaceAll(curLaw[0], curLaw[1] as any)
+      code = this.replaceBeforeTokenizing.reduce((prev, curLaw) => {
+        // nodejs 14 没有 replaceAll 方法, 不要用 replaceAll
+        return prev.replace(new RegExp(curLaw[0], 'g'), curLaw[1] as any)
       }, code)
-      const parser = new Nearley.Parser(this.compiledGrammar)
-      parser.feed(code)
-      if (parser.results.length === 0) {
+      this.parser.feed(code)
+      if (this.parser.results.length === 0) {
         throw new Error('unexpected end of input')
       }
-      else if (parser.results.length > 1) {
-        console.error(parser.results)
+      else if (this.parser.results.length > 1) {
+        console.error(this.parser.results)
         throw new Error('ambiguous parse')
       }
-      let res = this.generator(parser.results)
+      let res = this.genTex(this.parser.results)
       if (this.display)
         res = `\\displaystyle{ ${res} }`
       return res
@@ -120,7 +125,7 @@ class AsciiMath {
       const message = String(e)
       let index = message.indexOf(' Instead, I was expecting to see one of the following:')
       if (index > -1) {
-        return this.generator({
+        return this.genTex({
           type: 'opOA',
           value: 'verb',
           $1: { value: message.slice(0, index) },

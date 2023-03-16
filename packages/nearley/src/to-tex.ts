@@ -153,23 +153,28 @@ const initGenerator = (symbols: Required<Symbols>) => {
     return aligned ? `\\begin{aligned}${res.join(' \\\\ ')}\\end{aligned}` : res[0]
   }
 
-  const escapeTex = (tex: string): string => {
-    return tex.split('\\').map((s) => {
-      return s.replace(/[{}]/g, '\\$&')
-        .replace(/~/g, '\\textasciitilde{}')
-        .replace(/\^/g, '\\textasciicircum{}')
-        .replace(/[#$%&_ ]/g, '\\$&')
-    }).join('\\textbackslash{}')
-  }
+  // const escapeTex = (tex: string): string => {
+  //   return tex.split('\\').map((s) => {
+  //     return s.replace(/[{}]/g, '\\$&')
+  //       .replace(/~/g, '\\textasciitilde{}')
+  //       .replace(/\^/g, '\\textasciicircum{}')
+  //       .replace(/[#$%&_ ]/g, '\\$&')
+  //   }).join('\\textbackslash{}')
+  // }
 
   // verbatim
   const genVerb = (ast: Ast) => {
     const { $1 } = ast
     return [
-      '\\begin{aligned}\n& \\texttt{',
-      escapeTex(escapeText($1.value)).split('\n').join('}\\\\\n& \\texttt{'),
-      '}\n\\end{aligned}',
+      '\\begin{aligned}\n& \\verb|',
+      escapeText($1.value).replace(/\|/g, '|\\verb%|%\\verb|').replace(/\n/g, '|\\\\\n& \\verb|'),
+      '|\n\\end{aligned}',
     ].join('')
+    // return [
+    //   '\\begin{aligned}\n& \\texttt{',
+    //   escapeTex(escapeText($1.value)).split('\n').join('}\\\\\n& \\texttt{'),
+    //   '}\n\\end{aligned}',
+    // ].join('')
   }
 
   /**
