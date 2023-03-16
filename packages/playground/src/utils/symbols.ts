@@ -72,6 +72,7 @@ const symbols: SymbolType = {
       'sub', 'sup', 'sube', 'supe',
       '!sube', 'subne', 'normal', 'rnormal',
       'lhd', 'rhd', 'S~', 'prop',
+      'complement',
     ],
     cols: 4,
   },
@@ -98,7 +99,7 @@ const symbols: SymbolType = {
       'oo', 'aleph', '/_', ':.',
       ':\'', '...', 'cdots', 'vdots',
       'ddots', 'square', 'NN', 'QQ',
-      'RR', 'CC',
+      'RR', 'CC', 'ZZ', 'N choose k',
     ],
     cols: 4,
   },
@@ -108,11 +109,14 @@ const symbols: SymbolType = {
       en: 'Math Function',
     },
     symbols: [
-      'sin', 'cos', 'tan', 'csc',
-      'sec', 'cot', 'sinh', 'cosh',
-      'tanh', 'log', 'ln', 'det',
-      'dim', 'lim', 'mod', 'gcd',
-      'lcm', 'min', 'max', 'sgn',
+      'sin', 'cos', 'tan', 'cot',
+      'sec', 'csc', 'sinh', 'cosh',
+      'tanh', 'coth', 'csch', 'sech',
+      'arcsin', 'arccos', 'arctan', 'log',
+      'ln', 'det', 'dim', 'lim',
+      'mod', 'gcd', 'lcm', 'min',
+      'max', 'sgn', 'Sup', 'inf',
+      'exp',
     ],
     cols: 4,
   },
@@ -160,7 +164,7 @@ const symbols: SymbolType = {
     symbols: [
       'overset("bala")(x)', 'overbrace(12345)^n',
       'underbrace(12345)_n', '==_(123)^(456)',
-      '-->_(a)^(b)',
+      '-->_(a)^(b)', 'a atop b',
     ],
     cols: 2,
   },
@@ -171,7 +175,7 @@ const symbols: SymbolType = {
     },
     symbols: [
       'text(I\'m here)', 'tex"\\hbar"',
-      'color(red)(abc)',
+      'color(red)(abc)', '"hello world"',
     ],
     cols: 2,
   },
@@ -182,6 +186,29 @@ const symbols: SymbolType = {
     },
     symbols: [
       '\\#', '\\$', '\\@', '\\_',
+    ],
+    cols: 4,
+  },
+  fontSize: {
+    title: {
+      zh: '字体大小',
+      en: 'Font Size',
+    },
+    symbols: [
+      'tiny "text"',
+      'small "text"',
+      'large "text"',
+      'huge "text"',
+    ],
+    cols: 2,
+  },
+  sugar: {
+    title: {
+      zh: '语法糖',
+      en: 'Syntax Sugar',
+    },
+    symbols: [
+      'dx', 'dy', 'dz', 'dt',
     ],
     cols: 4,
   },
@@ -211,7 +238,7 @@ const examples: OneExampleType[] = [
     theme: {
       zh: '文本', en: 'Text',
     },
-    code: '"hello world',
+    code: '"hello world"',
   },
   {
     theme: {
