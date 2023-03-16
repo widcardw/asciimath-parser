@@ -22,6 +22,7 @@ enum TokenTypes {
 interface SymbolValueType {
   type: TokenTypes
   tex: string
+  eatNext?: boolean
 }
 
 const SYMBOLMAP: Map<string, SymbolValueType> = new Map([
@@ -126,7 +127,7 @@ const SYMBOLMAP: Map<string, SymbolValueType> = new Map([
   ['\\:', { type: TokenTypes.Const, tex: '\\:' }],
   ['\\!', { type: TokenTypes.Const, tex: '\\!' }],
   ['enspace', { type: TokenTypes.Const, tex: '\\enspace' }],
-  ['hspace', { type: TokenTypes.OperatorOA, tex: '\\hspace{$1}' }],
+  ['hspace', { type: TokenTypes.OperatorOA, tex: '\\hspace{$1}', eatNext: true }],
   ['prop', { type: TokenTypes.Const, tex: '\\propto' }],
   ['complement', { type: TokenTypes.Const, tex: '\\complement' }],
 
@@ -264,10 +265,10 @@ const SYMBOLMAP: Map<string, SymbolValueType> = new Map([
   ['ubrace', { type: TokenTypes.OperatorOA, tex: '\\underbrace{ $1 }' }],
   ['overbrace', { type: TokenTypes.OperatorOA, tex: '\\overbrace{ $1 }' }],
   ['obrace', { type: TokenTypes.OperatorOA, tex: '\\overbrace{ $1 }' }],
-  ['color', { type: TokenTypes.OperatorOAB, tex: '{ \\color{$1} $2 }' }],
+  ['color', { type: TokenTypes.OperatorOAB, tex: '{ \\color{$1} $2 }', eatNext: true }],
   ['phantom', { type: TokenTypes.OperatorOA, tex: '\\phantom{$1}' }],
-  ['text', { type: TokenTypes.OperatorOA, tex: '\\text{$1}' }],
-  ['tex', { type: TokenTypes.Const, tex: '' }],
+  ['text', { type: TokenTypes.OperatorOA, tex: '\\text{$1}', eatNext: true }],
+  ['tex', { type: TokenTypes.OperatorOA, tex: '$1', eatNext: true }],
   ['mbox', { type: TokenTypes.OperatorOA, tex: '\\mbox{$1}' }],
   ['op', { type: TokenTypes.OperatorOA, tex: '\\operatorname{ $1 }' }],
   ['cancel', { type: TokenTypes.OperatorOA, tex: '\\cancel{ $1 }' }],

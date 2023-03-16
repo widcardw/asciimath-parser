@@ -50,6 +50,7 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
       'dz': { type: TokenTypes.Const, tex: '{\\text{d}z}' },
       'dt': { type: TokenTypes.Const, tex: '{\\text{d}t}' },
       '#': { type: TokenTypes.Const, tex: '\\displaystyle' },
+      'choose': { type: TokenTypes.OperatorAOB, tex: '{ $1 \\choose $2 }' },
     },
     replaceBeforeTokenizing: [
       [/&#(x?[0-9a-fA-F]+);/g, (_match, $1) =>
@@ -92,7 +93,11 @@ class AsciiMath {
         // @ts-expect-error do not check replacement type
         return prev.replaceAll(curLaw[0], curLaw[1])
       }, code)
-      let res = codegen(parser(this.trie.tryParsingAll(code)))
+      let res = codegen(
+        parser(
+          this.trie.tryParsingAll(code),
+        ),
+      )
       if (this.display)
         res = `\\displaystyle{ ${res} }`
       return res

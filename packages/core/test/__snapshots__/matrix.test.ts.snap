@@ -326,7 +326,7 @@ exports[`grid like matrix > should generate grid like matrix 2`] = `
 }
 `;
 
-exports[`grid like matrix > should generate grid like matrix 3`] = `"\\\\left. \\\\begin{array}{|c|c|} \\\\hline a & b\\\\\\\\\\\\hline c & d\\\\\\\\\\\\hline \\\\end{array} \\\\right."`;
+exports[`grid like matrix > should generate grid like matrix 3`] = `"\\\\left. \\\\begin{array}{|c|c|} \\\\hline a & b \\\\\\\\ \\\\hline c & d \\\\\\\\ \\\\hline \\\\end{array} \\\\right."`;
 
 exports[`hline of matrix > should add hline over matrix 1`] = `
 [
@@ -685,7 +685,7 @@ exports[`hline of matrix > should not cause infinite loop 2`] = `
 }
 `;
 
-exports[`hline of matrix > should not cause infinite loop 3`] = `"\\\\left. \\\\begin{array}{|c|c|} \\\\hline a & b\\\\\\\\\\\\hline\\\\\\\\\\\\hline c & d\\\\\\\\\\\\hline \\\\end{array} \\\\right."`;
+exports[`hline of matrix > should not cause infinite loop 3`] = `"\\\\left. \\\\begin{array}{|c|c|} \\\\hline a & b \\\\\\\\ \\\\hline \\\\\\\\ \\\\hline c & d \\\\\\\\ \\\\hline \\\\end{array} \\\\right."`;
 
 exports[`matrix with empty el > should generate ast 1`] = `
 [

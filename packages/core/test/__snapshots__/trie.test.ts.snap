@@ -874,6 +874,7 @@ exports[`tokenize color > should tokenize color 1`] = `
 [
   {
     "current": 5,
+    "eatNext": true,
     "isKeyWord": true,
     "tex": "{ \\\\color{$1} $2 }",
     "type": "OperatorOAB",
@@ -914,6 +915,7 @@ exports[`tokenize color > should tokenize rgb color 1`] = `
 [
   {
     "current": 5,
+    "eatNext": true,
     "isKeyWord": true,
     "tex": "{ \\\\color{$1} $2 }",
     "type": "OperatorOAB",

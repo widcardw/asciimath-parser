@@ -84,7 +84,7 @@ function createConstNode(arg?: TokenizedValue | string) {
   }
   let tex
   if (arg.type === TokenTypes.Text) {
-    tex = arg.tex.replace(/^(\\quad)?([^\\]+)(\\quad)?$/, (_match, $1, $2, $3) => {
+    tex = arg.tex.replace(/^(\\quad)?(.+?)(\\quad)?$/, (_match, $1, $2, $3) => {
       return `${$1 || ''}\\text{${$2}}${$3 || ''}`
     })
   }
@@ -423,6 +423,9 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
           if (tempNode) {
             tempArr.push(tempNode)
             tempNode = null
+          }
+          else {
+            tempArr.push(createConstNode())
           }
           break
         }

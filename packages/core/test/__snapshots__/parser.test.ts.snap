@@ -1856,6 +1856,7 @@ exports[`test color > should parse color 1`] = `
 [
   {
     "current": 5,
+    "eatNext": true,
     "isKeyWord": true,
     "tex": "{ \\\\color{$1} $2 }",
     "type": "OperatorOAB",

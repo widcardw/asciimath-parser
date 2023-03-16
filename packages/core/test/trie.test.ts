@@ -128,10 +128,18 @@ describe('tokenize text', () => {
     expect(trie.tryParsingAll('text padding')).toMatchInlineSnapshot(`
       [
         {
+          "current": 4,
+          "eatNext": true,
+          "isKeyWord": true,
+          "tex": "\\\\text{$1}",
+          "type": "OperatorA",
+          "value": "text",
+        },
+        {
           "current": 12,
           "isKeyWord": false,
           "tex": "padding",
-          "type": "Text",
+          "type": "Const",
           "value": "padding",
         },
       ]
@@ -141,10 +149,18 @@ describe('tokenize text', () => {
     expect(trie.tryParsingAll('text(why spacing    )')).toMatchInlineSnapshot(`
       [
         {
+          "current": 4,
+          "eatNext": true,
+          "isKeyWord": true,
+          "tex": "\\\\text{$1}",
+          "type": "OperatorA",
+          "value": "text",
+        },
+        {
           "current": 21,
           "isKeyWord": false,
           "tex": "why spacing    ",
-          "type": "Text",
+          "type": "Const",
           "value": "why spacing    ",
         },
       ]
@@ -154,6 +170,14 @@ describe('tokenize text', () => {
   it('should tokenize tex', () => {
     expect(trie.tryParsingAll('tex"\\hbar"')).toMatchInlineSnapshot(`
       [
+        {
+          "current": 3,
+          "eatNext": true,
+          "isKeyWord": true,
+          "tex": "$1",
+          "type": "OperatorA",
+          "value": "tex",
+        },
         {
           "current": 10,
           "isKeyWord": false,

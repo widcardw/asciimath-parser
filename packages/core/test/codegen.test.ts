@@ -55,6 +55,6 @@ describe('codegen {: any :}', () => {
   })
 
   it('should generate {: ... ]', () => {
-    expect(codegen(parser(trie.tryParsingAll('{: 1,2;3,4]')))).toMatchInlineSnapshot('"\\\\left. \\\\begin{array}{cc} 1 & 2\\\\\\\\3 & 4 \\\\end{array} \\\\right]"')
+    expect(codegen(parser(trie.tryParsingAll('{: 1,2;3,4]')))).toMatchInlineSnapshot('"\\\\left. \\\\begin{array}{cc} 1 & 2 \\\\\\\\ 3 & 4 \\\\end{array} \\\\right]"')
   })
 })

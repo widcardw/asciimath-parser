@@ -8,7 +8,7 @@ describe('special cases', () => {
   const am = new AsciiMath({ display: false })
   it('should not cause infinite loop in color', () => {
     expect(am.toTex('color(😀\''))
-      .toMatchInlineSnapshot('"{ \\\\color{} 😀 } ^{\\\\prime}"')
+      .toMatchInlineSnapshot('"{ \\\\color{😀\'}  }"')
     expect(am.toTex('color (pink) (123)'))
       .toMatchInlineSnapshot('"{ \\\\color{pink} 123 }"')
   })
