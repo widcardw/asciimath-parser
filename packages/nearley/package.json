@@ -48,6 +48,7 @@
     "@types/nearley": "^2.11.2",
     "@types/prompts": "^2.4.2",
     "@vitest/coverage-c8": "^0.28.3",
+    "asciimath-js": "^1.1.5",
     "bumpp": "^8.2.1",
     "nearley": "^2.20.1",
     "tsup": "^6.5.0",

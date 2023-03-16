@@ -16,6 +16,31 @@ importers:
       eslint: 8.35.0
       typescript: 4.9.5
 
+  C:/Users/fran/git/js/asciimath-parser/packages/nearley:
+    specifiers:
+      '@types/moo': ^0.5.5
+      '@types/nearley': ^2.11.2
+      '@types/prompts': ^2.4.2
+      '@vitest/coverage-c8': ^0.28.3
+      asciimath-js: ^1.1.5
+      bumpp: ^8.2.1
+      moo: ^0.5.2
+      nearley: ^2.20.1
+      tsup: ^6.5.0
+      vitest: ^0.27.2
+    dependencies:
+      moo: 0.5.2
+    devDependencies:
+      '@types/moo': 0.5.5
+      '@types/nearley': 2.11.2
+      '@types/prompts': 2.4.2
+      '@vitest/coverage-c8': 0.28.5
+      asciimath-js: 1.1.5
+      bumpp: 8.2.1
+      nearley: 2.20.1
+      tsup: 6.6.3
+      vitest: 0.27.3
+
   packages/cli:
     specifiers:
       bumpp: ^8.2.1
@@ -1491,6 +1516,11 @@ packages:
       es-abstract: 1.21.1
       es-shim-unscopables: 1.0.0
       get-intrinsic: 1.2.0
+    dev: true
+
+  /asciimath-js/1.1.5:
+    resolution: {integrity: sha512-EcTPjm7LL5FZveD6dXXbnPr0E9PNSfmMyQND/HvI/2kBoA5o+f3Nt1SY4aZ8CiYZ2L75uPqgyJmsNwDS07s74g==}
+    hasBin: true
     dev: true
 
   /assertion-error/1.1.0:
