@@ -2,9 +2,33 @@
 
 Another asciimath parser based on [nearley](https://nearley.js.org).
 
+## Usage
+
+Install with a package manager.
+
+```sh
+pnpm install asciimath-parser-nearley
+```
+
+Import and create an instance of AsciiMath.
+
+```js
+import { AsciiMath } from 'asciimath-parser-nearley'
+const am = new AsciiMath({
+  display: false,
+  throws: false,
+  symbols: {
+    keywords: {/** ... */},
+    /** ... */
+  },
+  replaceBeforeTokenizing: [],
+})
+console.log(am.toTex('sum_(n=1)^(+oo)1/n^2=pi^2/6'))
+// \sum_{ n = 1 }^{ + \infty } \frac{ 1 }{ n^2 } = \frac{ \pi^2 }{ 6 }
+```
+
 > **Warning**
-> This library is heavily working in progress, so currently there is no npm package available.
-> In addition, some rules are not consistent with `asciimath-parser`.
+> Some rules are not consistent with `asciimath-parser`. Please view the documentation below.
 
 If want to preview this library, you can visit https://asciimath.widcard.win and click on the <kbd>Nearley<sup>Beta</sup></kbd> button, then the formulas will be parsed by Asciimath Parser Nearley.
 
