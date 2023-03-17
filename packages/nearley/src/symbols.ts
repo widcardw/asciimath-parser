@@ -124,8 +124,8 @@ const symbols: Required<Symbols> = {
     '!in': { tex: '\\notin' },
     'sub': { tex: '\\sub' },
     'supset': { tex: '\\supset' }, // ⊃
-    'sube': { tex: '\\sube' },
-    'supe': { tex: '\\supe' },
+    'sube': { tex: '\\subseteq' },
+    'supe': { tex: '\\supseteq' },
     '-=': { tex: '\\equiv' },
     '~=': { tex: '\\cong' },
     '~': { tex: '\\sim' },
