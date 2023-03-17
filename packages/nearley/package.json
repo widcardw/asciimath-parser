@@ -1,6 +1,5 @@
 {
   "name": "asciimath-parser-nearley",
-  "private": true,
   "type": "module",
   "version": "0.5.6",
   "description": "Transform asciimath to LaTeX",
