@@ -32,43 +32,6 @@ console.log(am.toTex('sum_(n=1)^(+oo)1/n^2=pi^2/6'))
 
 If want to preview this library, you can visit https://asciimath.widcard.win and click on the <kbd>Nearley<sup>Beta</sup></kbd> button, then the formulas will be parsed by Asciimath Parser Nearley.
 
-## TODO
-
-- [x] `==_a^b`
-- [x] multiline formulas
-- [x] unicode support
-- [x] escape backslashes in text like `"\\"`
-- [x] vabatim environment
-  ```text
-  verb "aaa
-  bbb"
-  ```
-  translates to
-  ```tex
-  \\begin{aligned}
-  & \\texttt{aaa} \\
-  & \\texttt{bbb}
-  \\end{aligned}
-  ```
-- [ ] single paren case like `(` and `)`
-- [ ] table syntax sugar
-  ```text
-  table[
-  a, b, c;
-  d, e, f;
-  ]
-  ```
-  is equal to
-  ```text
-  {:
-  --
-  |a|b|c|
-  --
-  d, e, f;
-  --
-  :}
-  ```
-
 ## Differences
 
 Asciimath Parser **Core** version is written in pure TypeScript, and we may
@@ -171,3 +134,40 @@ const tex = am.toTex('sum_(n=1)^(+oo)1/n^2=pi^2/6')
 console.log(tex)
 // \displaystyle{ \sum_{ n = 1 }^{ + \infty } \frac{ 1 }{ n^2 } = \frac{ \pi^2 }{ 6 } }
 ```
+
+## TODO
+
+- [x] `==_a^b`
+- [x] multiline formulas
+- [x] unicode support
+- [x] escape backslashes in text like `"\\"`
+- [x] vabatim environment
+  ```text
+  verb "aaa
+  bbb"
+  ```
+  translates to
+  ```tex
+  \begin{aligned}
+  & \verb|aaa| \\
+  & \verb|bbb|
+  \end{aligned}
+  ```
+- [ ] single paren case like `(` and `)`
+- [ ] table syntax sugar
+  ```text
+  table[
+  a, b, c;
+  d, e, f;
+  ]
+  ```
+  is equal to
+  ```text
+  {:
+  --
+  |a|b|c|
+  --
+  d, e, f;
+  --
+  :}
+  ```
