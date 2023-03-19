@@ -12,6 +12,8 @@ A JavaScript implementation of simple mathematical formula markup language. It i
 
 ### API
 
+You can use either `asciimath-parser` or `asciimath-parser-nearley`. This documentation is for the former, while the latter has some differences. Please refer to its [README](https://github.com/widcardw/asciimath-parser/tree/main/packages/nearley).
+
 #### Basic Usage
 
 Install the package with npm/yarn/pnpm.

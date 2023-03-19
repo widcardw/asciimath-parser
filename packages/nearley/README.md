@@ -30,8 +30,6 @@ console.log(am.toTex('sum_(n=1)^(+oo)1/n^2=pi^2/6'))
 > **Warning**
 > Some rules are not consistent with `asciimath-parser`. Please view the documentation below.
 
-If want to preview this library, you can visit https://asciimath.widcard.win and click on the <kbd>Nearley<sup>Beta</sup></kbd> button, then the formulas will be parsed by Asciimath Parser Nearley.
-
 ## Differences
 
 Asciimath Parser **Core** version is written in pure TypeScript, and we may

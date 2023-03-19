@@ -12,6 +12,8 @@ layout: ../../layouts/MainLayout.astro
 
 ### API
 
+你可以使用 `asciimath-parser` 或者 `asciimath-parser-nearley`，如果想要使用前者，阅读本文档即可，而如果是后者，可能存在一些区别，请参照其 [README](https://github.com/widcardw/asciimath-parser/tree/main/packages/nearley).
+
 #### 基本使用
 
 使用 npm/yarn/pnpm 包管理工具安装。
