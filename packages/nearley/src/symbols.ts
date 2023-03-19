@@ -122,8 +122,9 @@ const symbols: Required<Symbols> = {
     '>-=': { tex: '\\succeq' },
     'in': { tex: '\\in' },
     '!in': { tex: '\\notin' },
-    'sub': { tex: '\\sub' },
-    'supset': { tex: '\\supset' }, // ⊃
+    'sub': { tex: '\\subset' },
+    'subset': { tex: '\\subset' },
+    'supset': { tex: '\\supset' },
     'sube': { tex: '\\subseteq' },
     'supe': { tex: '\\supseteq' },
     '-=': { tex: '\\equiv' },
@@ -135,10 +136,10 @@ const symbols: Required<Symbols> = {
     'S~': { tex: '\u223D' },
     '!-=': { tex: '\\not\\equiv' },
     '!|': { tex: '\u2224' },
-    '!sube': { tex: '\\not\\sube' },
-    '!supe': { tex: '\\not\\supe' },
-    'subne': { tex: '\\subne' },
-    'supne': { tex: '\\supne' },
+    '!sube': { tex: '\\not\\subseteq' },
+    '!supe': { tex: '\\not\\supseteq' },
+    'subne': { tex: '\\subsetneqq' },
+    'supne': { tex: '\\supsetneqq' },
     'lhd': { tex: '\\lhd' },
     'rhd': { tex: '\\rhd' },
     'normal': { tex: '\\unlhd' },
@@ -168,6 +169,7 @@ const symbols: Required<Symbols> = {
 
     // misc symbols
     'prop': { tex: '\\propto' },
+    'comp': { tex: '\\complement' },
     'complement': { tex: '\\complement' },
     'not': { tex: '\\neg' },
     '=>': { tex: '\\implies' },
@@ -190,6 +192,7 @@ const symbols: Required<Symbols> = {
     'grad': { tex: '\\nabla' },
     'nabla': { tex: '\\nabla' },
     '+-': { tex: '\\pm' },
+    '-+': { tex: '\\mp' },
     'O/': { tex: '\\varnothing' },
     'oo': { tex: '\\infty' },
     'aleph': { tex: '\\aleph' },
@@ -239,8 +242,8 @@ const symbols: Required<Symbols> = {
     'arccos': { tex: '\\arccos' },
     'arctan': { tex: '\\arctan' },
     'coth': { tex: '\\coth' },
-    'sech': { tex: '\\sech' },
-    'csch': { tex: '\\csch' },
+    'sech': { tex: '\\operatorname{sech}' },
+    'csch': { tex: '\\operatorname{csch}' },
     'exp': { tex: '\\exp' },
     'log': { tex: '\\log' },
     'ln': { tex: '\\ln' },
@@ -282,8 +285,8 @@ const symbols: Required<Symbols> = {
   opOA: {
     abs: { tex: '\\left|$1\\right|' },
     norm: { tex: '\\left\\|$1\\right\\|' },
-    floor: { tex: '\\left\\lfloor$1\\right\\rfloor' },
-    ceil: { tex: '\\left\\lceil$1\\right\\rceil' },
+    floor: { tex: '\\left\\lfloor{}$1\\right\\rfloor' },
+    ceil: { tex: '\\left\\lceil{}$1\\right\\rceil' },
     sqrt: { tex: '\\sqrt{ $1 }' },
     hat: { tex: '\\hat{ $1 }' },
     widehat: { tex: '\\widehat{ $1 }' },
@@ -306,23 +309,26 @@ const symbols: Required<Symbols> = {
     overbrace: { tex: '\\overbrace{ $1 }' },
     obrace: { tex: '\\overbrace{ $1 }' },
     phantom: { tex: '\\phantom{ $1 }' },
+    mbox: { tex: '\\mbox{$1}' },
+    op: { tex: '\\operatorname{ $1 }' },
+    // TODO: \cancel is not supported by web mathjax, but supported by mathjax tex2svg?
+    cancel: { tex: '\\cancel{ $1 }' },
+
+    // literal string
+    hspace: { tex: '\\hspace{$1}' },
     text: { tex: '\\text{$1}' },
     tex: { tex: '{ $1 }' },
     verb: { tex: '' }, // 这里 tex 没有实际意义, verb 需特殊处理
-    mbox: { tex: '\\mbox{$1}' },
-    op: { tex: '\\operatorname{ $1 }' },
-    cancel: { tex: '\\cancel{ $1 }' },
-    hspace: { tex: '\\hspace{$1}' },
 
-    // font command
+    // font style
     bb: { tex: '\\mathbf{ $1 }' },
     mathbf: { tex: '\\mathbf{ $1 }' },
     sf: { tex: '\\mathsf{ $1 }' },
     mathsf: { tex: '\\mathsf{ $1 }' },
     bbb: { tex: '\\mathbb{ $1 }' },
-    mathbb: { tex: '\\mathbb{ $1 }' },
+    mathbb: { tex: '\\mathbb{ $1 }' }, // katex mathbb 只对大写字母有效
     cc: { tex: '\\mathcal{ $1 }' },
-    mathcal: { tex: '\\mathcal{ $1 }' },
+    mathcal: { tex: '\\mathcal{ $1 }' }, // mathcal 只对大写字母有效
     tt: { tex: '\\mathtt{ $1 }' },
     mathtt: { tex: '\\mathtt{ $1 }' },
     fr: { tex: '\\mathfrak{ $1 }' },
@@ -336,6 +342,7 @@ const symbols: Required<Symbols> = {
     // font size
     tiny: { tex: '{ \\tiny $1 }' },
     small: { tex: '{ \\small $1 }' },
+    normalsize: { tex: '{ \\normalsize $1 }' },
     large: { tex: '{ \\large $1 }' },
     huge: { tex: '{ \\huge $1 }' },
   },
@@ -345,7 +352,7 @@ const symbols: Required<Symbols> = {
     stackrel: { tex: '\\stackrel{ $1 }{ $2 }' },
     overset: { tex: '\\overset{ $1 }{ $2 }' },
     underset: { tex: '\\under{ $1 }{ $2 }' },
-    color: { tex: '{ \\color{$1} $2 }' },
+    color: { tex: '{ \\color{$1} $2 }' }, // first param is literal string
   },
   lp: {
     '(': { tex: '(' },
@@ -366,6 +373,7 @@ const symbols: Required<Symbols> = {
     '~|': { tex: '\\rceil' },
   },
   limits: {
+    // TODO: \xlongequal is not supported by web mathjax, but supported by mathjax tex2svg?
     '==': { tex: '\\xlongequal[ $1 ]{ $2 }' },
     '-->': { tex: '\\xrightarrow[ $1 ]{ $2 }' },
   },
@@ -399,7 +407,7 @@ const symbols: Required<Symbols> = {
   },
   pipe: {
     '|': { tex: '|' },
-    '||': { tex: '\\Vert' },
+    '||': { tex: '\\|' },
   },
 }
 
