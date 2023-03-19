@@ -64,12 +64,7 @@ function t(title: TitleType) {
       </div>
     </div>
     {
-      bandages.map((s) => (
-        <>
-          <Shield href={s.href} src={s.src} />
-          &nbsp;
-        </>
-      ))
+      bandages.map((s) => (<><Shield href={s.href} src={s.src} />&nbsp;</>))
     }
     <CardList client:idle />
     <slot />

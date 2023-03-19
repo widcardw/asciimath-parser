@@ -25,7 +25,7 @@ const CardList: Component = () => {
   const [items, setItems] = createSignal([0])
   const selection = {
     Core: { isBeta: false, am: amc },
-    Nearley: { isBeta: true, am: amn },
+    Nearley: { isBeta: false, am: amn },
   }
   type CoreType = keyof typeof selection
   const cores = Object.keys(selection) as CoreType[]

@@ -139,7 +139,7 @@ const symbols: SymbolType = {
       en: 'Font',
     },
     symbols: [
-      'bf A', 'bb A', 'bm A', 'bbb A',
+      'bb A', 'bm A', 'bbb A', 'cc A',
       'tt A', 'fr A', 'sf A', 'scr A',
     ],
     cols: 4,

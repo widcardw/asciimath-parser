@@ -95,8 +95,12 @@ p {
 	line-height: 1.65em;
 }
 
-.content ul {
-	line-height: 1.1em;
+.content li>ul {
+	margin-top: 0.75rem;
+}
+
+.content li {
+	line-height: 1.5rem;
 }
 
 p,
@@ -288,6 +292,10 @@ blockquote {
 	background-color: var(--theme-bg-offset);
 	border-radius: 0 0.25rem 0.25rem 0;
 	line-height: 1.7;
+}
+
+blockquote>p:not(:first-child) {
+	margin-top: 0.75rem;
 }
 
 img {
