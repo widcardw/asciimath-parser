@@ -31,9 +31,9 @@ console.log(am.toTex('sum_(n=1)^(+oo)1/n^2=pi^2/6'))
 // \displaystyle{ \sum _{ n = 1 } ^{ + \infty } \frac{ 1 }{ n ^{ 2 } } = \frac{ \pi ^{ 2 } }{ 6 } }
 ```
 
-#### Configuration and Extending Tokens
+#### Configuration and Token Extension
 
-The following are the types of arguments that `AsciiMath` accepts at construction time
+The following is the type declaration of AsciiMath config.
 
 ```ts
 type ReplaceLaw = [RegExp | string, string | ((substring: string, ...args: any[]) => string)]
@@ -45,7 +45,7 @@ interface AsciiMathConfig {
 }
 ```
 
--   `display` specifies whether the generated formula is contained in the `\displaystyle` environment. The default value is `true`.
+-   `display` specifies whether the generated formula is wrapped in `\displaystyle` environment. The default value is `true`.
 
 -   `replaceBeforeTokenizing` replaces **the matched strings** with **the target strings** respectively before the formula is parsed by AsciiMath.
 
@@ -77,7 +77,7 @@ interface AsciiMathConfig {
     }
     ```
 
-    You can specify it like below
+    You can specify it below
 
     ```ts
     const cfg: AsciiMathConfig = {
@@ -92,18 +92,18 @@ interface AsciiMathConfig {
     console.log(am.toTex('...'))
     ```
 
-    Then `dx`, `rm`, `frac` and `over` will be recognized as tokens of AsciiMath, and the code generation will be
+    Then `dx`, `rm`, `frac` and `over` will be recognized as tokens of AsciiMath, and the results will be
 
     -   `dx` into `{\mathrm{d}x}`
     -   `rm(absc)` into `\mathrm{absc}`, where `$1` will be replaced with `absc`
 
-        > If `eatNext` is set to `true`, then the next word will be "eat" by tokenizer and recognized as a literal string
+        > If `eatNext` is set to `true`, then the next word will be "eaten" by tokenizer and recognized as a literal string
         > even if there is any token in it. In the example above, `absc` contains the token `abs`, but the
         > program just simply read the word and put `absc` at the `$1`.
         >
         > Without `eatNext`, you will get `\mathrm{ \left|c\right| }`.
         >
-        > If you want to read a longer sentense, just wrap it with doublequote `"` or
+        > If you want to read a longer sentense, just wrap it with doublequotes `"` or
         > parens `(` `)` like `rm "here is a mathrm block"`
         >
         > `eatNext` is *only* recommended to be used with `OperatorOA` and `OperatorOAB`.
