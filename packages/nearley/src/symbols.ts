@@ -16,6 +16,7 @@ export enum TokenTypes {
 
 interface SymbolConfig {
   tex: string
+  strip?: boolean
 }
 
 export interface Symbols {
@@ -396,8 +397,8 @@ const symbols: Required<Symbols> = {
     dd: { tex: '\\text{d}' },
   },
   opAO: {
-    '!!': { tex: '{ $1!! }' },
-    '!': { tex: '{ $1! }' },
+    '!!': { tex: '{ $1!! }', strip: false }, // strip: false 时, op 的参数不会脱去括号
+    '!': { tex: '{ $1! }', strip: false },
   },
   opAOB: {
     '/': { tex: '\\frac{ $1 }{ $2 }' },

@@ -90,12 +90,13 @@ const initGenerator = (symbols: Required<Symbols>) => {
     const { type, value, $1, $2 } = ast
     if (value === 'verb')
       return genVerb(ast)
-    let res = symbols[type as TokenTypes][value].tex
+    const symbol = symbols[type as TokenTypes][value]
+    let { tex, strip = true } = symbol
     if ($1)
-      res = res.replace('$1', toTex($1, true))
+      tex = tex.replace('$1', toTex($1, strip))
     if ($2)
-      res = res.replace('$2', toTex($2, true))
-    return res
+      tex = tex.replace('$2', toTex($2, strip))
+    return tex
   }
 
   const escapeText = (str: string): string => {
