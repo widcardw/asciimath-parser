@@ -110,6 +110,8 @@ int main() {
 & \verb|}|
 \end{aligned}`,
   },
+  { input: '(a)!', output: '{ \\left(a\\right)! }' }, // test op strip
+  { input: '(n) choose (k) = n!/(n!(n-k)!)', output: '{ n \\choose k } = \\frac{ { n! } }{ { n! } { \\left(n - k\\right)! } }' },
 ]
 
 // no idea why this fails ˉ\_(ツ)_/ˉ
