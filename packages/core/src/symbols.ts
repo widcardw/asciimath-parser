@@ -272,7 +272,7 @@ const SYMBOLMAP: Map<string, SymbolValueType> = new Map([
   ['text', { type: TokenTypes.OperatorOA, tex: '\\text{$1}', eatNext: true }],
   ['tex', { type: TokenTypes.OperatorOA, tex: '$1', eatNext: true }],
   ['mbox', { type: TokenTypes.OperatorOA, tex: '\\mbox{$1}' }],
-  ['op', { type: TokenTypes.OperatorOA, tex: '\\operatorname{ $1 }' }],
+  ['op', { type: TokenTypes.OperatorOA, tex: '\\operatorname{ $1 }', eatNext: true }],
   ['cancel', { type: TokenTypes.OperatorOA, tex: '\\cancel{ $1 }' }],
   ['bb', { type: TokenTypes.OperatorOA, tex: '\\mathbf{ $1 }' }],
   ['mathbf', { type: TokenTypes.OperatorOA, tex: '\\mathbf{ $1 }' }],

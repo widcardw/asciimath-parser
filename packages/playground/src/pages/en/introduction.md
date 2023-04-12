@@ -31,7 +31,7 @@ console.log(am.toTex('sum_(n=1)^(+oo)1/n^2=pi^2/6'))
 // \displaystyle{ \sum _{ n = 1 } ^{ + \infty } \frac{ 1 }{ n ^{ 2 } } = \frac{ \pi ^{ 2 } }{ 6 } }
 ```
 
-#### Configuration and Token Extension
+#### Configuration and Custom Tokens
 
 The following is the type declaration of AsciiMath config.
 
@@ -45,71 +45,89 @@ interface AsciiMathConfig {
 }
 ```
 
--   `display` specifies whether the generated formula is wrapped in `\displaystyle` environment. The default value is `true`.
+##### `display`
 
--   `replaceBeforeTokenizing` replaces **the matched strings** with **the target strings** respectively before the formula is parsed by AsciiMath.
+Specify whether the generated formula is wrapped in `\displaystyle` environment. The default value is `true`.
 
-    For example, if you specify it like below:
+##### `replaceBeforeTokenizing` 
 
-    ```ts
-    const cfg: AsciiMathConfig = {
-      replaceBeforeTokenizing: [
-        [/d0/g, '{:"d"theta:}'],
-        [/x(\d+)/g, (_, $1) => `x^(${$1})`],
-      ]
-    }
-    const am = new AsciiMath(cfg)
-    console.log(am.toTex('...'))
-    ```
+Replace **the matched strings** with **the target strings** respectively before the formula is parsed by AsciiMath.
 
-    -   All of the `d0` will be replaced with `{:"d"theta:}`, and then be parsed into `{ \text{d} \theta }` by AsciiMath.
-    -   Strings like `x2` and `x10` will be replaced with `x^(2)` and `x^(10)`, and then be parsed into `x^{ 2 }` and `x^{ 10 }`, respectively. (I think no one should write them like this, though ¯\\\_(ツ)\_/¯)
+<details>
 
--   `symbols` specify the extended tokens. If you want to view all of the token types, please refer to [_`symbols.ts`_](https://github.com/widcardw/asciimath-parser/blob/main/packages/core/src/symbols.ts). However, it is **not recommended** to extend **all** of them. The following lists the recommended token types for extension
+<summary>Click to show details.</summary>
 
-    ```ts
-    enum TokenTypes {
-      Const, // transform matched string into tex
-      OperatorOA, // with unary operand, like `abs(a)`
-      OperatorOAB, // with binary operands, like `frac(a)(b)`
-      OperatorAOB, // infix operator, like `a / b`
-      OperatorAO, // suffix operator, like factorial `n!`
-    }
-    ```
+For example, if you specify it like below:
 
-    You can specify it below
+```ts
+const cfg: AsciiMathConfig = {
+  replaceBeforeTokenizing: [
+    [/d0/g, '{:"d"theta:}'],
+    [/x(\d+)/g, (_, $1) => `x^(${$1})`],
+  ]
+}
+const am = new AsciiMath(cfg)
+console.log(am.toTex('...'))
+```
 
-    ```ts
-    const cfg: AsciiMathConfig = {
-      symbols: {
-        dx: { type: TokenTypes.Const, tex: '{\\mathrm{d}x}' },
-        rm: { type: TokenTypes.OperatorOA, tex: '\\mathrm{$1}', eatNext: true },
-        frac: { type: TokenTypes.OperatorOAB, tex: '\\frac{ $1 }{ $2 }' },
-        over: { type: TokenTypes.OperatorAOB, tex: '{ $1 \\over $2 }' },
-      }
-    }
-    const am = new AsciiMath(cfg)
-    console.log(am.toTex('...'))
-    ```
+-   All of the `d0` will be replaced with `{:"d"theta:}`, and then be parsed into `{ \text{d} \theta }` by AsciiMath.
+-   Strings like `x2` and `x10` will be replaced with `x^(2)` and `x^(10)`, and then be parsed into `x^{ 2 }` and `x^{ 10 }`, respectively. (I think no one should write them like this, though ¯\\\_(ツ)\_/¯)
 
-    Then `dx`, `rm`, `frac` and `over` will be recognized as tokens of AsciiMath, and the results will be
+</details>
 
-    -   `dx` into `{\mathrm{d}x}`
-    -   `rm(absc)` into `\mathrm{absc}`, where `$1` will be replaced with `absc`
+##### `symbols`
 
-        > If `eatNext` is set to `true`, then the next word will be "eaten" by tokenizer and recognized as a literal string
-        > even if there is any token in it. In the example above, `absc` contains the token `abs`, but the
-        > program just simply read the word and put `absc` at the `$1`.
-        >
-        > Without `eatNext`, you will get `\mathrm{ \left|c\right| }`.
-        >
-        > If you want to read a longer sentense, just wrap it with doublequotes `"` or
-        > parens `(` `)` like `rm "here is a mathrm block"`
-        >
-        > `eatNext` is *only* recommended to be used with `OperatorOA` and `OperatorOAB`.
+Specify the extended tokens. If you want to view all of the token types, please refer to [_`symbols.ts`_](https://github.com/widcardw/asciimath-parser/blob/main/packages/core/src/symbols.ts). However, it is **not recommended** to extend **all** of them. The following lists the recommended token types for extension
 
-    -   `frac(m)(n)` into `\frac{ m }{ n }`, where `$1` and `$2` will be replaced with `m` and `n`, respectively
-    -   `a over b` into `{ a \over b }`, where `$1` and `$2` will be replaced with `a` and `b`, respectively
+```ts
+enum TokenTypes {
+  Const, // transform matched string into tex
+  OperatorOA, // with unary operand, like `abs(a)`
+  OperatorOAB, // with binary operands, like `frac(a)(b)`
+  OperatorAOB, // infix operator, like `a / b`
+  OperatorAO, // suffix operator, like factorial `n!`
+}
+```
+
+<details>
+
+<summary>Click to show details.</summary>
+
+You can specify it below
+
+```ts
+const cfg: AsciiMathConfig = {
+  symbols: {
+    dx: { type: TokenTypes.Const, tex: '{\\mathrm{d}x}' },
+    rm: { type: TokenTypes.OperatorOA, tex: '\\mathrm{$1}', eatNext: true },
+    frac: { type: TokenTypes.OperatorOAB, tex: '\\frac{ $1 }{ $2 }' },
+    over: { type: TokenTypes.OperatorAOB, tex: '{ $1 \\over $2 }' },
+  }
+}
+const am = new AsciiMath(cfg)
+console.log(am.toTex('...'))
+```
+
+Then `dx`, `rm`, `frac` and `over` will be recognized as tokens of AsciiMath, and the results will be
+
+-   `dx` into `{\mathrm{d}x}`
+-   `rm(absc)` into `\mathrm{absc}`, where `$1` will be replaced with `absc`
+
+    > If `eatNext` is set to `true`, then the next word will be "eaten" by tokenizer and recognized as a literal string
+    > even if there is any token in it. In the example above, `absc` contains the token `abs`, but the
+    > program just simply read the word and put `absc` at the `$1`.
+    >
+    > Without `eatNext`, you will get `\mathrm{ \left|c\right| }`.
+    >
+    > If you want to read a longer sentense, just wrap it with doublequotes `"` or
+    > parens `(` `)` like `rm "here is a mathrm block"`
+    >
+    > `eatNext` is *only* recommended to be used with `OperatorOA` and `OperatorOAB`.
+
+-   `frac(m)(n)` into `\frac{ m }{ n }`, where `$1` and `$2` will be replaced with `m` and `n`, respectively
+-   `a over b` into `{ a \over b }`, where `$1` and `$2` will be replaced with `a` and `b`, respectively
+
+</details>
 
 ### Cli
 

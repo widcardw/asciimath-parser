@@ -95,3 +95,12 @@ describe('aligned environment', () => {
     expect(am.toTex('a=b\n\nc=d')).toMatchInlineSnapshot('"\\\\begin{aligned}a = b \\\\\\\\ c = d\\\\end{aligned}"')
   })
 })
+
+describe('operator name', () => {
+  const am = new AsciiMath({ display: false })
+  it('should eat next of op', () => {
+    expect(am.toTex('op(div)')).toMatchInlineSnapshot('"\\\\operatorname{ div }"')
+    expect(am.toTex('op"div"')).toMatchInlineSnapshot('"\\\\operatorname{ div }"')
+    expect(am.toTex('op pi')).toMatchInlineSnapshot('"\\\\operatorname{ pi }"')
+  })
+})
