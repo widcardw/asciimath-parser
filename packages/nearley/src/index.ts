@@ -67,6 +67,9 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
       ...config?.symbols,
     },
     replaceBeforeTokenizing: [
+      // line break compat
+      [/\r\n/g, '\n'],
+      [/\r/g, '\n'],
       // html entity
       [/&#(x?[0-9a-fA-F]+);/g, (_match, $1) =>
         String.fromCodePoint($1[0] === 'x' ? `0${$1}` : $1),
