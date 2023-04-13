@@ -24,7 +24,7 @@ const initLexer = (symbols: Symbols) => {
   const main = {
     newlines: { match: /\n{2,}/u, lineBreaks: true },
     newline: { match: '\n', lineBreaks: true },
-    space: /[ \t]+/u,
+    space: /[ \t\v\f]+/u,
     number: /[0-9]+\.[0-9]+|[0-9]+/u,
     text: { match: /"/u, push: 'text' },
     lp: { match: loadSymbol(TokenTypes.lp), push: 'lp' },
