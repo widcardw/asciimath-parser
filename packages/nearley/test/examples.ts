@@ -131,6 +131,9 @@ int main() {
 & \verb|\}|
 \end{aligned}`,
   },
+  { input: 'a\r\n', output: 'a' },
+  { input: '& a\r\n\r& b\n\r& c', output: '\\begin{aligned}& a \\\\ & b \\\\ & c\\end{aligned}' },
+  { input: 'a\t\v\f', output: 'a' },
 ]
 
 const todoExamples: Examples = [
