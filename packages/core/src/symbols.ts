@@ -288,7 +288,7 @@ const SYMBOLMAP: Map<string, SymbolValueType> = new Map([
   ['bm', { type: TokenTypes.OperatorOA, tex: '\\boldsymbol{ $1 }' }],
   ['rm', { type: TokenTypes.OperatorOA, tex: '\\mathrm{ $1 }' }],
   ['scr', { type: TokenTypes.OperatorOA, tex: '\\mathscr{ $1 }' }],
-  ['limits', { type: TokenTypes.OperatorOA, tex: '\\mathop{$1}\\limits' }],
+  ['limits', { type: TokenTypes.OperatorOA, tex: '\\mathop{ $1 }\\limits' }],
 
   ['iint', { type: TokenTypes.Const, tex: '\\iint' }],
   ['iiint', { type: TokenTypes.Const, tex: '\\iiint' }],

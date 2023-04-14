@@ -21,9 +21,7 @@ describe('test nearley', () => {
   examples.forEach((item, index) => {
     // traceLex(item.input, am.lexer)
     it(`#${index} ${item.desc ? `[${item.desc}] ` : ''}${item.input}`, () => {
-      expect(am.toTex(item.input)).toMatchInlineSnapshot(
-        `"${item.output.replace(/\\/g, '\\\\')}"`,
-      )
+      expect(am.toTex(item.input)).toBe(item.output)
     })
   })
 })

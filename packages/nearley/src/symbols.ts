@@ -340,6 +340,8 @@ const symbols: Required<Symbols> = {
     scr: { tex: '\\mathscr{ $1 }' },
     mathscr: { tex: '\\mathscr{ $1 }' },
 
+    limits: { tex: '\\mathop{ $1 }\\limits' },
+
     // font size
     tiny: { tex: '{ \\tiny $1 }' },
     small: { tex: '{ \\small $1 }' },

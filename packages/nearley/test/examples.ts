@@ -1,5 +1,7 @@
 type Examples = { input: string; output: string; desc?: string }[]
 
+const $_ = String.raw
+
 const passedExamples: Examples = [
   { input: '    ', output: '' },
   { input: ' a', output: 'a' },
@@ -112,6 +114,8 @@ int main() {
   },
   { input: '(a)!', output: '{ \\left(a\\right)! }' }, // test op strip
   { input: '(n) choose (k) = n!/(n!(n-k)!)', output: '{ n \\choose k } = \\frac{ { n! } }{ { n! } { \\left(n - k\\right)! } }' },
+  { input: 'limits(theta)_(k=1)^K', output: $_`\mathop{ \theta }\limits_{ k = 1 }^K` },
+  { input: 'limits(tex"\\Vert")_(k=1)^K', output: $_`\mathop{ { \Vert } }\limits_{ k = 1 }^K` },
 ]
 
 // no idea why this fails ˉ\_(ツ)_/ˉ

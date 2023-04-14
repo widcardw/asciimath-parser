@@ -108,6 +108,6 @@ describe('operator name', () => {
 describe('limits style', () => {
   const am = new AsciiMath({ display: false })
   it('should build limits style', () => {
-    expect(am.toTex('limits(||)_(k=1)^K')).toMatchInlineSnapshot('"\\\\mathop{\\\\Vert}\\\\limits _{ k = 1 } ^{ K }"')
+    expect(am.toTex('limits(||)_(k=1)^K')).toMatchInlineSnapshot('"\\\\mathop{ \\\\Vert }\\\\limits _{ k = 1 } ^{ K }"')
   })
 })
