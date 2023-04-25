@@ -113,7 +113,7 @@ const initGenerator = (symbols: Required<Symbols>) => {
     const { value, exp, sup, sub } = ast
     const symbol = symbols.part[value].tex
     const expStr = exp ? `^${toTex(exp)}` : ''
-    const supStr = `${symbol + expStr} ${toTex(sup)}`
+    const supStr = `${symbol + expStr} ${toTex(sup, true)}`
 
     // 偏微分分母的一项
     const genSubGroup = (ast: Ast) => {
