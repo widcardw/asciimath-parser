@@ -1,6 +1,6 @@
 type Examples = { input: string; output: string; desc?: string }[]
 
-const $_ = String.raw
+const $ = String.raw
 
 const passedExamples: Examples = [
   { input: '    ', output: '' },
@@ -100,12 +100,12 @@ const passedExamples: Examples = [
   { input: 'verb"114514\n1919810"', output: '\\begin{aligned}\n& \\verb|114514|\\\\\n& \\verb|1919810|\n\\end{aligned}' },
   { input: '"\\\\"', output: '\\text{\\}' },
   {
-    input: String.raw`verb"#include<stdio.h>
+    input: $`verb"#include<stdio.h>
 int main() {
   if (a || b) printf(b);
   return 0;
 }"`,
-    output: String.raw`\begin{aligned}
+    output: $`\begin{aligned}
 & \verb|#include<stdio.h>|\\
 & \verb|int main() {|\\
 & \verb|  if (a |\verb%|%\verb||\verb%|%\verb| b) printf(b);|\\
@@ -115,20 +115,20 @@ int main() {
   },
   { input: '(a)!', output: '{ \\left(a\\right)! }' }, // test op strip
   { input: '(n) choose (k) = n!/(n!(n-k)!)', output: '{ n \\choose k } = \\frac{ { n! } }{ { n! } { \\left(n - k\\right)! } }' },
-  { input: 'limits(theta)_(k=1)^K', output: $_`\mathop{ \theta }\limits_{ k = 1 }^K` },
-  { input: 'limits(tex"\\Vert")_(k=1)^K', output: $_`\mathop{ { \Vert } }\limits_{ k = 1 }^K` },
+  { input: 'limits(theta)_(k=1)^K', output: $`\mathop{ \theta }\limits_{ k = 1 }^K` },
+  { input: 'limits(tex"\\Vert")_(k=1)^K', output: $`\mathop{ { \Vert } }\limits_{ k = 1 }^K` },
 ]
 
 // no idea why this fails ˉ\_(ツ)_/ˉ
 const whyThisFails: Examples = [
   { input: '"\\"abc\\""', output: '\\text{"abc"}' },
   {
-    input: String.raw`verb"#include<stdio.h>
+    input: $`verb"#include<stdio.h>
 int main() {
   printf(\"hello, world!\n\");
   return 0;
 }"`,
-    output: String.raw`\begin{aligned}
+    output: $`\begin{aligned}
 & \verb|\#include<stdio.h>|\\
 & \verb|int\ main()\ \{|\\
 & \verb|\ \ printf("hello,\ world!\textbackslash{}n");|\\

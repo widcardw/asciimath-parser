@@ -3,10 +3,17 @@ import initGrammar from './grammar.js'
 import initLexer from './lexer.js'
 import type { Symbols } from './symbols.js'
 import initSymbols from './symbols.js'
-import initGenerator from './to-tex.js'
+import initTex from './to-tex.js'
+import type { MathVdom } from './to-mathml.js'
+import initMathML from './to-mathml.js'
 
 export type Ast = any
 type ReplaceLaw = [RegExp | string, string | ((substring: string, ...args: any[]) => string)]
+
+enum ErrorCode {
+  syntaxError,
+  otherError,
+}
 
 interface AsciiMathConfig {
   /**
@@ -86,6 +93,7 @@ class AsciiMath {
   public lexer: Nearley.Lexer
   public parser: Nearley.Parser
   private genTex: ((ast: Ast) => string)
+  private genMathML: ((ast: Ast) => MathVdom)
   private initState: { [key: string]: any; lexerState: Nearley.LexerState }
   constructor(config?: AsciiMathConfig) {
     const { display, throws, symbols, replaceBeforeTokenizing } = resolveConfig(config)
@@ -98,46 +106,83 @@ class AsciiMath {
     const compiledGrammar = Nearley.Grammar.fromCompiled(grammar)
     this.parser = new Nearley.Parser(compiledGrammar)
     this.initState = this.parser.save()
-    this.genTex = initGenerator(allSymbols)
+    this.genTex = initTex(allSymbols)
+    this.genMathML = initMathML(allSymbols)
   }
 
-  toTex(code: string): string {
+  private parse(code: string) {
+    code = this.replaceBeforeTokenizing.reduce((prev, curLaw) => {
+      // nodejs 14 没有 replaceAll 方法, 不要用 replaceAll
+      return prev.replace(new RegExp(curLaw[0], 'g'), curLaw[1] as any)
+    }, code)
+    this.parser.feed(code)
+    if (this.parser.results.length === 0) {
+      throw new Error('unexpected end of input')
+    }
+    else if (this.parser.results.length > 1) {
+      console.error(this.parser.results)
+      throw new Error('ambiguous parse')
+    }
+  }
+
+  private handleError(e: unknown): { code: ErrorCode; message: string } {
+    if (this.throws)
+      throw e
+    console.error(e)
+    const message = String(e)
+    let index = message.indexOf(' Instead, I was expecting to see one of the following:')
+    if (index > -1)
+      return { code: ErrorCode.syntaxError, message: message.slice(0, index) }
+    index = message.indexOf(':\n')
+    const end = index > -1 ? index : undefined
+    return { code: ErrorCode.otherError, message: message.slice(0, end) }
+  }
+
+  public toTex(code: string): string {
     this.parser.restore(this.initState)
     try {
-      code = this.replaceBeforeTokenizing.reduce((prev, curLaw) => {
-        // nodejs 14 没有 replaceAll 方法, 不要用 replaceAll
-        return prev.replace(new RegExp(curLaw[0], 'g'), curLaw[1] as any)
-      }, code)
-      this.parser.feed(code)
-      if (this.parser.results.length === 0) {
-        throw new Error('unexpected end of input')
-      }
-      else if (this.parser.results.length > 1) {
-        console.error(this.parser.results)
-        throw new Error('ambiguous parse')
-      }
-      let res = this.genTex(this.parser.results)
-      if (this.display)
-        res = `\\displaystyle{ ${res} }`
-      return res
+      this.parse(code)
+      const res = this.genTex(this.parser.results)
+      return this.display ? `\\displaystyle{ ${res} }` : res
     }
     catch (e) {
-      if (this.throws)
-        throw e
-      console.error(e)
-      const message = String(e)
-      let index = message.indexOf(' Instead, I was expecting to see one of the following:')
-      if (index > -1) {
+      const { code, message } = this.handleError(e)
+      if (code === ErrorCode.syntaxError) {
         return this.genTex({
           type: 'opOA',
           value: 'verb',
-          $1: { value: message.slice(0, index) },
+          $1: { value: message },
         })
       }
+      else { // ErrorCode.otherError
+        return `\\text{${message}}`
+      }
+    }
+  }
 
-      index = message.indexOf(':\n')
-      const end = index > -1 ? index : undefined
-      return `\\text{${message.slice(0, end)}}`
+  public toMathML(code: string): MathVdom {
+    this.parser.restore(this.initState)
+    try {
+      this.parse(code)
+      const res = this.genMathML(this.parser.results)
+      // TODO displaystyle
+      return res
+    }
+    catch (e) {
+      const { code, message } = this.handleError(e)
+      if (code === ErrorCode.syntaxError) {
+        return this.genMathML({
+          type: 'opOA',
+          value: 'verb',
+          $1: { value: message },
+        })
+      }
+      else { // ErrorCode.otherError
+        return this.genMathML({
+          type: 'text',
+          value: message,
+        })
+      }
     }
   }
 }

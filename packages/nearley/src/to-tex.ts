@@ -2,7 +2,7 @@
 import type { Symbols, TokenTypes } from './symbols'
 import type { Ast } from './index'
 
-const initGenerator = (symbols: Required<Symbols>) => {
+const initTex = (symbols: Required<Symbols>) => {
   const genMatrix = (ast: Ast, strip = false) => {
     const { value, left, right, pipeIndex } = ast
     const maxCol = Math.max(...value.map((row: Ast[]) => row.length))
@@ -212,4 +212,4 @@ const initGenerator = (symbols: Required<Symbols>) => {
   return toTex
 }
 
-export default initGenerator
+export default initTex
