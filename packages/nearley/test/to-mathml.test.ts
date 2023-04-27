@@ -41,7 +41,7 @@ describe('test nearley to-mathml', () => {
       return
     // traceLex(item.input, am.lexer)
     it(`#${index} ${item.desc ? `[${item.desc}] ` : ''}${item.input}`, () => {
-      expect(String(am.toMathML(item.input))).toBe(`<math><mrow>${item.mathml}</mrow></math>`)
+      expect(String(am.toMathML(item.input))).toBe(`<math>${item.mathml}</math>`)
     })
   })
 })

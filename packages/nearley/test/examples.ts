@@ -8,11 +8,11 @@ interface Example {
 const $ = String.raw
 
 const passedExamples: Example[] = [
-  { input: '    ', output: '', mathml: '' },
-  { input: ' a', output: 'a' },
-  { input: '+', output: '+' },
-  { input: 'pi', output: '\\pi' },
-  { input: '1+2+3', output: '1 + 2 + 3' },
+  { input: '    ', output: '', mathml: '<mrow></mrow>' },
+  { input: ' a', output: 'a', mathml: '<mtext>a</mtext>' },
+  { input: '+', output: '+', mathml: '<mo>+</mo>' },
+  { input: 'pi', output: '\\pi', mathml: '<mi>π</mi>' },
+  { input: '1+2+3', output: '1 + 2 + 3', mathml: '<mrow><mn>1</mn><mo>+</mo><mn>2</mn><mo>+</mo><mn>3</mn></mrow>' },
   { input: '1+-2', output: '1 \\pm 2' },
   { input: '(1+2]', output: '\\left(1 + 2\\right]' },
   { input: 'sin 11_4^514 19^19_8 1_0', output: '\\sin 11_4^{ 514 } 19_8^{ 19 } 1_0' },

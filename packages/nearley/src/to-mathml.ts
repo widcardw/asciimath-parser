@@ -36,10 +36,21 @@ const initMathML = (symbols: Required<Symbols>) => {
     const { value } = ast
     const aligned = value.length > 1
     const children = value.map((v: Ast) => toMathML(v))
-    return new MathVdom({
-      tag: 'mrow',
-      children: aligned ? 'TODO' : (children[0] || ''),
-    })
+    if (aligned) {
+      return new MathVdom({
+        tag: 'TODO',
+        children: '',
+      })
+    }
+    else if (children[0] instanceof MathVdom) {
+      return children[0]
+    }
+    else {
+      return new MathVdom({
+        tag: 'mrow',
+        children: children[0] || '',
+      })
+    }
   }
 
   /**
@@ -47,7 +58,7 @@ const initMathML = (symbols: Required<Symbols>) => {
    * @param {boolean} strip 是否去掉最外层矩阵的括号、括号表达式的括号或文本的引号
    */
   const toMathML = (ast: Ast, strip = false): MathVdom => {
-    console.log('ast', ast)
+    // console.log(ast)
     if (ast === null)
       return new MathVdom({ tag: 'mrow' })
     if (typeof ast === 'string')
@@ -56,7 +67,7 @@ const initMathML = (symbols: Required<Symbols>) => {
       return ast
     if (Array.isArray(ast)) {
       // strip outer mrow, is this correct?
-      if (ast.length === 1 && ast[0].type === 'am')
+      if (ast.length === 1)
         return toMathML(ast[0])
       return new MathVdom({ tag: 'mrow', children: ast.map(v => toMathML(v)) })
     }
