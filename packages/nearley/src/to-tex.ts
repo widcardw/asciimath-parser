@@ -151,7 +151,7 @@ const initTex = (symbols: Required<Symbols>) => {
     const { value } = ast
     const aligned = value.length > 1
     const res = value.map((v: Ast) => toTex(v))
-    return aligned ? `\\begin{aligned}${res.join(' \\\\ ')}\\end{aligned}` : res[0]
+    return aligned ? `\\begin{aligned}${res.join(' \\\\ ')}\\end{aligned}` : (res[0] || '')
   }
 
   // const escapeTex = (tex: string): string => {

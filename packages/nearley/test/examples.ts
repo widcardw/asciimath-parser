@@ -1,9 +1,14 @@
-type Examples = { input: string; output: string; desc?: string }[]
+interface Example {
+  input: string
+  output: string
+  mathml?: string
+  desc?: string
+}
 
 const $ = String.raw
 
-const passedExamples: Examples = [
-  { input: '    ', output: '' },
+const passedExamples: Example[] = [
+  { input: '    ', output: '', mathml: '' },
   { input: ' a', output: 'a' },
   { input: '+', output: '+' },
   { input: 'pi', output: '\\pi' },
@@ -117,10 +122,14 @@ int main() {
   { input: '(n) choose (k) = n!/(n!(n-k)!)', output: '{ n \\choose k } = \\frac{ { n! } }{ { n! } { \\left(n - k\\right)! } }' },
   { input: 'limits(theta)_(k=1)^K', output: $`\mathop{ \theta }\limits_{ k = 1 }^K` },
   { input: 'limits(tex"\\Vert")_(k=1)^K', output: $`\mathop{ { \Vert } }\limits_{ k = 1 }^K` },
+  { input: 'a\r\n', output: 'a' },
+  { input: '& a\r\n\r& b\n\r& c', output: '\\begin{aligned}& a \\\\ & b \\\\ & c\\end{aligned}' },
+  { input: 'a\t\v\f', output: 'a' },
+  { input: 'dd^2 (bm r) s', output: $`\frac{ \text{d}^2 \boldsymbol{ r } }{ \text{d} s^2 }` },
 ]
 
 // no idea why this fails ˉ\_(ツ)_/ˉ
-const whyThisFails: Examples = [
+const whyThisFails: Example[] = [
   { input: '"\\"abc\\""', output: '\\text{"abc"}' },
   {
     input: $`verb"#include<stdio.h>
@@ -136,16 +145,12 @@ int main() {
 & \verb|\}|
 \end{aligned}`,
   },
-  { input: 'a\r\n', output: 'a' },
-  { input: '& a\r\n\r& b\n\r& c', output: '\\begin{aligned}& a \\\\ & b \\\\ & c\\end{aligned}' },
-  { input: 'a\t\v\f', output: 'a' },
-  { input: 'dd^2 (bm r) s', output: '\frac{ \text{d}^2 \boldsymbol{ r } }{ \text{d} s^2 }' },
 ]
 
-const todoExamples: Examples = [
+const todoExamples: Example[] = [
 ]
 
-export const examples: Examples = [
+export const examples: Example[] = [
   ...passedExamples,
   ...todoExamples,
   // ...whyThisFails,

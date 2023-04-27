@@ -14,8 +14,15 @@ export enum TokenTypes {
   pipe = 'pipe',
 }
 
+interface MathMLConfig {
+  tag: string
+  attr: Record<string, string>
+  value: string
+}
+
 interface SymbolConfig {
   tex: string
+  mathml?: MathMLConfig
   strip?: boolean
 }
 

@@ -165,7 +165,10 @@ class AsciiMath {
     try {
       this.parse(code)
       const res = this.genMathML(this.parser.results)
-      // TODO displaystyle
+      if (this.display) {
+        res.attr = res.attr || {}
+        res.attr.displaystyle = 'true'
+      }
       return res
     }
     catch (e) {
