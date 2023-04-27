@@ -4,7 +4,7 @@ import initLexer from './lexer.js'
 import type { Symbols } from './symbols.js'
 import initSymbols from './symbols.js'
 import initTex from './to-tex.js'
-import type { MathVdom } from './to-mathml.js'
+import type { MathVdom } from './math-vdom.js'
 import initMathML from './to-mathml.js'
 
 export type Ast = any

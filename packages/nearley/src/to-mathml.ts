@@ -1,35 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import type { Symbols } from './symbols'
+import type { Symbols, TokenTypes } from './symbols'
+import { MathVdom } from './math-vdom'
 import type { Ast } from './index'
-
-interface IMathVdom {
-  tag: string
-  attr?: Record<string, string>
-  children?: MathVdom[] | string
-}
-
-export class MathVdom implements IMathVdom {
-  tag: string
-  attr?: Record<string, string>
-  children?: MathVdom[] | string
-
-  constructor({ tag, attr, children }: IMathVdom) {
-    this.tag = tag
-    this.attr = attr
-    this.children = typeof children === 'string'
-      ? children
-      : children?.map((child: IMathVdom) => {
-        return child instanceof MathVdom ? child : new MathVdom(child)
-      })
-  }
-
-  toString(): string {
-    const { tag, attr = {}, children = '' } = this
-    const attrStr = Object.entries(attr).map(([key, value]) => ` ${key}="${value}"`).join('')
-    const childrenStr = typeof children === 'string' ? children : children.map(child => child.toString()).join('')
-    return `<${tag}${attrStr}>${childrenStr}</${tag}>`
-  }
-}
 
 const initMathML = (symbols: Required<Symbols>) => {
   const genAm = (ast: Ast) => {
@@ -51,6 +23,28 @@ const initMathML = (symbols: Required<Symbols>) => {
         children: children[0] || '',
       })
     }
+  }
+
+  const genOp = (ast: Ast) => {
+    const { type, value, $1, $2 } = ast
+    // TODO
+    // if (value === 'verb')
+    //   return genVerb(ast)
+    const symbol = symbols[type as TokenTypes][value]
+    const { mathml, strip = true } = symbol
+    if (mathml === undefined) {
+      console.error(symbol)
+      throw new Error('cannot convert to mathml')
+    }
+    const ml = new MathVdom(mathml) // copy
+    if (!ml.children)
+      ml.children = [new MathVdom({ tag: '$1' })]
+    const convert = (ast: Ast) => toMathML(ast, strip)
+    if ($1)
+      ml.replace('$1', $1, convert)
+    if ($2)
+      ml.replace('$2', $2, convert)
+    return ml
   }
 
   /**
@@ -78,19 +72,22 @@ const initMathML = (symbols: Required<Symbols>) => {
       // case 'text': return genText(ast, strip)
       // case 'pipe': return genPipe(ast)
       case 'number': return new MathVdom({ tag: 'mn', children: ast.value })
-      case 'literal': return new MathVdom({ tag: 'mtext', children: ast.value })
+      case 'literal': {
+        const tag = (/^[A-Za-z]$/.test(ast.value)) ? 'mi' : 'mtext'
+        return new MathVdom({ tag, children: ast.value })
+      }
       case 'lp': case 'limits': case 'align':
         return new MathVdom({ tag: 'mo', children: ast.value })
       case 'keyword': {
-        const config = symbols.keyword[ast.value]
+        const symbol = symbols.keyword[ast.value]
         return new MathVdom({
-          tag: config.mathml?.tag || 'mtext',
-          attr: config.mathml?.attr,
-          children: config.mathml?.value || ast.value,
+          tag: symbol.mathml?.tag || 'mtext',
+          attr: symbol.mathml?.attr,
+          children: symbol.mathml?.children || ast.value,
         })
       }
       // case 'subsup': return genSubSup(ast)
-      // case 'opOA': case 'opAO': case 'opOAB': case 'opAOB': return genOp(ast)
+      case 'opOA': case 'opAO': case 'opOAB': case 'opAOB': return genOp(ast)
       // case 'part': return genPart(ast)
       case 'am': return genAm(ast)
       // case 'verb': return genVerb(ast)
