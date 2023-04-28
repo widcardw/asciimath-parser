@@ -47,6 +47,8 @@ const CardList: Component = () => {
             </button>
           )}
         </For>
+        <div style={{ flex: 1 }} />
+        <div style={{ opacity: 0.5 }}><kbd>⌘</kbd> <kbd>K</kbd> to copy</div>
       </div>
       <For each={items()}>
         {(_item, i) => (

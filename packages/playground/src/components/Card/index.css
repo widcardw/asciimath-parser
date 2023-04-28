@@ -30,3 +30,13 @@
   border-top: 1px solid #7f7f7f33;
   border-bottom: 1px solid #7f7f7f33;
 }
+
+.copied {
+  position: absolute;
+  padding: 0.25rem 0.5rem;
+  right: 0;
+  top: 0;
+  border-radius: 0.25rem;
+  background: var(--theme-accent);
+  color: white;
+}
