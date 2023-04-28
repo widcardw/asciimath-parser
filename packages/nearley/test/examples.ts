@@ -34,7 +34,7 @@ const passedExamples: Examples = [
   { input: 'dy/dx, ("d"r)/("d"theta), f\'\'(x)', output: '\\frac{ {\\text{d}y} }{ {\\text{d}x} } , \\frac{ \\text{d} r }{ \\text{d} \\theta } , f ^{\\prime\\prime} \\left(x\\right)' },
   { input: 'ddfx , dd^2 f x , ddot x', output: '\\frac{ \\text{d} f }{ \\text{d} x } , \\frac{ \\text{d}^2 f }{ \\text{d} x^2 } , \\ddot{ x }' },
   { input: 'ppfx', output: '\\frac{ \\partial f }{ \\partial x }' },
-  { input: 'pp {::} x', output: '\\frac{ \\partial \\left.\\right. }{ \\partial x }' },
+  { input: 'pp {::} x', output: '\\frac{ \\partial  }{ \\partial x }' },
   { input: 'pp^3 f (x y^2)', output: '\\frac{ \\partial^3 f }{ \\partial x\\partial y^2 }' },
   { input: 'abs(x)', output: '\\left|x\\right|' },
   { input: '{ a | b }', output: '\\left\\lbrace{}a \\mid b\\right\\rbrace' },
@@ -49,6 +49,7 @@ const passedExamples: Examples = [
   { input: 'a^2 choose b^2', output: '{ a^2 \\choose b^2 }' },
   { input: 'n!', output: '{ n! }' },
   { input: 'n!!^2/2!', output: '\\frac{ { n!! }^2 }{ { 2! } }' },
+  { input: 'n_1!', output: 'n_{ 1! }' },
   { input: '|__x__|', output: '\\left\\lfloor{}x\\right\\rfloor' },
   // matrix examples
   { input: '[ ]', output: '\\left[\\right]' },
@@ -138,6 +139,7 @@ int main() {
   { input: 'a\r\n', output: 'a' },
   { input: '& a\r\n\r& b\n\r& c', output: '\\begin{aligned}& a \\\\ & b \\\\ & c\\end{aligned}' },
   { input: 'a\t\v\f', output: 'a' },
+  { input: 'dd^2 (bm r) s', output: '\frac{ \text{d}^2 \boldsymbol{ r } }{ \text{d} s^2 }' },
 ]
 
 const todoExamples: Examples = [
