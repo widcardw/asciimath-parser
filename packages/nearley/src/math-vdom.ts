@@ -89,4 +89,17 @@ export class MathVdom implements IMathVdom {
       ],
     }
   }
+
+  static table(rows: string[][]): IMathVdom {
+    return {
+      tag: 'mtable',
+      children: rows.map(row => ({
+        tag: 'mtr',
+        children: row.map(tag => ({
+          tag: 'mtd',
+          children: [{ tag }],
+        })),
+      })),
+    }
+  }
 }

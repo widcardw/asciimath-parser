@@ -41,7 +41,7 @@ export interface Symbols {
   pipe?: Record<string, SymbolConfig>
 }
 
-const { before, after, brace, binary } = MathVdom
+const { before, after, brace, binary, table } = MathVdom
 
 const symbols: Required<Symbols> = {
   keyword: {
@@ -115,10 +115,10 @@ const symbols: Required<Symbols> = {
 
     // relation symbols
     '!=': { tex: '\\ne', mathml: { tag: 'mo', children: '\u2260' } },
-    'lt': { tex: '<', mathml: { tag: 'mo', children: '&lt;' } },
+    'lt': { alias: '<', tex: '<', mathml: { tag: 'mo', children: '&lt;' } },
     '<=': { tex: '\\leqslant', mathml: { tag: 'mo', children: '\u2A7D' } },
     'le': { tex: '\\le', mathml: { tag: 'mo', children: '\u2264' } },
-    'gt': { tex: '>', mathml: { tag: 'mo', children: '&gt;' } },
+    'gt': { alias: '>', tex: '>', mathml: { tag: 'mo', children: '&gt;' } },
     '>=': { tex: '\\geqslant', mathml: { tag: 'mo', children: '\u2A7E' } },
     'ge': { tex: '\\ge', mathml: { tag: 'mo', children: '\u2265' } },
     '-<': { tex: '\\prec', mathml: { tag: 'mo', children: '\u227A' } },
@@ -219,10 +219,10 @@ const symbols: Required<Symbols> = {
     '#': { tex: '\\displaystyle' },
 
     // math text
-    'if': { tex: '\\text{if\\quad}', mathml: { tag: 'mtext', children: 'if ' } },
-    'otherwise': { tex: '\\text{otherwise\\quad}', mathml: { tag: 'mtext', children: 'otherwise ' } },
-    'and': { tex: '\\text{ and }', mathml: { tag: 'mtext', children: ' and ' } },
-    'or': { tex: '\\text{ or }', mathml: { tag: 'mtext', children: ' or ' } },
+    'if': { tex: '\\text{if\\quad}', mathml: { tag: 'mrow', children: [{ tag: 'mtext', children: 'if' }, { tag: 'mspace', attr: { width: '1ex' } }] } },
+    'otherwise': { tex: '\\text{otherwise\\quad}', mathml: { tag: 'mrow', children: [{ tag: 'mtext', children: 'otherwise' }, { tag: 'mspace', attr: { width: '1ex' } }] } },
+    'and': { tex: '\\text{ and }', mathml: { tag: 'mo', children: 'and' } },
+    'or': { tex: '\\text{ or }', mathml: { tag: 'mo', children: 'or' } },
 
     // math functions
     'lim': { limits: true, tex: '\\lim', mathml: { tag: 'mo' } },
@@ -376,8 +376,8 @@ const symbols: Required<Symbols> = {
     '&': { tex: '&' },
   },
   part: {
-    pp: { tex: '\\partial' },
-    dd: { tex: '\\text{d}' },
+    pp: { tex: '\\partial', mathml: { tag: 'mo', children: '\u2202' } },
+    dd: { tex: '\\text{d}', mathml: { tag: 'mtext', children: 'd' } },
   },
   opAO: {
     '!!': { tex: '{ $1!! }', strip: false, mathml: after('!!') }, // strip: false 时, op 的参数不会脱去括号
@@ -386,8 +386,8 @@ const symbols: Required<Symbols> = {
   opAOB: {
     '/': { tex: '\\frac{ $1 }{ $2 }', mathml: binary('$1', '$2', 'mfrac') },
     'over': { tex: '{ $1 \\over $2 }', mathml: binary('$1', '$2', 'mfrac') },
-    'atop': { tex: '{ $1 \\atop $2 }' },
-    'choose': { tex: '{ $1 \\choose $2 }' },
+    'atop': { tex: '{ $1 \\atop $2 }', mathml: table([['$1'], ['$2']]) },
+    'choose': { tex: '{ $1 \\choose $2 }', mathml: { tag: 'mrow', children: [{ tag: 'mo', children: '(' }, table([['$1'], ['$2']]), { tag: 'mo', children: ')' }] } },
   },
 }
 

@@ -15,6 +15,25 @@ const initMathML = (symbols: Required<Symbols>) => {
     return ml
   }
 
+  // TODO: 矩阵对齐、矩阵横、竖线
+  const genMatrix = (ast: Ast, strip = false) => {
+    const { value, left, right, pipeIndex } = ast
+    if (value[value.length - 1]?.filter(Boolean)?.length === 0)
+      value.pop() // 移除尾部空行
+    const body = value.map((row: Ast[]) => {
+      return { tag: 'mtr', children: row.map(v => ({ tag: 'mtd', children: [toMathML(v)] })) }
+    })
+    const res = new MathVdom({ tag: 'mtable', children: body })
+    if (strip)
+      return res
+    const children = [res]
+    const lp = getMathml(symbols.lp[left] || symbols.pipe[left], left.value)
+    lp.children && children.unshift(lp)
+    const rp = getMathml(symbols.rp[right] || symbols.pipe[right], right.value)
+    rp.children && children.push(rp)
+    return new MathVdom({ tag: 'mrow', children })
+  }
+
   const genParen = (ast: Ast, strip = false) => {
     const { left, right, value, pipeIndex } = ast
     const res: MathVdom[] = []
@@ -103,6 +122,56 @@ const initMathML = (symbols: Required<Symbols>) => {
     return strip ? value as any : new MathVdom({ tag: 'mtext', children: value })
   }
 
+  // 偏微分
+  const genPart = (ast: Ast) => {
+    const { value, exp, sup, sub } = ast
+    const symbol = symbols.part[value]
+    const symml = getMathml(symbol)
+    const expml = toMathML(exp)
+
+    // 生成指数
+    const genExp = (ml: IMathVdom) => {
+      return exp ? { tag: 'msup', children: [ml, expml] } : ml
+    }
+
+    const supml = {
+      tag: 'mrow',
+      children: [genExp(symml), toMathML(sup, true)],
+    }
+
+    // 偏微分分母的一项
+    const genSubGroup = (ast: Ast, needExp = false) => {
+      const ml = toMathML(ast)
+      return {
+        tag: 'mrow',
+        children: [symml, needExp ? genExp(ml) : ml],
+      }
+    }
+
+    // 偏微分的分母部分
+    let subml
+    if (sub.type !== 'paren') {
+      subml = genSubGroup(sub, true) // 这里带指数
+    }
+    else if (Array.isArray(sub.value[0])) {
+      subml = new MathVdom({
+        tag: 'mrow',
+        children: sub.value[0].map(ast => genSubGroup(ast)), // 这里不带指数
+      })
+    }
+    else {
+      subml = genSubGroup(sub.value[0], true) // 这里带指数
+    }
+
+    return new MathVdom({
+      tag: 'mfrac',
+      children: [
+        supml,
+        subml,
+      ],
+    })
+  }
+
   const genAm = (ast: Ast) => {
     const { value } = ast
     const aligned = value.length > 1
@@ -137,17 +206,15 @@ const initMathML = (symbols: Required<Symbols>) => {
     if (ast instanceof MathVdom)
       return ast
     if (Array.isArray(ast)) {
-      // strip outer mrow, is this correct?
+      // strip outer mrow
       if (ast.length === 1)
         return toMathML(ast[0])
       return new MathVdom({ tag: 'mrow', children: ast.map(v => toMathML(v)) })
     }
     switch (ast.type) {
-      // TODO
-      // case 'matrix': return genMatrix(ast, strip)
+      case 'matrix': return genMatrix(ast, strip)
       case 'paren': return genParen(ast, strip)
       case 'text': return genText(ast, strip)
-      // case 'pipe': return genPipe(ast)
       case 'number': return new MathVdom({ tag: 'mn', children: ast.value })
       case 'literal': {
         const tag = /[a-zA-Z]/.test(ast.value) ? 'mi' : ast.value.codePointAt(0) > 0x4E00 ? 'mtext' : 'mo'
@@ -165,8 +232,9 @@ const initMathML = (symbols: Required<Symbols>) => {
       }
       case 'subsup': return genSubSup(ast)
       case 'opOA': case 'opAO': case 'opOAB': case 'opAOB': return genOp(ast)
-      // case 'part': return genPart(ast)
+      case 'part': return genPart(ast)
       case 'am': return genAm(ast)
+      // TODO
       // case 'verb': return genVerb(ast)
       default: {
         console.error(ast)
