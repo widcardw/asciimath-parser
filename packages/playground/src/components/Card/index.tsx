@@ -10,6 +10,7 @@ const Card: Component<{
 }> = (props) => {
   const [amStr, setAmStr] = createSignal('')
   const [tex, setTex] = createSignal('')
+  const [mathml, setMathml] = createSignal('')
   const kHtml = createMemo(() => katex.renderToString(tex(), {
     displayMode: true,
     throwOnError: false,
@@ -18,10 +19,16 @@ const Card: Component<{
   function inputAmCb(e: Event) {
     setAmStr((e.target as HTMLTextAreaElement).value)
     setTex(props.am.toTex(amStr()))
+    if ((props.am as AsciiMathNearley).toMathML)
+      setMathml((props.am as AsciiMathNearley).toMathML(amStr()).toString())
   }
 
   function inputTexCb(e: Event) {
     setTex((e.target as HTMLTextAreaElement).value)
+  }
+
+  function inputMathmlCb(e: Event) {
+    setMathml((e.target as HTMLTextAreaElement).value)
   }
 
   return (
@@ -37,7 +44,15 @@ const Card: Component<{
         value={tex()}
         onInput={useDebounceFn(inputTexCb, 800)}
       />
-      <div class="display" innerHTML={kHtml()} />
+      <textarea
+        class="input-area"
+        rows="4"
+        placeholder="Input MathML here"
+        value={mathml()}
+        onInput={useDebounceFn(inputMathmlCb, 800)}
+      />
+      <div class="display" data-caption="KaTeX Output" innerHTML={kHtml()} />
+      <div class="display" data-caption="MathML Output" innerHTML={mathml()} />
     </div>
   )
 }
