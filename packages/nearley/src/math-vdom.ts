@@ -28,29 +28,50 @@ export class MathVdom implements IMathVdom {
     return `<${tag}${attrStr}>${childrenStr}</${tag}>`
   }
 
-  replace(from: string, to: Ast, convert: (am: string) => MathVdom) {
+  replace(from: string, to: Ast) {
     const { attr, children } = this
     if (attr) {
       Object.entries(attr).forEach(([key, value]) => {
-        attr[key] = value.replace(from, to.value)
+        attr[key] = value.replace(from, to)
       })
     }
     if (typeof children === 'string') {
-      this.children = children.replace(from, to.value)
+      this.children = children.replace(from, to)
     }
     else if (Array.isArray(children)) {
       children.forEach((child, i) => {
-        if (child.tag.includes(from))
-          children[i] = convert(to)
+        if (child.tag === from)
+          children[i] = to
         else
-          children[i].replace(from, to, convert)
+          children[i].replace(from, to)
       })
+    }
+    return this
+  }
+
+  static before(left: string, tag = 'mrow'): IMathVdom {
+    return {
+      tag,
+      children: [
+        { tag: 'mo', children: left },
+        { tag: '$1' },
+      ],
     }
   }
 
-  static brace(left: string, right: string): IMathVdom {
+  static after(right: string, tag = 'mrow'): IMathVdom {
     return {
-      tag: 'mrow',
+      tag,
+      children: [
+        { tag: '$1' },
+        { tag: 'mo', children: right },
+      ],
+    }
+  }
+
+  static brace(left: string, right: string, tag = 'mrow'): IMathVdom {
+    return {
+      tag,
       children: [
         { tag: 'mo', children: left },
         { tag: '$1' },
@@ -59,12 +80,12 @@ export class MathVdom implements IMathVdom {
     }
   }
 
-  static accent(tag: string, decoration: string): IMathVdom {
+  static binary(first: string, second: string, tag: string): IMathVdom {
     return {
       tag,
       children: [
-        { tag: '$1' },
-        { tag: 'mo', children: decoration },
+        { tag: first },
+        { tag: second },
       ],
     }
   }

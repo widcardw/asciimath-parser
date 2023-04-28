@@ -100,7 +100,7 @@ const initTex = (symbols: Required<Symbols>) => {
   }
 
   const escapeText = (str: string): string => {
-    return str.slice(0, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\')
+    return str.replace(/\\"/g, '"').replace(/\\\\/g, '\\')
   }
 
   const genText = (ast: Ast, strip = false) => {

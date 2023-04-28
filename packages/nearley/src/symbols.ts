@@ -17,11 +17,12 @@ export enum TokenTypes {
   pipe = 'pipe',
 }
 
-interface SymbolConfig {
-  alias?: string | string[]
+export interface SymbolConfig {
   tex: string
   mathml?: IMathVdom
-  strip?: boolean
+  alias?: string | string[] // 别名
+  limits?: boolean // 使用 underover 而不是 subsup
+  strip?: boolean // strip: false 时, op 的参数不会脱去括号
 }
 
 export interface Symbols {
@@ -39,6 +40,8 @@ export interface Symbols {
   opAOB?: Record<string, SymbolConfig>
   pipe?: Record<string, SymbolConfig>
 }
+
+const { before, after, brace, binary } = MathVdom
 
 const symbols: Required<Symbols> = {
   keyword: {
@@ -99,16 +102,16 @@ const symbols: Required<Symbols> = {
     'o+': { tex: '\\oplus', mathml: { tag: 'mo', children: '\u2295' } },
     'ox': { tex: '\\otimes', mathml: { tag: 'mo', children: '\u2297' } },
     'o.': { tex: '\\odot', mathml: { tag: 'mo', children: '\u2299' } },
-    'sum': { tex: '\\sum', mathml: { tag: 'mo', children: '\u2211' } },
-    'prod': { tex: '\\prod', mathml: { tag: 'mo', children: '\u220F' } },
+    'sum': { limits: true, tex: '\\sum', mathml: { tag: 'mo', children: '\u2211' } },
+    'prod': { limits: true, tex: '\\prod', mathml: { tag: 'mo', children: '\u220F' } },
     '^^': { tex: '\\wedge', mathml: { tag: 'mo', children: '\u2227' } },
-    '^^^': { tex: '\\bigwedge', mathml: { tag: 'mo', children: '\u22C0' } },
+    '^^^': { limits: true, tex: '\\bigwedge', mathml: { tag: 'mo', children: '\u22C0' } },
     'vv': { tex: '\\vee', mathml: { tag: 'mo', children: '\u2228' } },
-    'vvv': { tex: '\\bigvee', mathml: { tag: 'mo', children: '\u22C1' } },
+    'vvv': { limits: true, tex: '\\bigvee', mathml: { tag: 'mo', children: '\u22C1' } },
     'nn': { tex: '\\cap', mathml: { tag: 'mo', children: '\u2229' } },
-    'nnn': { tex: '\\bigcap', mathml: { tag: 'mo', children: '\u22C2' } },
+    'nnn': { limits: true, tex: '\\bigcap', mathml: { tag: 'mo', children: '\u22C2' } },
     'uu': { tex: '\\cup', mathml: { tag: 'mo', children: '\u222A' } },
-    'uuu': { tex: '\\bigcup', mathml: { tag: 'mo', children: '\u22C3' } },
+    'uuu': { limits: true, tex: '\\bigcup', mathml: { tag: 'mo', children: '\u22C3' } },
 
     // relation symbols
     '!=': { tex: '\\ne', mathml: { tag: 'mo', children: '\u2260' } },
@@ -222,7 +225,7 @@ const symbols: Required<Symbols> = {
     'or': { tex: '\\text{ or }', mathml: { tag: 'mtext', children: ' or ' } },
 
     // math functions
-    'lim': { tex: '\\lim', mathml: { tag: 'mo' } },
+    'lim': { limits: true, tex: '\\lim', mathml: { tag: 'mo' } },
     'sin': { tex: '\\sin', mathml: { tag: 'mo' } },
     'cos': { tex: '\\cos', mathml: { tag: 'mo' } },
     'tan': { tex: '\\tan', mathml: { tag: 'mo' } },
@@ -244,10 +247,10 @@ const symbols: Required<Symbols> = {
     'det': { tex: '\\det', mathml: { tag: 'mo' } },
     'dim': { tex: '\\dim', mathml: { tag: 'mo' } },
     'gcd': { tex: '\\gcd', mathml: { tag: 'mo' } },
-    'min': { tex: '\\min', mathml: { tag: 'mo' } },
-    'max': { tex: '\\max', mathml: { tag: 'mo' } },
-    'sup': { tex: '\\sup', mathml: { tag: 'mo' } }, // 上确界
-    'inf': { tex: '\\inf', mathml: { tag: 'mo' } },
+    'min': { limits: true, tex: '\\min', mathml: { tag: 'mo' } },
+    'max': { limits: true, tex: '\\max', mathml: { tag: 'mo' } },
+    'sup': { limits: true, tex: '\\sup', mathml: { tag: 'mo' } }, // 上确界
+    'inf': { limits: true, tex: '\\inf', mathml: { tag: 'mo' } },
     'mod': { tex: '\\operatorname{mod}', mathml: { tag: 'mo' } },
     'lcm': { tex: '\\operatorname{lcm}', mathml: { tag: 'mo' } },
     'sgn': { tex: '\\operatorname{sgn}', mathml: { tag: 'mo' } },
@@ -272,25 +275,25 @@ const symbols: Required<Symbols> = {
     'circArrRt': { tex: '\\circlearrowright', mathml: { tag: 'mo', children: '\u21BB' } },
   },
   opOA: {
-    abs: { tex: '\\left|$1\\right|', mathml: MathVdom.brace('|', '|') },
-    norm: { tex: '\\left\\|$1\\right\\|', mathml: MathVdom.brace('\u2225', '\u2225') },
-    floor: { tex: '\\left\\lfloor{}$1\\right\\rfloor', mathml: MathVdom.brace('\u230A', '\u230B') },
-    ceil: { tex: '\\left\\lceil{}$1\\right\\rceil', mathml: MathVdom.brace('\u2308', '\u2309') },
+    abs: { tex: '\\left|$1\\right|', mathml: brace('|', '|') },
+    norm: { tex: '\\left\\|$1\\right\\|', mathml: brace('\u2225', '\u2225') },
+    floor: { tex: '\\left\\lfloor{}$1\\right\\rfloor', mathml: brace('\u230A', '\u230B') },
+    ceil: { tex: '\\left\\lceil{}$1\\right\\rceil', mathml: brace('\u2308', '\u2309') },
     sqrt: { tex: '\\sqrt{ $1 }', mathml: { tag: 'msqrt' } },
-    hat: { tex: '\\hat{ $1 }', mathml: MathVdom.accent('mover', '^') },
-    Hat: { alias: 'widehat', tex: '\\widehat{ $1 }', mathml: MathVdom.accent('mover', '^') },
-    tilde: { tex: '\\tilde{ $1 }', mathml: MathVdom.accent('mover', '~') },
-    Tilde: { alias: 'widetilde', tex: '\\widetilde{ $1 }', mathml: MathVdom.accent('mover', '~') },
-    ol: { alias: 'overline', tex: '\\overline{ $1 }', mathml: MathVdom.accent('mover', '\u00AF') },
-    arc: { tex: '\\stackrel{\\frown}{ $1 }', mathml: MathVdom.accent('mover', '\u23DC') },
-    bar: { tex: '\\bar{ $1 }', mathml: MathVdom.accent('mover', '\u00AF') },
-    vec: { tex: '\\vec{ $1 }', mathml: MathVdom.accent('mover', '\u2192') },
-    Vec: { tex: '\\overrightarrow{ $1 }', mathml: MathVdom.accent('mover', '\u2192') },
-    dot: { tex: '\\dot{ $1 }', mathml: MathVdom.accent('mover', '.') },
-    ddot: { tex: '\\ddot{ $1 }', mathml: MathVdom.accent('mover', '..') },
-    ul: { alias: 'underline', tex: '\\underline{ $1 }', mathml: MathVdom.accent('munder', '\u0332') },
-    ubrace: { alias: 'underbrace', tex: '\\underbrace{ $1 }', mathml: MathVdom.accent('munder', '\u23DF') },
-    obrace: { alias: 'overbrace', tex: '\\overbrace{ $1 }', mathml: MathVdom.accent('mover', '\u23DE') },
+    hat: { tex: '\\hat{ $1 }', mathml: after('^', 'mover') },
+    Hat: { alias: 'widehat', tex: '\\widehat{ $1 }', mathml: after('^', 'mover') },
+    tilde: { tex: '\\tilde{ $1 }', mathml: after('~', 'mover') },
+    Tilde: { alias: 'widetilde', tex: '\\widetilde{ $1 }', mathml: after('~', 'mover') },
+    ol: { alias: 'overline', tex: '\\overline{ $1 }', mathml: after('\u00AF', 'mover') },
+    arc: { tex: '\\stackrel{\\frown}{ $1 }', mathml: after('\u23DC', 'mover') },
+    bar: { tex: '\\bar{ $1 }', mathml: after('\u00AF', 'mover') },
+    vec: { tex: '\\vec{ $1 }', mathml: after('\u2192', 'mover') },
+    Vec: { tex: '\\overrightarrow{ $1 }', mathml: after('\u2192', 'mover') },
+    dot: { tex: '\\dot{ $1 }', mathml: after('.', 'mover') },
+    ddot: { tex: '\\ddot{ $1 }', mathml: after('..', 'mover') },
+    ul: { alias: 'underline', tex: '\\underline{ $1 }', mathml: after('\u0332', 'munder') },
+    ubrace: { limits: true, alias: 'underbrace', tex: '\\underbrace{ $1 }', mathml: after('\u23DF', 'munder') },
+    obrace: { limits: true, alias: 'overbrace', tex: '\\overbrace{ $1 }', mathml: after('\u23DE', 'mover') },
     phantom: { tex: '\\phantom{ $1 }', mathml: { tag: 'mphantom' } },
     boxed: { tex: '\\boxed{$1}', mathml: { tag: 'menclose', attr: { notation: 'box' } } },
     op: { tex: '\\operatorname{ $1 }', mathml: { tag: 'mo' } },
@@ -298,7 +301,7 @@ const symbols: Required<Symbols> = {
     cancel: { tex: '\\cancel{ $1 }', mathml: { tag: 'menclose', attr: { notation: 'updiagonalstrike' } } },
 
     // literal string
-    hspace: { tex: '\\hspace{$1}', mathml: { tag: 'mspace', attr: { width: '$1' } } },
+    hspace: { tex: '\\hspace{$1}', mathml: { tag: 'mspace', attr: { width: '$1' }, children: '' } },
     text: { tex: '\\text{$1}', mathml: { tag: 'mtext' } },
     tex: { tex: '{ $1 }', mathml: { tag: 'mtext' } },
     verb: { tex: '', mathml: { tag: 'mtext' } }, // 这里 tex 没有实际意义, verb 需特殊处理
@@ -324,11 +327,11 @@ const symbols: Required<Symbols> = {
     huge: { tex: '{ \\huge $1 }' },
   },
   opOAB: {
-    root: { tex: '\\sqrt[ $1 ]{ $2 }', mathml: { tag: 'mroot', children: [{ tag: '$2' }, { tag: '$1' }] } },
-    frac: { tex: '\\frac{ $1 }{ $2 }', mathml: { tag: 'mfrac', children: [{ tag: '$1' }, { tag: '$2' }] } },
-    stackrel: { tex: '\\stackrel{ $1 }{ $2 }', mathml: { tag: 'mover', children: [{ tag: '$2' }, { tag: '$1' }] } },
-    overset: { tex: '\\overset{ $1 }{ $2 }', mathml: { tag: 'mover', children: [{ tag: '$2' }, { tag: '$1' }] } },
-    underset: { tex: '\\under{ $1 }{ $2 }', mathml: { tag: 'munder', children: [{ tag: '$2' }, { tag: '$1' }] } },
+    root: { tex: '\\sqrt[ $1 ]{ $2 }', mathml: binary('$2', '$1', 'mroot') },
+    frac: { tex: '\\frac{ $1 }{ $2 }', mathml: binary('$1', '$2', 'mfrac') },
+    stackrel: { tex: '\\stackrel{ $1 }{ $2 }', mathml: binary('$2', '$1', 'mover') },
+    overset: { tex: '\\overset{ $1 }{ $2 }', mathml: binary('$2', '$1', 'mover') },
+    underset: { tex: '\\under{ $1 }{ $2 }', mathml: binary('$2', '$1', 'munder') },
     color: { tex: '{ \\color{$1} $2 }', mathml: { tag: 'mstyle', attr: { mathcolor: '$1' }, children: [{ tag: '$2' }] } }, // first param is literal string
   },
   lp: {
@@ -349,19 +352,23 @@ const symbols: Required<Symbols> = {
     '__|': { tex: '\\rfloor', mathml: { tag: 'mo', children: '\u230B' } },
     '~|': { tex: '\\rceil', mathml: { tag: 'mo', children: '\u2309' } },
   },
+  pipe: {
+    '|': { tex: '|', mathml: { tag: 'mo', children: '|' } },
+    '||': { tex: '\\|', mathml: { tag: 'mo', children: '\u2225' } },
+  },
   limits: {
     // TODO: \xlongequal is not supported by web mathjax, but supported by mathjax tex2svg?
-    '==': { tex: '\\xlongequal[ $1 ]{ $2 }', mathml: { tag: 'munderover', children: [{ tag: '\u2550\u2550' }, { tag: '$1' }, { tag: '$2' }] } },
-    '-->': { tex: '\\xrightarrow[ $1 ]{ $2 }', mathml: { tag: 'munderover', children: [{ tag: '\u2192' }, { tag: '$1' }, { tag: '$2' }] } },
+    '==': { tex: '\\xlongequal[ $1 ]{ $2 }', mathml: { tag: 'mo', children: '\u2550\u2550' } },
+    '-->': { tex: '\\xrightarrow[ $1 ]{ $2 }', mathml: { tag: 'mo', children: '\u2192' } },
   },
   sub: {
-    '_+': { tex: '_{ +$1 }' },
-    '_-': { tex: '_{ -$1 }' },
+    '_+': { tex: '_{ +$1 }', mathml: before('+') },
+    '_-': { tex: '_{ -$1 }', mathml: before('-') },
     '_': { tex: '_$1' },
   },
   sup: {
-    '^+': { tex: '^{ +$1 }' },
-    '^-': { tex: '^{ -$1 }' },
+    '^+': { tex: '^{ +$1 }', mathml: before('+') },
+    '^-': { tex: '^{ -$1 }', mathml: before('-') },
     '^': { tex: '^$1' },
   },
   align: {
@@ -373,18 +380,14 @@ const symbols: Required<Symbols> = {
     dd: { tex: '\\text{d}' },
   },
   opAO: {
-    '!!': { tex: '{ $1!! }', strip: false }, // strip: false 时, op 的参数不会脱去括号
-    '!': { tex: '{ $1! }', strip: false },
+    '!!': { tex: '{ $1!! }', strip: false, mathml: after('!!') }, // strip: false 时, op 的参数不会脱去括号
+    '!': { tex: '{ $1! }', strip: false, mathml: after('!') },
   },
   opAOB: {
-    '/': { tex: '\\frac{ $1 }{ $2 }', mathml: { tag: 'mfrac', children: [{ tag: '$1' }, { tag: '$2' }] } },
-    'over': { tex: '{ $1 \\over $2 }', mathml: { tag: 'mfrac', children: [{ tag: '$1' }, { tag: '$2' }] } },
+    '/': { tex: '\\frac{ $1 }{ $2 }', mathml: binary('$1', '$2', 'mfrac') },
+    'over': { tex: '{ $1 \\over $2 }', mathml: binary('$1', '$2', 'mfrac') },
     'atop': { tex: '{ $1 \\atop $2 }' },
     'choose': { tex: '{ $1 \\choose $2 }' },
-  },
-  pipe: {
-    '|': { tex: '|' },
-    '||': { tex: '\\|' },
   },
 }
 

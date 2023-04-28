@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest'
-import { MathVdom } from '../src/to-mathml'
 import * as AmNearley from '../src/index'
 import { examples } from './examples'
 
@@ -41,7 +40,9 @@ describe('test nearley to-mathml', () => {
       return
     // traceLex(item.input, am.lexer)
     it(`#${index} ${item.desc ? `[${item.desc}] ` : ''}${item.input}`, () => {
-      expect(String(am.toMathML(item.input))).toBe(`<math>${item.mathml}</math>`)
+      const res = String(am.toMathML(item.input))
+      console.log(res)
+      expect(res).toBe(`<math>${item.mathml}</math>`)
     })
   })
 })

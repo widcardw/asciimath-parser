@@ -1,6 +1,6 @@
 interface Example {
   input: string
-  output: string
+  tex: string
   mathml?: string
   desc?: string
 }
@@ -8,88 +8,88 @@ interface Example {
 const $ = String.raw
 
 const passedExamples: Example[] = [
-  { input: '    ', output: '', mathml: '<mrow></mrow>' },
-  { input: ' a', output: 'a', mathml: '<mi>a</mi>' },
-  { input: '+', output: '+', mathml: '<mo>+</mo>' },
-  { input: 'pi', output: '\\pi', mathml: '<mi>π</mi>' },
-  { input: '1+2+3', output: '1 + 2 + 3', mathml: '<mrow><mn>1</mn><mo>+</mo><mn>2</mn><mo>+</mo><mn>3</mn></mrow>' },
-  { input: '1+-2', output: '1 \\pm 2', mathml: '<mrow><mn>1</mn><mo>±</mo><mn>2</mn></mrow>' },
-  { input: '(1+2]', output: '\\left(1 + 2\\right]' },
-  { input: 'sin 11_4^514 19^19_8 1_0', output: '\\sin 11_4^{ 514 } 19_8^{ 19 } 1_0' },
-  { input: '[a;b;c]', output: '\\left[\\begin{array}{c}a \\\\ b \\\\ c\\end{array}\\right]' },
-  { input: '[a, b; c, d;:}', output: '\\left[\\begin{array}{cc}a & b \\\\ c & d \\\\ \\end{array}\\right.' },
-  { input: 'sqrt x', output: '\\sqrt{ x }', mathml: '<msqrt><mi>x</mi></msqrt>' },
-  { input: 'sqrt (x)', output: '\\sqrt{ x }' },
-  { input: 'root 3 2.0', output: '\\sqrt[ 3 ]{ 2.0 }', mathml: '<mroot><mn>2.0</mn><mn>3</mn></mroot>' },
-  { input: 'root [3)  {:2.0}', output: '\\sqrt[ 3 ]{ 2.0 }' },
-  { input: 'sum_(n=1)^(+oo) 1/n^2 = pi^2/6', output: '\\sum_{ n = 1 }^{ + \\infty } \\frac{ 1 }{ n^2 } = \\frac{ \\pi^2 }{ 6 }' },
-  { input: 'a_1^2 + b_1^2 = c_1^2', output: 'a_1^2 + b_1^2 = c_1^2' },
-  { input: 'a/b, a//b', output: '\\frac{ a }{ b } , a {/} b', mathml: '<mrow><mfrac><mi>a</mi><mi>b</mi></mfrac><mtext>,</mtext><mi>a</mi><mo>/</mo><mi>b</mi></mrow>' },
-  { input: 'sqrt n, root n x, a^2/sqrt b', output: '\\sqrt{ n } , \\sqrt[ n ]{ x } , \\frac{ a^2 }{ \\sqrt{ b } }' },
-  { input: 'lim_(n->oo) (1 + 1/n)^n', output: '\\lim_{ n \\to \\infty } \\left(1 + \\frac{ 1 }{ n }\\right)^n' },
-  { input: 'sin {: x/2 :}', output: '\\sin \\left.\\frac{ x }{ 2 }\\right.' },
-  { input: 'int_a^b f(x) dx', output: '\\int_a^b f \\left(x\\right) {\\text{d}x}' },
-  { input: '(del f)/(del x), (del^3 f)/(del x del y^2)', output: '\\frac{ \\partial f }{ \\partial x } , \\frac{ \\partial^3 f }{ \\partial x \\partial y^2 }' },
-  { input: 'frac a b', output: '\\frac{ a }{ b }', mathml: '<mfrac><mi>a</mi><mi>b</mi></mfrac>' },
-  { input: '"hello world"', output: '\\text{hello world}' },
-  { input: 'color "red"  abc', output: '{ \\color{red} a } b c', mathml: '<mrow><mstyle mathcolor="red""><mi>a</mi></mstyle><mi>b</mi><mi>c</mi></mrow>' },
-  { input: 'hspace "12pt"', output: '\\hspace{12pt}' },
-  { input: 'tex "\\LaTeX"', output: '{ \\LaTeX }' },
-  { input: '""', output: '\\text{}' },
-  { input: 'dy/dx, ("d"r)/("d"theta), f\'\'(x)', output: '\\frac{ {\\text{d}y} }{ {\\text{d}x} } , \\frac{ \\text{d} r }{ \\text{d} \\theta } , f ^{\\prime\\prime} \\left(x\\right)' },
-  { input: 'ddfx , dd^2 f x , ddot x', output: '\\frac{ \\text{d} f }{ \\text{d} x } , \\frac{ \\text{d}^2 f }{ \\text{d} x^2 } , \\ddot{ x }' },
-  { input: 'ppfx', output: '\\frac{ \\partial f }{ \\partial x }' },
-  { input: 'pp {::} x', output: '\\frac{ \\partial  }{ \\partial x }' },
-  { input: 'pp^3 f (x y^2)', output: '\\frac{ \\partial^3 f }{ \\partial x\\partial y^2 }' },
-  { input: 'abs(x)', output: '\\left|x\\right|' },
-  { input: '{ a | b }', output: '\\left\\lbrace{}a \\mid b\\right\\rbrace' },
-  { input: '(a,b)', output: '\\left(a, b\\right)' },
-  { input: '{(x,y)|x^2+y^2<=1}', output: '\\left\\lbrace{}\\left(x, y\\right) \\mid x^2 + y^2 \\leqslant 1\\right\\rbrace' },
-  { input: '|a, b; c, d|', output: '\\left|\\begin{array}{cc}a & b \\\\ c & d\\end{array}\\right|' },
-  { input: '|x| = { x, if x > 0; -x, otherwise :}', output: '\\left|x\\right| = \\left\\lbrace{}\\begin{array}{ll}x & \\text{if\\quad} x > 0 \\\\ - x & \\text{otherwise\\quad}\\end{array}\\right.' },
-  { input: 'e^-x', output: 'e^{ -x }' },
-  { input: 'e^-(x^-2+y^2)', output: 'e^{ -\\left(x^{ -2 } + y^2\\right) }' },
-  { input: '-(a+b-c)/2', output: '- \\frac{ a + b - c }{ 2 }' },
-  { input: 'f\'_(+) (x)', output: 'f ^{\\prime}_{ + } \\left(x\\right)' },
-  { input: 'a^2 choose b^2', output: '{ a^2 \\choose b^2 }' },
-  { input: 'n!', output: '{ n! }' },
-  { input: 'n!!^2/2!', output: '\\frac{ { n!! }^2 }{ { 2! } }' },
-  { input: 'n_1!', output: 'n_{ 1! }' },
-  { input: '|__x__|', output: '\\left\\lfloor{}x\\right\\rfloor' },
+  { input: '    ', tex: '', mathml: '<mrow></mrow>' },
+  { input: ' a', tex: 'a', mathml: '<mi>a</mi>' },
+  { input: '+', tex: '+', mathml: '<mo>+</mo>' },
+  { input: 'pi', tex: '\\pi', mathml: '<mi>π</mi>' },
+  { input: '1+2+3', tex: '1 + 2 + 3', mathml: '<mrow><mn>1</mn><mo>+</mo><mn>2</mn><mo>+</mo><mn>3</mn></mrow>' },
+  { input: '1+-2', tex: '1 \\pm 2', mathml: '<mrow><mn>1</mn><mo>±</mo><mn>2</mn></mrow>' },
+  { input: '(1+2]', tex: '\\left(1 + 2\\right]', mathml: '<mrow><mo>(</mo><mn>1</mn><mo>+</mo><mn>2</mn><mo>]</mo></mrow>' },
+  { input: 'sin 11_4^514 19^19_8 1_0', tex: '\\sin 11_4^{ 514 } 19_8^{ 19 } 1_0', mathml: '<mrow><mo>sin</mo><msubsup><mn>11</mn><mn>4</mn><mn>514</mn></msubsup><msubsup><mn>19</mn><mn>8</mn><mn>19</mn></msubsup><msub><mn>1</mn><mn>0</mn></msub></mrow>' },
+  { input: '[a;b;c]', tex: '\\left[\\begin{array}{c}a \\\\ b \\\\ c\\end{array}\\right]' },
+  { input: '[a, b; c, d;:}', tex: '\\left[\\begin{array}{cc}a & b \\\\ c & d \\\\ \\end{array}\\right.' },
+  { input: 'sqrt x', tex: '\\sqrt{ x }', mathml: '<msqrt><mi>x</mi></msqrt>' },
+  { input: 'sqrt (x)', tex: '\\sqrt{ x }', mathml: '<msqrt><mrow><mi>x</mi></mrow></msqrt>' },
+  { input: 'root 3 2.0', tex: '\\sqrt[ 3 ]{ 2.0 }', mathml: '<mroot><mn>2.0</mn><mn>3</mn></mroot>' },
+  { input: 'root [3)  {:2.0}', tex: '\\sqrt[ 3 ]{ 2.0 }', mathml: '<mroot><mrow><mn>2.0</mn></mrow><mrow><mn>3</mn></mrow></mroot>' },
+  { input: 'sum_(n=1)^(+oo) 1/n^2 = pi^2/6', tex: '\\sum_{ n = 1 }^{ + \\infty } \\frac{ 1 }{ n^2 } = \\frac{ \\pi^2 }{ 6 }', mathml: '<mrow><munderover><mo>∑</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo>+</mo><mo>∞</mo></mrow></munderover><mfrac><mn>1</mn><msup><mi>n</mi><mn>2</mn></msup></mfrac><mo>=</mo><mfrac><msup><mi>π</mi><mn>2</mn></msup><mn>6</mn></mfrac></mrow>' },
+  { input: 'a_1^2 + b_1^2 = c_1^2', tex: 'a_1^2 + b_1^2 = c_1^2', mathml: '<mrow><msubsup><mi>a</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>b</mi><mn>1</mn><mn>2</mn></msubsup><mo>=</mo><msubsup><mi>c</mi><mn>1</mn><mn>2</mn></msubsup></mrow>' },
+  { input: 'a/b, a//b', tex: '\\frac{ a }{ b } , a {/} b', mathml: '<mrow><mfrac><mi>a</mi><mi>b</mi></mfrac><mo>,</mo><mi>a</mi><mo>/</mo><mi>b</mi></mrow>' },
+  { input: 'sqrt n, root n x, a^2/sqrt b', tex: '\\sqrt{ n } , \\sqrt[ n ]{ x } , \\frac{ a^2 }{ \\sqrt{ b } }', mathml: '<mrow><msqrt><mi>n</mi></msqrt><mo>,</mo><mroot><mi>x</mi><mi>n</mi></mroot><mo>,</mo><mfrac><msup><mi>a</mi><mn>2</mn></msup><msqrt><mi>b</mi></msqrt></mfrac></mrow>' },
+  { input: 'lim_(n->oo) (1 + 1/n)^n', tex: '\\lim_{ n \\to \\infty } \\left(1 + \\frac{ 1 }{ n }\\right)^n', mathml: '<mrow><munder><mo>lim</mo><mrow><mi>n</mi><mo>→</mo><mo>∞</mo></mrow></munder><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo>)</mo></mrow><mi>n</mi></msup></mrow>' },
+  { input: 'sin {: x/2 :}', tex: '\\sin \\left.\\frac{ x }{ 2 }\\right.', mathml: '<mrow><mo>sin</mo><mrow><mfrac><mi>x</mi><mn>2</mn></mfrac></mrow></mrow>' },
+  { input: 'int_a^b f(x) dx', tex: '\\int_a^b f \\left(x\\right) {\\text{d}x}', mathml: '<mrow><msubsup><mo>∫</mo><mi>a</mi><mi>b</mi></msubsup><mi>f</mi><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow><mrow><mtext>d</mtext><mi>x</mi></mrow></mrow>' },
+  { input: '(del f)/(del x), (del^3 f)/(del x del y^2)', tex: '\\frac{ \\partial f }{ \\partial x } , \\frac{ \\partial^3 f }{ \\partial x \\partial y^2 }', mathml: '<mrow><mfrac><mrow><mo>∂</mo><mi>f</mi></mrow><mrow><mo>∂</mo><mi>x</mi></mrow></mfrac><mo>,</mo><mfrac><mrow><msup><mo>∂</mo><mn>3</mn></msup><mi>f</mi></mrow><mrow><mo>∂</mo><mi>x</mi><mo>∂</mo><msup><mi>y</mi><mn>2</mn></msup></mrow></mfrac></mrow>' },
+  { input: 'frac a b', tex: '\\frac{ a }{ b }', mathml: '<mfrac><mi>a</mi><mi>b</mi></mfrac>' },
+  { input: '"hello world"', tex: '\\text{hello world}', mathml: '<mtext>hello world</mtext>' },
+  { input: 'color "red"  abc', tex: '{ \\color{red} a } b c', mathml: '<mrow><mstyle mathcolor="red"><mi>a</mi></mstyle><mi>b</mi><mi>c</mi></mrow>' },
+  { input: 'hspace "12pt"', tex: '\\hspace{12pt}', mathml: '<mspace width="12pt"></mspace>' },
+  { input: 'tex "\\LaTeX"', tex: '{ \\LaTeX }', mathml: '<mtext>\\LaTeX</mtext>' },
+  { input: '""', tex: '\\text{}', mathml: '<mtext></mtext>' },
+  { input: 'dy/dx, ("d"r)/("d"theta), f\'\'(x)', tex: '\\frac{ {\\text{d}y} }{ {\\text{d}x} } , \\frac{ \\text{d} r }{ \\text{d} \\theta } , f ^{\\prime\\prime} \\left(x\\right)', mathml: '<mrow><mfrac><mrow><mtext>d</mtext><mi>y</mi></mrow><mrow><mtext>d</mtext><mi>x</mi></mrow></mfrac><mo>,</mo><mfrac><mrow><mtext>d</mtext><mi>r</mi></mrow><mrow><mtext>d</mtext><mi>θ</mi></mrow></mfrac><mo>,</mo><mi>f</mi><mo>″</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow>' },
+  { input: 'ddfx , dd^2 f x , ddot x', tex: '\\frac{ \\text{d} f }{ \\text{d} x } , \\frac{ \\text{d}^2 f }{ \\text{d} x^2 } , \\ddot{ x }' },
+  { input: 'ppfx', tex: '\\frac{ \\partial f }{ \\partial x }' },
+  { input: 'pp {::} x', tex: '\\frac{ \\partial  }{ \\partial x }' },
+  { input: 'pp^3 f (x y^2)', tex: '\\frac{ \\partial^3 f }{ \\partial x\\partial y^2 }' },
+  { input: 'abs(x)', tex: '\\left|x\\right|', mathml: '<mrow><mo>|</mo><mrow><mi>x</mi></mrow><mo>|</mo></mrow>' },
+  { input: '{ a | b }', tex: '\\left\\lbrace{}a \\mid b\\right\\rbrace', mathml: '<mrow><mo>{</mo><mi>a</mi><mo>∣</mo><mi>b</mi><mo>}</mo></mrow>' },
+  { input: '(a,b)', tex: '\\left(a, b\\right)', mathml: '<mrow><mo>(</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo>)</mo></mrow>' },
+  { input: '{(x,y)|x^2+y^2<=1}', tex: '\\left\\lbrace{}\\left(x, y\\right) \\mid x^2 + y^2 \\leqslant 1\\right\\rbrace', mathml: '<mrow><mo>{</mo><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo><mo>∣</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup><mo>⩽</mo><mn>1</mn><mo>}</mo></mrow>' },
+  { input: '|a, b; c, d|', tex: '\\left|\\begin{array}{cc}a & b \\\\ c & d\\end{array}\\right|' },
+  { input: '|x| = { x, if x > 0; -x, otherwise :}', tex: '\\left|x\\right| = \\left\\lbrace{}\\begin{array}{ll}x & \\text{if\\quad} x > 0 \\\\ - x & \\text{otherwise\\quad}\\end{array}\\right.' },
+  { input: 'e^-x', tex: 'e^{ -x }', mathml: '<msup><mi>e</mi><mrow><mo>-</mo><mi>x</mi></mrow></msup>' },
+  { input: 'e^-(x^-2+y^2)', tex: 'e^{ -\\left(x^{ -2 } + y^2\\right) }', mathml: '<msup><mi>e</mi><mrow><mo>-</mo><mrow><mo>(</mo><msup><mi>x</mi><mrow><mo>-</mo><mn>2</mn></mrow></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup><mo>)</mo></mrow></mrow></msup>' },
+  { input: '-(a+b-c)/2', tex: '- \\frac{ a + b - c }{ 2 }', mathml: '<mrow><mo>-</mo><mfrac><mrow><mi>a</mi><mo>+</mo><mi>b</mi><mo>-</mo><mi>c</mi></mrow><mn>2</mn></mfrac></mrow>' },
+  { input: 'f\'_(+) (x)', tex: 'f ^{\\prime}_{ + } \\left(x\\right)', mathml: '<mrow><mi>f</mi><msub><mo>′</mo><mrow><mo>+</mo></mrow></msub><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow>' },
+  { input: 'a^2 choose b^2', tex: '{ a^2 \\choose b^2 }' },
+  { input: 'n!', tex: '{ n! }', mathml: '<mrow><mi>n</mi><mo>!</mo></mrow>' },
+  { input: 'n!!^2/2!', tex: '\\frac{ { n!! }^2 }{ { 2! } }', mathml: '<mfrac><msup><mrow><mi>n</mi><mo>!!</mo></mrow><mn>2</mn></msup><mrow><mn>2</mn><mo>!</mo></mrow></mfrac>' },
+  { input: 'n_1!', tex: 'n_{ 1! }', mathml: '<msub><mi>n</mi><mrow><mn>1</mn><mo>!</mo></mrow></msub>' },
+  { input: '|__x__|', tex: '\\left\\lfloor{}x\\right\\rfloor', mathml: '<mrow><mo>⌊</mo><mi>x</mi><mo>⌋</mo></mrow>' },
   // matrix examples
-  { input: '[ ]', output: '\\left[\\right]' },
-  { input: '[1]', output: '\\left[1\\right]' },
-  { input: '[1,]', output: '\\left[1, \\right]' },
-  { input: '[1;]', output: '\\left[\\begin{array}{c}1 \\\\ \\end{array}\\right]' },
-  { input: '[1, 2]', output: '\\left[1, 2\\right]' },
-  { input: '[1, 2; 3]', output: '\\left[\\begin{array}{cc}1 & 2 \\\\ 3\\end{array}\\right]' },
-  { input: '[1, 2; ,3]', output: '\\left[\\begin{array}{cc}1 & 2 \\\\  & 3\\end{array}\\right]' },
-  { input: '[1, 2;]', output: '\\left[\\begin{array}{cc}1 & 2 \\\\ \\end{array}\\right]' },
+  { input: '[ ]', tex: '\\left[\\right]', mathml: '<mrow><mo>[</mo><mrow></mrow><mo>]</mo></mrow>' },
+  { input: '[1]', tex: '\\left[1\\right]', mathml: '<mrow><mo>[</mo><mn>1</mn><mo>]</mo></mrow>' },
+  { input: '[1,]', tex: '\\left[1, \\right]', mathml: '<mrow><mo>[</mo><mn>1</mn><mo>,</mo><mrow></mrow><mo>]</mo></mrow>' },
+  { input: '[1;]', tex: '\\left[\\begin{array}{c}1 \\\\ \\end{array}\\right]' },
+  { input: '[1, 2]', tex: '\\left[1, 2\\right]', mathml: '<mrow><mo>[</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>]</mo></mrow>' },
+  { input: '[1, 2; 3]', tex: '\\left[\\begin{array}{cc}1 & 2 \\\\ 3\\end{array}\\right]' },
+  { input: '[1, 2; ,3]', tex: '\\left[\\begin{array}{cc}1 & 2 \\\\  & 3\\end{array}\\right]' },
+  { input: '[1, 2;]', tex: '\\left[\\begin{array}{cc}1 & 2 \\\\ \\end{array}\\right]' },
 
-  { input: '| |', output: '\\left|\\right|' },
-  { input: '|1|', output: '\\left|1\\right|' },
-  { input: '|1,|', output: '\\left|1, \\right|' },
-  { input: '|1;|', output: '\\left|\\begin{array}{c}1 \\\\ \\end{array}\\right|' },
-  { input: '|1, 2|', output: '\\left|1, 2\\right|' },
-  { input: '|1, 2; 3|', output: '\\left|\\begin{array}{cc}1 & 2 \\\\ 3\\end{array}\\right|' },
-  { input: '|1, 2; ,3|', output: '\\left|\\begin{array}{cc}1 & 2 \\\\  & 3\\end{array}\\right|' },
-  { input: '|1, 2;|', output: '\\left|\\begin{array}{cc}1 & 2 \\\\ \\end{array}\\right|' },
+  { input: '| |', tex: '\\left|\\right|', mathml: '<mrow><mo>|</mo><mrow></mrow><mo>|</mo></mrow>' },
+  { input: '|1|', tex: '\\left|1\\right|', mathml: '<mrow><mo>|</mo><mn>1</mn><mo>|</mo></mrow>' },
+  { input: '|1,|', tex: '\\left|1, \\right|', mathml: '<mrow><mo>|</mo><mn>1</mn><mo>,</mo><mrow></mrow><mo>|</mo></mrow>' },
+  { input: '|1;|', tex: '\\left|\\begin{array}{c}1 \\\\ \\end{array}\\right|' },
+  { input: '|1, 2|', tex: '\\left|1, 2\\right|', mathml: '<mrow><mo>|</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>|</mo></mrow>' },
+  { input: '|1, 2; 3|', tex: '\\left|\\begin{array}{cc}1 & 2 \\\\ 3\\end{array}\\right|' },
+  { input: '|1, 2; ,3|', tex: '\\left|\\begin{array}{cc}1 & 2 \\\\  & 3\\end{array}\\right|' },
+  { input: '|1, 2;|', tex: '\\left|\\begin{array}{cc}1 & 2 \\\\ \\end{array}\\right|' },
 
-  { input: '[1, 2 | 3; 4, 5 | 6]', output: '\\left[\\begin{array}{cc|c}1 & 2 & 3 \\\\ 4 & 5 & 6\\end{array}\\right]' },
-  { input: '[1, 2 | 3; 4 | 5, 6]', output: '\\left[\\begin{array}{c|c|c}1 & 2 & 3 \\\\ 4 & 5 & 6\\end{array}\\right]' },
-  { input: '[a, b; [1, 2; 3, 4], d]', output: '\\left[\\begin{array}{cc}a & b \\\\ \\left[\\begin{array}{cc}1 & 2 \\\\ 3 & 4\\end{array}\\right] & d\\end{array}\\right]' },
-  { input: '[|a, b; c,d]', output: '\\left[\\begin{array}{|cc}a & b \\\\ c & d\\end{array}\\right]' },
-  { input: '[a, b|; c,d]', output: '\\left[\\begin{array}{cc|}a & b \\\\ c & d\\end{array}\\right]' },
-  { input: '[|a, b|; c,d]', output: '\\left[\\begin{array}{|cc|}a & b \\\\ c & d\\end{array}\\right]' },
-  { input: '[|hline 1| 2|; hline 3, 4; hline]', output: '\\left[\\begin{array}{|c|c|}\\hline 1 & 2 \\\\ \\hline 3 & 4 \\\\ \\hline\\end{array}\\right]' },
-  { input: '"\\\\abc"', output: '\\text{\\abc}' },
-  { input: '==^b_a', output: '\\xlongequal[ a ]{ b }' },
-  { input: '-->^114_5', output: '\\xrightarrow[ 5 ]{ 114 }' },
-  { input: '==^b', output: '\\xlongequal[  ]{ b }' },
-  { input: '==_a', output: '\\xlongequal[ a ]{  }' },
-  { input: '& 1111\n\n& 2222', output: '\\begin{aligned}& 1111 \\\\ & 2222\\end{aligned}' },
-  { input: 'hline\na && 111 && 333\n\nhline\nb && 222\n\nhline', output: '\\begin{aligned}\\hline a && 111 && 333 \\\\ \\hline b && 222 \\\\ \\hline\\end{aligned}' },
-  { input: '[hline|a|b|;]', output: '\\left[\\begin{array}{|c|c|}\\hline a & b \\\\ \\end{array}\\right]' },
+  { input: '[1, 2 | 3; 4, 5 | 6]', tex: '\\left[\\begin{array}{cc|c}1 & 2 & 3 \\\\ 4 & 5 & 6\\end{array}\\right]' },
+  { input: '[1, 2 | 3; 4 | 5, 6]', tex: '\\left[\\begin{array}{c|c|c}1 & 2 & 3 \\\\ 4 & 5 & 6\\end{array}\\right]' },
+  { input: '[a, b; [1, 2; 3, 4], d]', tex: '\\left[\\begin{array}{cc}a & b \\\\ \\left[\\begin{array}{cc}1 & 2 \\\\ 3 & 4\\end{array}\\right] & d\\end{array}\\right]' },
+  { input: '[|a, b; c,d]', tex: '\\left[\\begin{array}{|cc}a & b \\\\ c & d\\end{array}\\right]' },
+  { input: '[a, b|; c,d]', tex: '\\left[\\begin{array}{cc|}a & b \\\\ c & d\\end{array}\\right]' },
+  { input: '[|a, b|; c,d]', tex: '\\left[\\begin{array}{|cc|}a & b \\\\ c & d\\end{array}\\right]' },
+  { input: '[|hline 1| 2|; hline 3, 4; hline]', tex: '\\left[\\begin{array}{|c|c|}\\hline 1 & 2 \\\\ \\hline 3 & 4 \\\\ \\hline\\end{array}\\right]' },
+  { input: '"\\\\abc"', tex: '\\text{\\abc}', mathml: '<mtext>\\abc</mtext>' },
+  { input: '==^b_a', tex: '\\xlongequal[ a ]{ b }', mathml: '<munderover><mo>══</mo><mi>a</mi><mi>b</mi></munderover>' },
+  { input: '-->^114_5', tex: '\\xrightarrow[ 5 ]{ 114 }', mathml: '<munderover><mo>→</mo><mn>5</mn><mn>114</mn></munderover>' },
+  { input: '==^b', tex: '\\xlongequal[  ]{ b }', mathml: '<mover><mo>══</mo><mi>b</mi></mover>' },
+  { input: '==_a', tex: '\\xlongequal[ a ]{  }', mathml: '<munder><mo>══</mo><mi>a</mi></munder>' },
+  { input: '& 1111\n\n& 2222', tex: '\\begin{aligned}& 1111 \\\\ & 2222\\end{aligned}' },
+  { input: 'hline\na && 111 && 333\n\nhline\nb && 222\n\nhline', tex: '\\begin{aligned}\\hline a && 111 && 333 \\\\ \\hline b && 222 \\\\ \\hline\\end{aligned}' },
+  { input: '[hline|a|b|;]', tex: '\\left[\\begin{array}{|c|c|}\\hline a & b \\\\ \\end{array}\\right]' },
   {
     input: `{:
   --
@@ -98,19 +98,19 @@ const passedExamples: Example[] = [
   c, d;
   --
 :}`,
-    output: '\\left.\\begin{array}{|c|c|}\\hline a & b \\\\ \\hline c & d \\\\ \\hline\\end{array}\\right.',
+    tex: '\\left.\\begin{array}{|c|c|}\\hline a & b \\\\ \\hline c & d \\\\ \\hline\\end{array}\\right.',
   },
-  { input: '\uD83D\uDC40', output: '\uD83D\uDC40' },
-  { input: '🍎/(🍌+🍍) + 🍌/(🍍+🍎) + 🍍/(🍎+🍌) = 4', output: '\\frac{ 🍎 }{ 🍌 + 🍍 } + \\frac{ 🍌 }{ 🍍 + 🍎 } + \\frac{ 🍍 }{ 🍎 + 🍌 } = 4' },
-  { input: 'verb"114514\n1919810"', output: '\\begin{aligned}\n& \\verb|114514|\\\\\n& \\verb|1919810|\n\\end{aligned}' },
-  { input: '"\\\\"', output: '\\text{\\}' },
+  { input: '\uD83D\uDC40', tex: '\uD83D\uDC40', mathml: '<mtext>\uD83D\uDC40</mtext>' },
+  { input: '🍎/(🍌+🍍) + 🍌/(🍍+🍎) + 🍍/(🍎+🍌) = 4', tex: '\\frac{ 🍎 }{ 🍌 + 🍍 } + \\frac{ 🍌 }{ 🍍 + 🍎 } + \\frac{ 🍍 }{ 🍎 + 🍌 } = 4', mathml: '<mrow><mfrac><mtext>🍎</mtext><mrow><mtext>🍌</mtext><mo>+</mo><mtext>🍍</mtext></mrow></mfrac><mo>+</mo><mfrac><mtext>🍌</mtext><mrow><mtext>🍍</mtext><mo>+</mo><mtext>🍎</mtext></mrow></mfrac><mo>+</mo><mfrac><mtext>🍍</mtext><mrow><mtext>🍎</mtext><mo>+</mo><mtext>🍌</mtext></mrow></mfrac><mo>=</mo><mn>4</mn></mrow>' },
+  { input: 'verb"114514\n1919810"', tex: '\\begin{aligned}\n& \\verb|114514|\\\\\n& \\verb|1919810|\n\\end{aligned}' },
+  { input: '"\\\\"', tex: '\\text{\\}', mathml: '<mtext>\\</mtext>' },
   {
     input: $`verb"#include<stdio.h>
 int main() {
   if (a || b) printf(b);
   return 0;
 }"`,
-    output: $`\begin{aligned}
+    tex: $`\begin{aligned}
 & \verb|#include<stdio.h>|\\
 & \verb|int main() {|\\
 & \verb|  if (a |\verb%|%\verb||\verb%|%\verb| b) printf(b);|\\
@@ -118,26 +118,26 @@ int main() {
 & \verb|}|
 \end{aligned}`,
   },
-  { input: '(a)!', output: '{ \\left(a\\right)! }' }, // test op strip
-  { input: '(n) choose (k) = n!/(n!(n-k)!)', output: '{ n \\choose k } = \\frac{ { n! } }{ { n! } { \\left(n - k\\right)! } }' },
-  { input: 'limits(theta)_(k=1)^K', output: $`\mathop{ \theta }\limits_{ k = 1 }^K` },
-  { input: 'limits(tex"\\Vert")_(k=1)^K', output: $`\mathop{ { \Vert } }\limits_{ k = 1 }^K` },
-  { input: 'a\r\n', output: 'a' },
-  { input: '& a\r\n\r& b\n\r& c', output: '\\begin{aligned}& a \\\\ & b \\\\ & c\\end{aligned}' },
-  { input: 'a\t\v\f', output: 'a' },
-  { input: 'dd^2 (bm r) s', output: $`\frac{ \text{d}^2 \boldsymbol{ r } }{ \text{d} s^2 }` },
+  { input: '(a)!', tex: '{ \\left(a\\right)! }', mathml: '<mrow><mrow><mo>(</mo><mi>a</mi><mo>)</mo></mrow><mo>!</mo></mrow>' }, // test op strip
+  { input: '(n) choose (k) = n!/(n!(n-k)!)', tex: '{ n \\choose k } = \\frac{ { n! } }{ { n! } { \\left(n - k\\right)! } }' },
+  { input: 'limits(theta)_(k=1)^K', tex: $`\mathop{ \theta }\limits_{ k = 1 }^K` },
+  { input: 'limits(tex"\\Vert")_(k=1)^K', tex: $`\mathop{ { \Vert } }\limits_{ k = 1 }^K` },
+  { input: 'a\r\n', tex: 'a', mathml: '<mi>a</mi>' },
+  { input: '& a\r\n\r& b\n\r& c', tex: '\\begin{aligned}& a \\\\ & b \\\\ & c\\end{aligned}' },
+  { input: 'a\t\v\f', tex: 'a', mathml: '<mi>a</mi>' },
+  { input: 'dd^2 (bm r) s', tex: $`\frac{ \text{d}^2 \boldsymbol{ r } }{ \text{d} s^2 }` },
 ]
 
 // no idea why this fails ˉ\_(ツ)_/ˉ
 const whyThisFails: Example[] = [
-  { input: '"\\"abc\\""', output: '\\text{"abc"}' },
+  { input: '"\\"abc\\""', tex: '\\text{"abc"}' },
   {
     input: $`verb"#include<stdio.h>
 int main() {
   printf(\"hello, world!\n\");
   return 0;
 }"`,
-    output: $`\begin{aligned}
+    tex: $`\begin{aligned}
 & \verb|\#include<stdio.h>|\\
 & \verb|int\ main()\ \{|\\
 & \verb|\ \ printf("hello,\ world!\textbackslash{}n");|\\

@@ -64,12 +64,12 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
     throws: config?.throws ?? false,
     symbols: {
       keyword: {
-        dx: { tex: '{\\text{d}x}' },
-        dy: { tex: '{\\text{d}y}' },
-        dz: { tex: '{\\text{d}z}' },
-        dt: { tex: '{\\text{d}t}' },
-        ee: { tex: '\\text{e}' },
-        ii: { tex: '\\text{i}' },
+        dx: { tex: '{\\text{d}x}', mathml: { tag: 'mrow', children: [{ tag: 'mtext', children: 'd' }, { tag: 'mi', children: 'x' }] } },
+        dy: { tex: '{\\text{d}y}', mathml: { tag: 'mrow', children: [{ tag: 'mtext', children: 'd' }, { tag: 'mi', children: 'y' }] } },
+        dz: { tex: '{\\text{d}z}', mathml: { tag: 'mrow', children: [{ tag: 'mtext', children: 'd' }, { tag: 'mi', children: 'z' }] } },
+        dt: { tex: '{\\text{d}t}', mathml: { tag: 'mrow', children: [{ tag: 'mtext', children: 'd' }, { tag: 'mi', children: 't' }] } },
+        ee: { tex: '\\text{e}', mathml: { tag: 'mtext', children: 'e' } },
+        ii: { tex: '\\text{i}', mathml: { tag: 'mtext', children: 'i' } },
       },
       ...config?.symbols,
     },
