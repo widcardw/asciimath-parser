@@ -11,18 +11,18 @@ const initGenerator = (symbols: Required<Symbols>) => {
     const cols = alignType.repeat(maxCol).split('')
     const colsBuf = []
     cols.forEach((col, index) => {
-      if (pipeIndex?.has(index))
+      if (pipeIndex?.[index])
         colsBuf.push('|')
       colsBuf.push(col)
     })
-    if (pipeIndex?.has(cols.length))
+    if (pipeIndex?.[cols.length])
       colsBuf.push('|')
 
     const body = value.map((row: Ast[]) => {
       return row.map(v => toTex(v)).join(' & ')
     }).join(' \\\\ ')
     const res = `\\begin{array}{${colsBuf.join('')}}${body}\\end{array}`
-    if (strip)
+    if (strip && symbols.lp[left] && symbols.rp[right])
       return res
     return [
       '\\left',
@@ -36,16 +36,33 @@ const initGenerator = (symbols: Required<Symbols>) => {
   const genParen = (ast: Ast, strip = false) => {
     const { left, right, value, pipeIndex } = ast
     const res: string[] = []
+    let isLeft = true
+    let lastPipeIndex = -1
+    let lastPipeValue = null
     value.forEach((item: Ast, index: number) => {
-      if (pipeIndex?.has(index))
-        res.push(' \\mid ')
-      else if (index > 0)
+      // try best to match \left| with \right|
+      if (pipeIndex?.[index]) {
+        isLeft = !isLeft
+        lastPipeIndex = res.length
+        lastPipeValue = pipeIndex[index]
+        res.push((isLeft ? '\\right' : '\\left') + symbols.pipe[lastPipeValue].tex)
+      }
+      else if (index > 0) {
         res.push(', ')
+      }
       res.push(toTex(item))
     })
-    if (pipeIndex?.has(value.length))
-      res.push(' \\mid ')
-    if (strip)
+    if (pipeIndex?.[value.length]) {
+      isLeft = !isLeft
+      lastPipeValue = pipeIndex[value.length]
+      lastPipeIndex = res.length
+      res.push((isLeft ? '\\right' : '\\left') + symbols.pipe[lastPipeValue].tex)
+    }
+    // the unmatched one is changed to \mid instead
+    if (lastPipeIndex > -1 && !isLeft)
+      res[lastPipeIndex] = symbols.pipe[lastPipeValue].mid as string
+
+    if (strip && symbols.lp[left] && symbols.rp[right])
       return res.join('')
     return [
       '\\left',

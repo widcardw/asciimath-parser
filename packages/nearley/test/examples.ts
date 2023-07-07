@@ -117,6 +117,10 @@ int main() {
   { input: '(n) choose (k) = n!/(n!(n-k)!)', output: '{ n \\choose k } = \\frac{ { n! } }{ { n! } { \\left(n - k\\right)! } }' },
   { input: 'limits(theta)_(k=1)^K', output: $_`\mathop{ \theta }\limits_{ k = 1 }^K` },
   { input: 'limits(tex"\\Vert")_(k=1)^K', output: $_`\mathop{ { \Vert } }\limits_{ k = 1 }^K` },
+  { input: '|a_n|/2', output: $_`\frac{ \left|a_n\right| }{ 2 }` },
+  { input: '(|a|+|b|)', output: $_`\left(\left|a\right|+\left|b\right|\right)` },
+  { input: '(|a|+|b|+|c)', output: $_`\left(\left|a\right|+\left|b\right|+ \mid c\right)` },
+  { input: '(||a||+|b|+|c)', output: $_`\left(\left\|a\right\|+\left|b\right|+ \mid c\right)` },
 ]
 
 // no idea why this fails ˉ\_(ツ)_/ˉ
