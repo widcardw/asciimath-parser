@@ -140,6 +140,7 @@ int main() {
   { input: '& a\r\n\r& b\n\r& c', output: '\\begin{aligned}& a \\\\ & b \\\\ & c\\end{aligned}' },
   { input: 'a\t\v\f', output: 'a' },
   { input: 'dd^2 (bm r) s', output: '\frac{ \text{d}^2 \boldsymbol{ r } }{ \text{d} s^2 }' },
+  { input: '|a_n|/2', output: $_`\frac{ \left|a_n\right| }{ 2 }` },
 ]
 
 const todoExamples: Examples = [

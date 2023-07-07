@@ -22,7 +22,7 @@ const initGenerator = (symbols: Required<Symbols>) => {
       return row.map(v => toTex(v)).join(' & ')
     }).join(' \\\\ ')
     const res = `\\begin{array}{${colsBuf.join('')}}${body}\\end{array}`
-    if (strip)
+    if (strip && symbols.lp[left] && symbols.rp[right])
       return res
     return [
       '\\left',
@@ -45,7 +45,7 @@ const initGenerator = (symbols: Required<Symbols>) => {
     })
     if (pipeIndex?.has(value.length))
       res.push(' \\mid ')
-    if (strip)
+    if (strip && symbols.lp[left] && symbols.rp[right])
       return res.join('')
     return [
       '\\left',
