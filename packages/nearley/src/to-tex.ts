@@ -36,15 +36,29 @@ const initGenerator = (symbols: Required<Symbols>) => {
   const genParen = (ast: Ast, strip = false) => {
     const { left, right, value, pipeIndex } = ast
     const res: string[] = []
+    let isLeft = true
+    let lastPipeIndex = -1
     value.forEach((item: Ast, index: number) => {
-      if (pipeIndex?.has(index))
-        res.push(' \\mid ')
-      else if (index > 0)
+      // try best to match \left| with \right|
+      if (pipeIndex?.has(index)) {
+        res.push(isLeft ? '\\left|' : '\\right|')
+        isLeft = !isLeft
+        lastPipeIndex = res.length - 1
+      }
+      else if (index > 0) {
         res.push(', ')
+      }
       res.push(toTex(item))
     })
-    if (pipeIndex?.has(value.length))
-      res.push(' \\mid ')
+    if (pipeIndex?.has(value.length)) {
+      res.push(isLeft ? '\\left|' : '\\right|')
+      isLeft = !isLeft
+      lastPipeIndex = res.length - 1
+    }
+    // the unmatched one is changed to \mid instead
+    if (lastPipeIndex > -1)
+      res[lastPipeIndex] = ' \\mid '
+
     if (strip && symbols.lp[left] && symbols.rp[right])
       return res.join('')
     return [

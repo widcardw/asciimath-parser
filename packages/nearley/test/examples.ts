@@ -117,6 +117,8 @@ int main() {
   { input: '(n) choose (k) = n!/(n!(n-k)!)', output: '{ n \\choose k } = \\frac{ { n! } }{ { n! } { \\left(n - k\\right)! } }' },
   { input: 'limits(theta)_(k=1)^K', output: $_`\mathop{ \theta }\limits_{ k = 1 }^K` },
   { input: 'limits(tex"\\Vert")_(k=1)^K', output: $_`\mathop{ { \Vert } }\limits_{ k = 1 }^K` },
+  { input: '|a_n|/2', output: $_`\frac{ \left|a_n\right| }{ 2 }` },
+  { input: '(|a|+|b|+|c)', output: $_`\left(\left|a\right|+\left|b\right|+ \mid c\right)` },
 ]
 
 // no idea why this fails ˉ\_(ツ)_/ˉ
@@ -140,7 +142,6 @@ int main() {
   { input: '& a\r\n\r& b\n\r& c', output: '\\begin{aligned}& a \\\\ & b \\\\ & c\\end{aligned}' },
   { input: 'a\t\v\f', output: 'a' },
   { input: 'dd^2 (bm r) s', output: '\frac{ \text{d}^2 \boldsymbol{ r } }{ \text{d} s^2 }' },
-  { input: '|a_n|/2', output: $_`\frac{ \left|a_n\right| }{ 2 }` },
 ]
 
 const todoExamples: Examples = [
