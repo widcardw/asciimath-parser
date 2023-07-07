@@ -17,6 +17,7 @@ export enum TokenTypes {
 interface SymbolConfig {
   tex: string
   strip?: boolean
+  mid?: string
 }
 
 export interface Symbols {
@@ -411,8 +412,8 @@ const symbols: Required<Symbols> = {
     'choose': { tex: '{ $1 \\choose $2 }' },
   },
   pipe: {
-    '|': { tex: '|' },
-    '||': { tex: '\\|' },
+    '|': { tex: '|', mid: ' \\mid ' },
+    '||': { tex: '\\|', mid: ' \\| ' },
   },
 }
 

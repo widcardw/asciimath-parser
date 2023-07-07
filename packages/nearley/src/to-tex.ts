@@ -11,11 +11,11 @@ const initGenerator = (symbols: Required<Symbols>) => {
     const cols = alignType.repeat(maxCol).split('')
     const colsBuf = []
     cols.forEach((col, index) => {
-      if (pipeIndex?.has(index))
+      if (pipeIndex?.[index])
         colsBuf.push('|')
       colsBuf.push(col)
     })
-    if (pipeIndex?.has(cols.length))
+    if (pipeIndex?.[cols.length])
       colsBuf.push('|')
 
     const body = value.map((row: Ast[]) => {
@@ -38,26 +38,29 @@ const initGenerator = (symbols: Required<Symbols>) => {
     const res: string[] = []
     let isLeft = true
     let lastPipeIndex = -1
+    let lastPipeValue = null
     value.forEach((item: Ast, index: number) => {
       // try best to match \left| with \right|
-      if (pipeIndex?.has(index)) {
-        res.push(isLeft ? '\\left|' : '\\right|')
+      if (pipeIndex?.[index]) {
         isLeft = !isLeft
-        lastPipeIndex = res.length - 1
+        lastPipeIndex = res.length
+        lastPipeValue = pipeIndex[index]
+        res.push((isLeft ? '\\right' : '\\left') + symbols.pipe[lastPipeValue].tex)
       }
       else if (index > 0) {
         res.push(', ')
       }
       res.push(toTex(item))
     })
-    if (pipeIndex?.has(value.length)) {
-      res.push(isLeft ? '\\left|' : '\\right|')
+    if (pipeIndex?.[value.length]) {
       isLeft = !isLeft
-      lastPipeIndex = res.length - 1
+      lastPipeValue = pipeIndex[value.length]
+      lastPipeIndex = res.length
+      res.push((isLeft ? '\\right' : '\\left') + symbols.pipe[lastPipeValue].tex)
     }
     // the unmatched one is changed to \mid instead
-    if (lastPipeIndex > -1)
-      res[lastPipeIndex] = ' \\mid '
+    if (lastPipeIndex > -1 && !isLeft)
+      res[lastPipeIndex] = symbols.pipe[lastPipeValue].mid as string
 
     if (strip && symbols.lp[left] && symbols.rp[right])
       return res.join('')
