@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import type { Symbols, TokenTypes } from './symbols'
+import type { StripType, Symbols, TokenTypes } from './symbols'
 import type { Ast } from './index'
 
 const initGenerator = (symbols: Required<Symbols>) => {
@@ -103,16 +103,28 @@ const initGenerator = (symbols: Required<Symbols>) => {
     return res
   }
 
+  // strip 为 true 时, 全脱
+  // strip 为 false 时, 全不脱
+  // strip 为 undefined 时, 脱括号, 不脱引号
+  const shouldStrip = (ast: Ast, strip: StripType, index: number): boolean => {
+    if (typeof strip === 'boolean')
+      return strip
+    if (strip === undefined)
+      return ast.type !== 'text'
+    // array
+    return shouldStrip(ast, strip[index], index)
+  }
+
   const genOp = (ast: Ast) => {
     const { type, value, $1, $2 } = ast
     if (value === 'verb')
       return genVerb(ast)
     const symbol = symbols[type as TokenTypes][value]
-    let { tex, strip = true } = symbol
+    let { tex, strip } = symbol
     if ($1)
-      tex = tex.replace('$1', toTex($1, strip))
+      tex = tex.replace('$1', toTex($1, shouldStrip($1, strip, 0)))
     if ($2)
-      tex = tex.replace('$2', toTex($2, strip))
+      tex = tex.replace('$2', toTex($2, shouldStrip($2, strip, 1)))
     return tex
   }
 

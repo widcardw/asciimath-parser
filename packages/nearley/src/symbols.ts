@@ -14,9 +14,14 @@ export enum TokenTypes {
   pipe = 'pipe',
 }
 
+export type StripType = (boolean | undefined) | (boolean | undefined)[]
+
 interface SymbolConfig {
   tex: string
-  strip?: boolean
+  // strip 为 true 时, 全脱
+  // strip 为 false 时, 全不脱
+  // strip 为 undefined 时, 脱括号, 不脱引号
+  strip?: StripType
   mid?: string
 }
 
@@ -314,14 +319,14 @@ const symbols: Required<Symbols> = {
     obrace: { tex: '\\overbrace{ $1 }' },
     phantom: { tex: '\\phantom{ $1 }' },
     mbox: { tex: '\\mbox{$1}' },
-    op: { tex: '\\operatorname{ $1 }' },
+    op: { tex: '\\operatorname{ $1 }', strip: true },
     // TODO: \cancel is not supported by web mathjax, but supported by mathjax tex2svg?
     cancel: { tex: '\\cancel{ $1 }' },
 
     // literal string
-    hspace: { tex: '\\hspace{$1}' },
-    text: { tex: '\\text{$1}' },
-    tex: { tex: '{ $1 }' },
+    hspace: { tex: '\\hspace{$1}', strip: true },
+    text: { tex: '\\text{$1}', strip: true },
+    tex: { tex: '{ $1 }', strip: true },
     verb: { tex: '' }, // 这里 tex 没有实际意义, verb 需特殊处理
 
     // font style
@@ -343,7 +348,7 @@ const symbols: Required<Symbols> = {
     scr: { tex: '\\mathscr{ $1 }' },
     mathscr: { tex: '\\mathscr{ $1 }' },
 
-    limits: { tex: '\\mathop{ $1 }\\limits' },
+    limits: { tex: '\\mathop{ $1 }\\limits', strip: true },
 
     // font size
     tiny: { tex: '{ \\tiny $1 }' },
@@ -358,7 +363,7 @@ const symbols: Required<Symbols> = {
     stackrel: { tex: '\\stackrel{ $1 }{ $2 }' },
     overset: { tex: '\\overset{ $1 }{ $2 }' },
     underset: { tex: '\\under{ $1 }{ $2 }' },
-    color: { tex: '{ \\color{$1} $2 }' }, // first param is literal string
+    color: { tex: '{ \\color{$1} $2 }', strip: [true, undefined] }, // first param is literal string
   },
   lp: {
     '(': { tex: '(' },

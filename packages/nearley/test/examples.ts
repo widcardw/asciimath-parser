@@ -1,6 +1,6 @@
 type Examples = { input: string; output: string; desc?: string }[]
 
-const $_ = String.raw
+const $ = String.raw
 
 const passedExamples: Examples = [
   { input: '    ', output: '' },
@@ -36,6 +36,7 @@ const passedExamples: Examples = [
   { input: 'ppfx', output: '\\frac{ \\partial f }{ \\partial x }' },
   { input: 'pp {::} x', output: '\\frac{ \\partial  }{ \\partial x }' },
   { input: 'pp^3 f (x y^2)', output: '\\frac{ \\partial^3 f }{ \\partial x\\partial y^2 }' },
+  { input: 'dd^2 (bm r) s', output: $`\frac{ \text{d}^2 \boldsymbol{ r } }{ \text{d} s^2 }` },
   { input: 'abs(x)', output: '\\left|x\\right|' },
   { input: '{ a | b }', output: '\\left\\lbrace{}a \\mid b\\right\\rbrace' },
   { input: '(a,b)', output: '\\left(a, b\\right)' },
@@ -100,12 +101,12 @@ const passedExamples: Examples = [
   { input: 'verb"114514\n1919810"', output: '\\begin{aligned}\n& \\verb|114514|\\\\\n& \\verb|1919810|\n\\end{aligned}' },
   { input: '"\\\\"', output: '\\text{\\}' },
   {
-    input: String.raw`verb"#include<stdio.h>
+    input: $`verb"#include<stdio.h>
 int main() {
   if (a || b) printf(b);
   return 0;
 }"`,
-    output: String.raw`\begin{aligned}
+    output: $`\begin{aligned}
 & \verb|#include<stdio.h>|\\
 & \verb|int main() {|\\
 & \verb|  if (a |\verb%|%\verb||\verb%|%\verb| b) printf(b);|\\
@@ -115,24 +116,29 @@ int main() {
   },
   { input: '(a)!', output: '{ \\left(a\\right)! }' }, // test op strip
   { input: '(n) choose (k) = n!/(n!(n-k)!)', output: '{ n \\choose k } = \\frac{ { n! } }{ { n! } { \\left(n - k\\right)! } }' },
-  { input: 'limits(theta)_(k=1)^K', output: $_`\mathop{ \theta }\limits_{ k = 1 }^K` },
-  { input: 'limits(tex"\\Vert")_(k=1)^K', output: $_`\mathop{ { \Vert } }\limits_{ k = 1 }^K` },
-  { input: '|a_n|/2', output: $_`\frac{ \left|a_n\right| }{ 2 }` },
-  { input: '(|a|+|b|)', output: $_`\left(\left|a\right|+\left|b\right|\right)` },
-  { input: '(|a|+|b|+|c)', output: $_`\left(\left|a\right|+\left|b\right|+ \mid c\right)` },
-  { input: '(||a||+|b|+|c)', output: $_`\left(\left\|a\right\|+\left|b\right|+ \mid c\right)` },
+  { input: 'limits(theta)_(k=1)^K', output: $`\mathop{ \theta }\limits_{ k = 1 }^K` },
+  { input: 'limits(tex"\\Vert")_(k=1)^K', output: $`\mathop{ { \Vert } }\limits_{ k = 1 }^K` },
+  { input: '|a_n|/2', output: $`\frac{ \left|a_n\right| }{ 2 }` },
+  { input: '(|a|+|b|)', output: $`\left(\left|a\right|+\left|b\right|\right)` },
+  { input: '(|a|+|b|+|c)', output: $`\left(\left|a\right|+\left|b\right|+ \mid c\right)` },
+  { input: '(||a||+|b|+|c)', output: $`\left(\left\|a\right\|+\left|b\right|+ \mid c\right)` },
+  { input: '[a;b]/2', output: $`\frac{ \begin{array}{c}a \\ b\end{array} }{ 2 }` }, // 脱去矩阵括号
+  { input: '"abc"/2', output: $`\frac{ \text{abc} }{ 2 }` }, // 不脱去引号
+  { input: 'a\r\n', output: 'a' },
+  { input: '& a\r\n\r& b\n\r& c', output: '\\begin{aligned}& a \\\\ & b \\\\ & c\\end{aligned}' },
+  { input: 'a\t\v\f', output: 'a' },
 ]
 
 // no idea why this fails ˉ\_(ツ)_/ˉ
 const whyThisFails: Examples = [
   { input: '"\\"abc\\""', output: '\\text{"abc"}' },
   {
-    input: String.raw`verb"#include<stdio.h>
+    input: $`verb"#include<stdio.h>
 int main() {
   printf(\"hello, world!\n\");
   return 0;
 }"`,
-    output: String.raw`\begin{aligned}
+    output: $`\begin{aligned}
 & \verb|\#include<stdio.h>|\\
 & \verb|int\ main()\ \{|\\
 & \verb|\ \ printf("hello,\ world!\textbackslash{}n");|\\
@@ -140,10 +146,6 @@ int main() {
 & \verb|\}|
 \end{aligned}`,
   },
-  { input: 'a\r\n', output: 'a' },
-  { input: '& a\r\n\r& b\n\r& c', output: '\\begin{aligned}& a \\\\ & b \\\\ & c\\end{aligned}' },
-  { input: 'a\t\v\f', output: 'a' },
-  { input: 'dd^2 (bm r) s', output: '\frac{ \text{d}^2 \boldsymbol{ r } }{ \text{d} s^2 }' },
 ]
 
 const todoExamples: Examples = [
