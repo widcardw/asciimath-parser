@@ -82,10 +82,10 @@ const initGenerator = (symbols: Required<Symbols>) => {
   }
 
   const genLimits = (ast: Ast) => {
-    const { value, sub, sup, $1, $2 } = ast
+    const { value, sub, sup, $1, $2, strip } = ast
     const res = symbols.limits[value.value].tex
-    const tex1 = sub ? toTex($1, true) : ''
-    const tex2 = sup ? toTex($2, true) : ''
+    const tex1 = sub ? toTex($1, shouldStrip($1, strip, 0)) : ''
+    const tex2 = sup ? toTex($2, shouldStrip($2, strip, 1)) : ''
     return res.replace('$1', tex1)
       .replace('$2', tex2)
   }
