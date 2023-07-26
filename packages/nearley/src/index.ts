@@ -113,6 +113,7 @@ class AsciiMath {
         throw new Error('unexpected end of input')
       }
       else if (this.parser.results.length > 1) {
+        // console.dir(this.parser.results, { depth: 10 })
         console.error(this.parser.results)
         throw new Error('ambiguous parse')
       }

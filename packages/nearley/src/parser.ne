@@ -110,6 +110,7 @@ simple -> matrix {% id %} # 矩阵
 
 matrix -> %lp _ matrixRow (%semicolon _ matrixRow):* %rp {% d => matrixPostProcess(d, true) %}
   | %pipe _ detRow (%semicolon _ detRow):* %pipeEnd {% d => matrixPostProcess(d, false) %}
+  | %pipe {% d => ({ type: 'keyword', value: 'mid' }) %}
 
 # 矩阵行, 可以为空
 matrixRow -> expr:? ((%comma | %pipeEnd) _ expr:?):* {% matrixRowPostProcess %}
