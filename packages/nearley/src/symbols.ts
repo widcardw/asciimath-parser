@@ -290,6 +290,10 @@ const symbols: Required<Symbols> = {
     'curvArrRt': { tex: '\\curvearrowright' },
     'circArrLt': { tex: '\\circlearrowleft' },
     'circArrRt': { tex: '\\circlearrowright' },
+    '~>': { tex: '\\rightsquigarrow' },
+    '-/->': { tex: '\\nrightarrow' },
+    '<-/-': { tex: '\\nleftarrow' },
+    '<-/->': { tex: '\\nleftrightarrow' },
   },
   opOA: {
     abs: { tex: '\\left|$1\\right|' },
