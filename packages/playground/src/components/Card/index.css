@@ -55,3 +55,7 @@
 .ͼ2 .cm-content {
   caret-color: #777;
 }
+
+.cm-content {
+  font-family: var(--font-mono);
+}
