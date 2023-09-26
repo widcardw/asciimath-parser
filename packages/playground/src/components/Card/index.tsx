@@ -20,8 +20,8 @@ const Card: Component<{
 }> = (props) => {
   const [amStr, setAmStr] = createSignal('')
   const [tex, setTex] = createSignal('')
-  const [amCopied, setAmCopied] = createSignal(false)
-  const [texCopied, setTexCopied] = createSignal(false)
+  // const [amCopied, setAmCopied] = createSignal(false)
+  // const [texCopied, setTexCopied] = createSignal(false)
   const kHtml = createMemo(() => katex.renderToString(tex(), {
     displayMode: true,
     throwOnError: false,
@@ -46,7 +46,7 @@ const Card: Component<{
       amEditor = new EditorView({
         parent: el1(),
         extensions: [
-          autocompletion({ override: [await myCompletion()], maxRenderedOptions: 10, closeOnBlur: false }),
+          autocompletion({ override: [await myCompletion()], maxRenderedOptions: 10 }),
           // closeBrackets(),
           placeholder('Input asciimath here...'),
           EditorView.lineWrapping,
