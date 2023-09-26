@@ -47,8 +47,8 @@ const CardList: Component = () => {
             </button>
           )}
         </For>
-        <div style={{ flex: 1 }} />
-        <div style={{ opacity: 0.5 }}><kbd>⌘</kbd> <kbd>K</kbd> to copy</div>
+        {/* <div style={{ flex: 1 }} />
+        <div style={{ opacity: 0.5 }}><kbd>⌘</kbd> <kbd>K</kbd> to copy</div> */}
       </div>
       <For each={items()}>
         {(_item, i) => (
@@ -57,7 +57,8 @@ const CardList: Component = () => {
             <button
               style={{ 'font-family': 'KaTeX_Main' }}
               onClick={() => setItems(p => [...p.slice(0, i()), ...p.slice(i() + 1)])}
-            >-
+            >
+              -
             </button>
           </div>
         )}
@@ -66,7 +67,8 @@ const CardList: Component = () => {
         class="w-full mb-1rem"
         onClick={() => setItems(p => [...p, Date.now()])}
         style={{ 'font-family': 'KaTeX_Main' }}
-      >+
+      >
+        +
       </button>
     </>
   )
