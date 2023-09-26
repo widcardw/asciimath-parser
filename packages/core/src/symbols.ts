@@ -246,6 +246,7 @@ const SYMBOLMAP: Map<string, SymbolValueType> = new Map([
   ['root', { type: TokenTypes.OperatorOAB, tex: '\\sqrt[ $1 ]{ $2 }' }],
   ['frac', { type: TokenTypes.OperatorOAB, tex: '\\frac{ $1 }{ $2 }' }],
   ['/', { type: TokenTypes.OperatorAOB, tex: '\\frac{ $1 }{ $2 }' }],
+  ['choose', { type: TokenTypes.OperatorAOB, tex: '{ $1 \\choose $2 }' }],
   ['_', { type: TokenTypes.OperatorSup, tex: '_{ $1 }' }],
   ['^', { type: TokenTypes.OperatorSup, tex: '^{ $1 }' }],
   ['stackrel', { type: TokenTypes.OperatorOAB, tex: '\\stackrel{ $1 }{ $2 }' }],

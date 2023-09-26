@@ -58,7 +58,6 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
       'dz': { type: TokenTypes.Const, tex: '{\\text{d}z}' },
       'dt': { type: TokenTypes.Const, tex: '{\\text{d}t}' },
       '#': { type: TokenTypes.Const, tex: '\\displaystyle' },
-      'choose': { type: TokenTypes.OperatorAOB, tex: '{ $1 \\choose $2 }' },
       'atop': { type: TokenTypes.OperatorAOB, tex: '{ $1 \\atop $2 }' },
     },
     replaceBeforeTokenizing: [
