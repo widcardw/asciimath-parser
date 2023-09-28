@@ -41,13 +41,16 @@ const Card: Component<{
     })
   }, 1000)
 
+  const texAreaUpdated = useDebounceFn(() => {
+    setTex(texEditor?.state.doc.toString() || '')
+  }, 1000)
+
   createEffect(async () => {
     if (!amEditor) {
       amEditor = new EditorView({
         parent: el1(),
         extensions: [
           autocompletion({ override: [await myCompletion()], maxRenderedOptions: 10 }),
-          // closeBrackets(),
           placeholder('Input asciimath here...'),
           EditorView.lineWrapping,
           EditorView.updateListener.of((update) => {
@@ -70,47 +73,19 @@ const Card: Component<{
           closeBrackets(),
           EditorView.lineWrapping,
           placeholder('Input KaTeX here...'),
+          EditorView.updateListener.of((update) => {
+            if (!update.changes.empty)
+              texAreaUpdated()
+          }),
+          // EditorView.inputHandler.of((view, from, to, text, insert) => {
+          //   view.dispatch(insert())
+          //   texAreaUpdated()
+          //   return true
+          // }),
         ],
       })
     }
   })
-
-  // function inputAmCb(e: Event) {
-  //   setAmStr((e.target as HTMLTextAreaElement).value)
-  //   setTex(props.am.toTex(amStr()))
-  // }
-
-  // function inputTexCb(e: Event) {
-  //   setTex((e.target as HTMLTextAreaElement).value)
-  // }
-
-  // function keydownHandler(e: TextAreaKeydownEvent) {
-  //   if (e.isComposing)
-  //     return false
-  //   if (e.code === 'KeyK' && e.metaKey) {
-  //     window.navigator.clipboard.writeText((e.target as HTMLTextAreaElement).value)
-  //     return true
-  //   }
-  //   return false
-  // }
-
-  // function keydownHandlerAm(e: TextAreaKeydownEvent) {
-  //   if (keydownHandler(e)) {
-  //     setAmCopied(true)
-  //     setTimeout(() => {
-  //       setAmCopied(false)
-  //     }, 1000)
-  //   }
-  // }
-
-  // function keydownHandlerTex(e: TextAreaKeydownEvent) {
-  //   if (keydownHandler(e)) {
-  //     setTexCopied(true)
-  //     setTimeout(() => {
-  //       setTexCopied(false)
-  //     }, 1000)
-  //   }
-  // }
 
   onCleanup(() => {
     amEditor?.destroy()
