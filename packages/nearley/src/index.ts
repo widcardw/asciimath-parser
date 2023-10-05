@@ -8,6 +8,10 @@ import initGenerator from './to-tex.js'
 export type Ast = any
 type ReplaceLaw = [RegExp | string, string | ((substring: string, ...args: any[]) => string)]
 
+interface ToTexConfig {
+  display?: boolean
+}
+
 interface AsciiMathConfig {
   /**
    * @default true
@@ -101,7 +105,7 @@ class AsciiMath {
     this.genTex = initGenerator(allSymbols)
   }
 
-  toTex(code: string): string {
+  toTex(code: string, config?: ToTexConfig): string {
     this.parser.restore(this.initState)
     try {
       code = this.replaceBeforeTokenizing.reduce((prev, curLaw) => {
@@ -118,8 +122,14 @@ class AsciiMath {
         throw new Error('ambiguous parse')
       }
       let res = this.genTex(this.parser.results)
-      if (this.display)
-        res = `\\displaystyle{ ${res} }`
+      if (typeof config?.display === 'undefined') {
+        if (this.display)
+          res = `\\displaystyle{ ${res} }`
+      }
+      else {
+        if (config.display)
+          res = `\\displaystyle{ ${res} }`
+      }
       return res
     }
     catch (e) {

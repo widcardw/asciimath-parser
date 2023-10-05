@@ -65,3 +65,19 @@ describe('error expression', () => {
     expect(am.toTex('(1^)')).toMatchInlineSnapshot('"\\\\text{Error: Read index out of range, index: 4}"')
   })
 })
+
+describe('customize display mode', () => {
+  const am = new AsciiMath()
+  it('should not be wrapped with display', () => {
+    expect(am.toTex('int', { display: false })).toMatchInlineSnapshot('"\\\\int"')
+    expect(am.toTex('int', { display: true })).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\int }"')
+  })
+})
+
+describe('customize display mode 2', () => {
+  const am = new AsciiMath({ display: false })
+  it('should not be wrapped with display', () => {
+    expect(am.toTex('int')).toMatchInlineSnapshot('"\\\\int"')
+    expect(am.toTex('int', { display: true })).toMatchInlineSnapshot('"\\\\displaystyle{ \\\\int }"')
+  })
+})
