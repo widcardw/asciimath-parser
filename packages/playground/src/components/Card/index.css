@@ -4,26 +4,14 @@
   flex: 1;
 }
 .display {
-  position: relative;
   padding: 1rem;
-  text-align: center;
-}
-.display::before {
-  content: attr(data-caption);
-  position: absolute;
-  font-size: .5rem;
-  color: #7f7f7faa;
-  top: .5rem;
-  left: .5rem;
-}
-.card > *:not(:last-child) {
-  border-bottom: 1px solid #7f7f7f33;
 }
 .input-area {
   /* max-width: 100%; */
   /* min-height: 4rem; */
   /* font-family: var(--font-mono); */
   border: none;
+  border-bottom: 1px solid #7f7f7f33;
   background: transparent;
   /* overflow: auto; */
   /* word-break: break-all; */
