@@ -1,8 +1,13 @@
-type Examples = { input: string; tex: string; desc?: string }[]
+interface Example {
+  input: string
+  tex: string
+  mathml?: string
+  desc?: string
+}
 
 const $ = String.raw
 
-const passedExamples: Examples = [
+const passedExamples: Example[] = [
   { input: '    ', tex: '' },
   { input: ' a', tex: 'a' },
   { input: '+', tex: '+' },
@@ -133,7 +138,7 @@ int main() {
 ]
 
 // no idea why this fails ˉ\_(ツ)_/ˉ
-const whyThisFails: Examples = [
+const whyThisFails: Example[] = [
   { input: '"\\"abc\\""', tex: '\\text{"abc"}' },
   {
     input: $`verb"#include<stdio.h>
@@ -151,10 +156,10 @@ int main() {
   },
 ]
 
-const todoExamples: Examples = [
+const todoExamples: Example[] = [
 ]
 
-export const examples: Examples = [
+export const examples: Example[] = [
   ...passedExamples,
   ...todoExamples,
   // ...whyThisFails,

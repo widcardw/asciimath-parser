@@ -19,15 +19,12 @@ export enum TokenTypes {
 
 export type StripType = (boolean | undefined) | (boolean | undefined)[]
 
-interface SymbolConfig {
+export interface SymbolConfig {
   tex: string
   mathml?: IMathVdom
   alias?: string | string[] // 别名
   limits?: boolean // 使用 underover 而不是 subsup
-  // strip 为 true 时, 全脱
-  // strip 为 false 时, 全不脱
-  // strip 为 undefined 时, 脱括号, 不脱引号
-  strip?: StripType
+  strip?: StripType // true: 全脱, false: 全不脱, undefined: 脱括号, 不脱引号
   mid?: string
 }
 

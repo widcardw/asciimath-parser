@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import type { SymbolConfig, Symbols, TokenTypes } from './symbols'
+import type { StripType, SymbolConfig, Symbols, TokenTypes } from './symbols'
 import type { IMathVdom } from './math-vdom'
 import { MathVdom } from './math-vdom'
 import type { Ast } from './index'
@@ -98,6 +98,18 @@ const initMathML = (symbols: Required<Symbols>) => {
     return new MathVdom({ tag, children })
   }
 
+  // strip 为 true 时, 全脱
+  // strip 为 false 时, 全不脱
+  // strip 为 undefined 时, 脱括号, 不脱引号
+  const shouldStrip = (ast: Ast, strip: StripType, index: number): boolean => {
+    if (typeof strip === 'boolean')
+      return strip
+    if (strip === undefined)
+      return ast.type !== 'text'
+    // array
+    return shouldStrip(ast, strip[index], index)
+  }
+
   const genOp = (ast: Ast) => {
     const { type, value, $1, $2 } = ast
     // TODO
@@ -107,9 +119,9 @@ const initMathML = (symbols: Required<Symbols>) => {
     const { strip = true } = symbol
     const ml = getMathml(symbol, [new MathVdom({ tag: '$1' })])
     if ($1)
-      ml.replace('$1', toMathML($1, strip))
+      ml.replace('$1', toMathML($1, shouldStrip($1, strip, 0)))
     if ($2)
-      ml.replace('$2', toMathML($2, strip))
+      ml.replace('$2', toMathML($2, shouldStrip($2, strip, 1)))
     return ml
   }
 
