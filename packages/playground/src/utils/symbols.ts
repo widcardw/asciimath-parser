@@ -130,6 +130,7 @@ const symbols: SymbolType = {
       '->', '|->', 'harr', 'rArr',
       'lArr', 'hArr', '->>', '>->',
       'curvArrLt', 'curvArrRt', 'circArrLt', 'circArrRt',
+      '~>', '-/->', '<-/-', '<-/->',
     ],
     cols: 4,
   },

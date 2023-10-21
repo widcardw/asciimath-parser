@@ -20,15 +20,15 @@
   border-bottom: 1px solid #7f7f7f33;
 }
 .input-area {
-  width: 100%;
-  min-height: 4rem;
-  font-family: var(--font-mono);
+  /* max-width: 100%; */
+  /* min-height: 4rem; */
+  /* font-family: var(--font-mono); */
   border: none;
   background: transparent;
-  overflow: auto;
-  word-break: break-all;
-  padding: 1rem;
-  resize: vertical;
+  /* overflow: auto; */
+  /* word-break: break-all; */
+  /* padding: 1rem; */
+  /* resize: vertical; */
   display: block;
   box-sizing: border-box;
 }
@@ -41,4 +41,33 @@
   font-family: var(--font-mono);
   border-top: 1px solid #7f7f7f33;
   border-bottom: 1px solid #7f7f7f33;
+}
+
+.copied {
+  position: absolute;
+  padding: 0.25rem 0.5rem;
+  right: 0;
+  top: 0;
+  border-radius: 0.25rem;
+  background: var(--theme-accent);
+  color: white;
+}
+
+.ͼ1 .cm-tooltip.cm-completionInfo {
+  overflow: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.theme-dark .ͼ2 .cm-tooltip {
+  background-color: #333;
+  border-color: #444;
+}
+
+.ͼ2 .cm-content {
+  caret-color: #777;
+}
+
+.cm-content {
+  font-family: var(--font-mono);
 }

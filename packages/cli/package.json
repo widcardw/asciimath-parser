@@ -1,7 +1,7 @@
 {
   "name": "asciimath-parser-cli",
   "type": "module",
-  "version": "0.6.0",
+  "version": "0.6.3",
   "description": "Transform asciimath to LaTeX",
   "author": "widcardw",
   "license": "MIT",

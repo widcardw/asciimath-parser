@@ -7,7 +7,7 @@ const matrixPostProcess = (d, pipeIndex) => {
       left: d[0],
       right: d[4],
       value: rows.map(row => row.value),
-      pipeIndex: pipeIndex ? new Set(rows.map(row => row.pipeIndex).flat()) : null,
+      pipeIndex: pipeIndex ? Object.assign({}, ...rows.map(row => row.pipeIndex)) : null,
     }
   } else { // 只有一行
     return {
@@ -15,25 +15,25 @@ const matrixPostProcess = (d, pipeIndex) => {
       left: d[0],
       right: d[4],
       value: d[2].value,
-      pipeIndex: pipeIndex ? new Set(d[2].pipeIndex) : null
+      pipeIndex: pipeIndex ? d[2].pipeIndex : null
     }
   }
 }
 
 const matrixRowPostProcess = (d) => {
-  const pipeIndex = []
+  const pipeIndex = {}
   const firstItem = String(d[0])
   const hasHeadline = firstItem === 'hline' || firstItem === '--'
   const offset = d[0] && !hasHeadline ? 1 : 0
   d[1].forEach((item, index) => {
     if (item[0][0].type === 'pipeEnd') {
-      pipeIndex.push(index + offset)
+      pipeIndex[index + offset] = item[0][0].value
     }
   })
   let value = [d[0], ...d[1].map(item => item[2])]
 
   // 允许 [|a, b|; c, d] => \begin{array}{|cc|}
-  const begin = pipeIndex[0] === 0 ? 1 : 0
+  const begin = pipeIndex[0] ? 1 : 0
   const lastItem = d[1][d[1].length - 1]
   const end = lastItem?.[0]?.[0]?.type === 'pipeEnd' && lastItem?.[2] === null ? -1 : undefined
 
@@ -110,6 +110,7 @@ simple -> matrix {% id %} # 矩阵
 
 matrix -> %lp _ matrixRow (%semicolon _ matrixRow):* %rp {% d => matrixPostProcess(d, true) %}
   | %pipe _ detRow (%semicolon _ detRow):* %pipeEnd {% d => matrixPostProcess(d, false) %}
+  | %pipe {% d => ({ type: 'keyword', value: 'mid' }) %}
 
 # 矩阵行, 可以为空
 matrixRow -> expr:? ((%comma | %pipeEnd) _ expr:?):* {% matrixRowPostProcess %}

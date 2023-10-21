@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import type { Symbols, TokenTypes } from './symbols'
+import type { StripType, Symbols, TokenTypes } from './symbols'
 import type { Ast } from './index'
 
 const initTex = (symbols: Required<Symbols>) => {
@@ -11,18 +11,18 @@ const initTex = (symbols: Required<Symbols>) => {
     const cols = alignType.repeat(maxCol).split('')
     const colsBuf = []
     cols.forEach((col, index) => {
-      if (pipeIndex?.has(index))
+      if (pipeIndex?.[index])
         colsBuf.push('|')
       colsBuf.push(col)
     })
-    if (pipeIndex?.has(cols.length))
+    if (pipeIndex?.[cols.length])
       colsBuf.push('|')
 
     const body = value.map((row: Ast[]) => {
       return row.map(v => toTex(v)).join(' & ')
     }).join(' \\\\ ')
     const res = `\\begin{array}{${colsBuf.join('')}}${body}\\end{array}`
-    if (strip)
+    if (strip && symbols.lp[left] && symbols.rp[right])
       return res
     return [
       '\\left',
@@ -36,16 +36,33 @@ const initTex = (symbols: Required<Symbols>) => {
   const genParen = (ast: Ast, strip = false) => {
     const { left, right, value, pipeIndex } = ast
     const res: string[] = []
+    let isLeft = true
+    let lastPipeIndex = -1
+    let lastPipeValue = null
     value.forEach((item: Ast, index: number) => {
-      if (pipeIndex?.has(index))
-        res.push(' \\mid ')
-      else if (index > 0)
+      // try best to match \left| with \right|
+      if (pipeIndex?.[index]) {
+        isLeft = !isLeft
+        lastPipeIndex = res.length
+        lastPipeValue = pipeIndex[index]
+        res.push((isLeft ? '\\right' : '\\left') + symbols.pipe[lastPipeValue].tex)
+      }
+      else if (index > 0) {
         res.push(', ')
+      }
       res.push(toTex(item))
     })
-    if (pipeIndex?.has(value.length))
-      res.push(' \\mid ')
-    if (strip)
+    if (pipeIndex?.[value.length]) {
+      isLeft = !isLeft
+      lastPipeValue = pipeIndex[value.length]
+      lastPipeIndex = res.length
+      res.push((isLeft ? '\\right' : '\\left') + symbols.pipe[lastPipeValue].tex)
+    }
+    // the unmatched one is changed to \mid instead
+    if (lastPipeIndex > -1 && !isLeft)
+      res[lastPipeIndex] = symbols.pipe[lastPipeValue].mid as string
+
+    if (strip && symbols.lp[left] && symbols.rp[right])
       return res.join('')
     return [
       '\\left',
@@ -65,10 +82,10 @@ const initTex = (symbols: Required<Symbols>) => {
   }
 
   const genLimits = (ast: Ast) => {
-    const { value, sub, sup, $1, $2 } = ast
+    const { value, sub, sup, $1, $2, strip } = ast
     const res = symbols.limits[value.value].tex
-    const tex1 = sub ? toTex($1, true) : ''
-    const tex2 = sup ? toTex($2, true) : ''
+    const tex1 = sub ? toTex($1, shouldStrip($1, strip, 0)) : ''
+    const tex2 = sup ? toTex($2, shouldStrip($2, strip, 1)) : ''
     return res.replace('$1', tex1)
       .replace('$2', tex2)
   }
@@ -86,16 +103,28 @@ const initTex = (symbols: Required<Symbols>) => {
     return res
   }
 
+  // strip 为 true 时, 全脱
+  // strip 为 false 时, 全不脱
+  // strip 为 undefined 时, 脱括号, 不脱引号
+  const shouldStrip = (ast: Ast, strip: StripType, index: number): boolean => {
+    if (typeof strip === 'boolean')
+      return strip
+    if (strip === undefined)
+      return ast.type !== 'text'
+    // array
+    return shouldStrip(ast, strip[index], index)
+  }
+
   const genOp = (ast: Ast) => {
     const { type, value, $1, $2 } = ast
     if (value === 'verb')
       return genVerb(ast)
     const symbol = symbols[type as TokenTypes][value]
-    let { tex, strip = true } = symbol
+    let { tex, strip } = symbol
     if ($1)
-      tex = tex.replace('$1', toTex($1, strip))
+      tex = tex.replace('$1', toTex($1, shouldStrip($1, strip, 0)))
     if ($2)
-      tex = tex.replace('$2', toTex($2, strip))
+      tex = tex.replace('$2', toTex($2, shouldStrip($2, strip, 1)))
     return tex
   }
 

@@ -17,12 +17,18 @@ export enum TokenTypes {
   pipe = 'pipe',
 }
 
-export interface SymbolConfig {
+export type StripType = (boolean | undefined) | (boolean | undefined)[]
+
+interface SymbolConfig {
   tex: string
   mathml?: IMathVdom
   alias?: string | string[] // 别名
   limits?: boolean // 使用 underover 而不是 subsup
-  strip?: boolean // strip: false 时, op 的参数不会脱去括号
+  // strip 为 true 时, 全脱
+  // strip 为 false 时, 全不脱
+  // strip 为 undefined 时, 脱括号, 不脱引号
+  strip?: StripType
+  mid?: string
 }
 
 export interface Symbols {
@@ -296,14 +302,14 @@ const symbols: Required<Symbols> = {
     obrace: { limits: true, alias: 'overbrace', tex: '\\overbrace{ $1 }', mathml: after('\u23DE', 'mover') },
     phantom: { tex: '\\phantom{ $1 }', mathml: { tag: 'mphantom' } },
     boxed: { tex: '\\boxed{$1}', mathml: { tag: 'menclose', attr: { notation: 'box' } } },
-    op: { tex: '\\operatorname{ $1 }', mathml: { tag: 'mo' } },
+    op: { tex: '\\operatorname{ $1 }', strip: true, mathml: { tag: 'mo' } },
     // TODO: \cancel is not supported by web mathjax, but supported by mathjax tex2svg?
     cancel: { tex: '\\cancel{ $1 }', mathml: { tag: 'menclose', attr: { notation: 'updiagonalstrike' } } },
 
     // literal string
-    hspace: { tex: '\\hspace{$1}', mathml: { tag: 'mspace', attr: { width: '$1' }, children: '' } },
-    text: { tex: '\\text{$1}', mathml: { tag: 'mtext' } },
-    tex: { tex: '{ $1 }', mathml: { tag: 'mtext' } },
+    hspace: { tex: '\\hspace{$1}', strip: true, mathml: { tag: 'mspace', attr: { width: '$1' }, children: '' } },
+    text: { tex: '\\text{$1}', strip: true, mathml: { tag: 'mtext' } },
+    tex: { tex: '{ $1 }', strip: true, mathml: { tag: 'mtext' } },
     verb: { tex: '', mathml: { tag: 'mtext' } }, // 这里 tex 没有实际意义, verb 需特殊处理
 
     // font style
@@ -317,7 +323,7 @@ const symbols: Required<Symbols> = {
     rm: { alias: 'mathrm', tex: '\\mathrm{ $1 }', mathml: { tag: 'mstyle', attr: { mathvariant: 'serif' } } },
     scr: { alias: 'mathscr', tex: '\\mathscr{ $1 }', mathml: { tag: 'mstyle', attr: { mathvariant: 'script' } } }, // mathml cannot tell difference between cc and scr
 
-    limits: { tex: '\\mathop{ $1 }\\limits' },
+    limits: { tex: '\\mathop{ $1 }\\limits', strip: true },
 
     // font size
     tiny: { tex: '{ \\tiny $1 }' },
@@ -332,7 +338,7 @@ const symbols: Required<Symbols> = {
     stackrel: { tex: '\\stackrel{ $1 }{ $2 }', mathml: binary('$2', '$1', 'mover') },
     overset: { tex: '\\overset{ $1 }{ $2 }', mathml: binary('$2', '$1', 'mover') },
     underset: { tex: '\\under{ $1 }{ $2 }', mathml: binary('$2', '$1', 'munder') },
-    color: { tex: '{ \\color{$1} $2 }', mathml: { tag: 'mstyle', attr: { mathcolor: '$1' }, children: [{ tag: '$2' }] } }, // first param is literal string
+    color: { tex: '{ \\color{$1} $2 }', strip: [true, undefined], mathml: { tag: 'mstyle', attr: { mathcolor: '$1' }, children: [{ tag: '$2' }] } }, // first param is literal string
   },
   lp: {
     '(': { tex: '(', mathml: { tag: 'mo' } },
@@ -353,8 +359,8 @@ const symbols: Required<Symbols> = {
     '~|': { tex: '\\rceil', mathml: { tag: 'mo', children: '\u2309' } },
   },
   pipe: {
-    '|': { tex: '|', mathml: { tag: 'mo', children: '|' } },
-    '||': { tex: '\\|', mathml: { tag: 'mo', children: '\u2225' } },
+    '|': { tex: '|', mid: ' \\mid ', mathml: { tag: 'mo', children: '|' } },
+    '||': { tex: '\\|', mid: ' \\| ', mathml: { tag: 'mo', children: '\u2225' } },
   },
   limits: {
     // TODO: \xlongequal is not supported by web mathjax, but supported by mathjax tex2svg?

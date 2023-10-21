@@ -7,6 +7,10 @@ import { createTrie } from './trie'
 
 type ReplaceLaw = [RegExp | string, string | ((substring: string, ...args: any[]) => string)]
 
+interface ToTexConfig {
+  display?: boolean
+}
+
 interface AsciiMathConfig {
   /**
    * @default true
@@ -58,7 +62,6 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
       'dz': { type: TokenTypes.Const, tex: '{\\text{d}z}' },
       'dt': { type: TokenTypes.Const, tex: '{\\text{d}t}' },
       '#': { type: TokenTypes.Const, tex: '\\displaystyle' },
-      'choose': { type: TokenTypes.OperatorAOB, tex: '{ $1 \\choose $2 }' },
       'atop': { type: TokenTypes.OperatorAOB, tex: '{ $1 \\atop $2 }' },
     },
     replaceBeforeTokenizing: [
@@ -96,7 +99,7 @@ class AsciiMath {
     this.replaceLaws = replaceBeforeParsing
   }
 
-  toTex(code: string): string {
+  toTex(code: string, config?: ToTexConfig): string {
     try {
       code = this.replaceLaws.reduce((prev, curLaw) => {
         // @ts-expect-error do not check replacement type
@@ -107,8 +110,14 @@ class AsciiMath {
           this.trie.tryParsingAll(code),
         ),
       )
-      if (this.display)
-        res = `\\displaystyle{ ${res} }`
+      if (typeof config?.display === 'undefined') {
+        if (this.display)
+          res = `\\displaystyle{ ${res} }`
+      }
+      else {
+        if (config.display)
+          res = `\\displaystyle{ ${res} }`
+      }
       return res
     }
     catch (e) {

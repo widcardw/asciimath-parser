@@ -14,6 +14,9 @@ enum ErrorCode {
   syntaxError,
   otherError,
 }
+interface ToTexConfig {
+  display?: boolean
+}
 
 interface AsciiMathConfig {
   /**
@@ -138,12 +141,12 @@ class AsciiMath {
     return { code: ErrorCode.otherError, message: message.slice(0, end) }
   }
 
-  public toTex(code: string): string {
+  toTex(code: string, config: ToTexConfig = {}): string {
     this.parser.restore(this.initState)
     try {
       this.parse(code)
       const res = this.genTex(this.parser.results)
-      return this.display ? `\\displaystyle{ ${res} }` : res
+      return (config.display ?? this.display) ? `\\displaystyle{ ${res} }` : res
     }
     catch (e) {
       const { code, message } = this.handleError(e)
@@ -160,12 +163,12 @@ class AsciiMath {
     }
   }
 
-  public toMathML(code: string): MathVdom {
+  public toMathML(code: string, config: ToTexConfig = {}): MathVdom {
     this.parser.restore(this.initState)
     try {
       this.parse(code)
       const res = this.genMathML(this.parser.results)
-      if (this.display) {
+      if (config.display ?? this.display) {
         res.attr = res.attr || {}
         res.attr.displaystyle = 'true'
       }
