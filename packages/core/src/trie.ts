@@ -1,13 +1,25 @@
 import type { SymbolValueType } from './symbols'
 import { SYMBOLMAP, TokenTypes } from './symbols'
 
+interface Position {
+  line: number
+  ch: number
+}
+
 interface TokenizedValue {
   value: string
   isKeyWord: boolean
   current: number
+  pos: Position
   tex: string
   type: TokenTypes
   eatNext?: boolean
+}
+
+interface EatenResult {
+  value: string
+  current: number
+  pos: Position
 }
 
 const NUMBERPATTERN = /[0-9]/
@@ -15,15 +27,13 @@ const STRINGPATTERN = /\S/
 
 type GeneTokenFn = (config: {
   current: number
+  pos: Position
   value?: string
 }) => TokenizedValue
 
-const createConstToken: GeneTokenFn = (config: {
-  current: number
-  value?: string
-}) => {
-  const { value = '', current } = config
-  return { value, isKeyWord: false, current, tex: value, type: TokenTypes.Const }
+const createConstToken: GeneTokenFn = (config) => {
+  const { value = '', current, pos } = config
+  return { value, isKeyWord: false, current, pos, tex: value, type: TokenTypes.Const }
 }
 
 class Trie {
@@ -95,7 +105,7 @@ class Trie {
    * @returns value: matched keyword
    * current: the string cursor
    */
-  public tryParsing(letters: string[], start = 0): TokenizedValue {
+  public tryParsing(letters: string[], start = 0, pos: Position = { line: 1, ch: 0 }): TokenizedValue {
     let value = ''
     let root = this._root
     let isKeyWord = false
@@ -129,10 +139,10 @@ class Trie {
         return SYMBOLMAP.get(value)!
       return { tex: value, type: TokenTypes.StringLiteral }
     })()
-    return { value, isKeyWord, current, ...ret }
+    return { value, isKeyWord, current, ...ret, pos }
   }
 
-  public tryParsingNumber(letters: string[], current: number): TokenizedValue {
+  public tryParsingNumber(letters: string[], current: number, pos: Position): TokenizedValue {
     let ch = letters[current]
     let value = ''
     while (NUMBERPATTERN.test(ch) && current < letters.length) {
@@ -147,10 +157,10 @@ class Trie {
       value += ch
       ch = letters[++current]
     }
-    return { value, isKeyWord: false, current, tex: value, type: TokenTypes.NumberLiteral }
+    return { value, isKeyWord: false, current, pos, tex: value, type: TokenTypes.NumberLiteral }
   }
 
-  public tryParsingString(letters: string[], current: number): TokenizedValue {
+  public tryParsingString(letters: string[], current: number, pos: Position): TokenizedValue {
     let ch = letters[current]
     let value = ''
     while (STRINGPATTERN.test(ch) && current < letters.length) {
@@ -160,23 +170,25 @@ class Trie {
       value += ch
       ch = letters[++current]
     }
-    return { value, isKeyWord: false, current, tex: value, type: TokenTypes.StringLiteral }
+    return { value, isKeyWord: false, current, pos, tex: value, type: TokenTypes.StringLiteral }
   }
 
-  public tryParsingNewLines(letters: string[], current: number): TokenizedValue {
+  public tryParsingNewLines(letters: string[], current: number, pos: Position): TokenizedValue {
     let ch = letters[current]
     let value = ''
     while (/\n/.test(ch) && current < letters.length) {
       value += ch
       ch = letters[++current]
+      pos.line++
+      pos.ch = 0
     }
     if (value.length >= 2)
-      return { value, isKeyWord: true, current, tex: '\\\\', type: TokenTypes.Align }
+      return { value, isKeyWord: true, current, pos, tex: '\\\\', type: TokenTypes.Align }
     else
-      return { value: '', isKeyWord: false, current, tex: '', type: TokenTypes.None }
+      return { value: '', isKeyWord: false, current, pos, tex: '', type: TokenTypes.None }
   }
 
-  private getPlainTextInDoubleQuote(letters: string[], current: number): { value: string; current: number } {
+  private getPlainTextInDoubleQuote(letters: string[], current: number, pos: Position): EatenResult {
     let value = ''
     let ch = letters[current]
     if (ch === '"') {
@@ -187,15 +199,15 @@ class Trie {
       }
       if (ch === '"') {
         current++
-        return { current, value }
+        return { current, value, pos }
       }
     }
-    return { value, current }
+    return { value, current, pos }
   }
 
-  public tryParsingText(letters: string[], current: number): TokenizedValue {
-    const { value, current: newCurrent } = this.getPlainTextInDoubleQuote(letters, current)
-    return { value, isKeyWord: false, current: newCurrent, tex: value, type: TokenTypes.Text }
+  public tryParsingText(letters: string[], current: number, pos: Position): TokenizedValue {
+    const { value, current: newCurrent } = this.getPlainTextInDoubleQuote(letters, current, pos)
+    return { value, isKeyWord: false, current: newCurrent, pos, tex: value, type: TokenTypes.Text }
   }
 
   private skipSpaces(letters: string[], current: number): number {
@@ -208,9 +220,9 @@ class Trie {
     return current
   }
 
-  private eatNext(letters: string[], current: number): TokenizedValue {
+  private eatNext(letters: string[], current: number, pos: Position): TokenizedValue {
     current = this.skipSpaces(letters, current)
-    const res = createConstToken({ current })
+    const res = createConstToken({ current, pos })
     if (current >= letters.length)
       return res
     let letter = letters[current]
@@ -254,9 +266,13 @@ class Trie {
     const tokens: TokenizedValue[] = []
     let counter = 0
     const letters = [...word]
+    let line = 1
+    let ch = 0
     while (current < letters.length) {
       {
-        const t = this.tryParsingNewLines(letters, current)
+        const t = this.tryParsingNewLines(letters, current, { line, ch })
+        line = t.pos.line
+        ch = t.pos.ch
         current = t.current
         if (t.value !== '') {
           tokens.push(t)
@@ -266,60 +282,27 @@ class Trie {
       // process spaces
       if (/\s/.test(letters[current])) {
         current++
+        ch++
         continue
       }
       // process potential keywords
-      const t = this.tryParsing(letters, current)
+      const t = this.tryParsing(letters, current, { line, ch })
+      ch += t.current - current
       current = t.current
       if (t.value !== '') {
         tokens.push(t)
         if (t.eatNext) {
-          const nt = this.eatNext(letters, current)
+          const nt = this.eatNext(letters, current, { line, ch })
+          ch += nt.current - current
           current = nt.current
           tokens.push(nt)
         }
         continue
       }
-      /* if (t.value !== '') {
-        switch (t.value) {
-          case 'text': {
-            t = this.getPlainText(letters, current, createTextToken)
-            current = t.current
-            tokens.push(t)
-            break
-          }
-          case 'tex': {
-            // t = this.getPlainText(letters, current, createConstToken)
-            current = this.skipSpaces(letters, current)
-            const { value: v, current: c } = this.getPlainTextInDoubleQuote(letters, current)
-            current = c
-            t = createConstToken({ current, value: v })
-            tokens.push(t)
-            break
-          }
-          case 'hspace': {
-            tokens.push(t)
-            const nt = this.getPlainText(letters, current, createConstToken)
-            current = nt.current
-            tokens.push(nt)
-            break
-          }
-          case 'color': {
-            tokens.push(t)
-            const nt = this.processColor(letters, current)
-            current = nt.current
-            tokens.push(nt)
-            break
-          }
-          default: {
-            tokens.push(t)
-          }
-        }
-        continue
-      } */
       // process numbers
       {
-        const t = this.tryParsingNumber(letters, current)
+        const t = this.tryParsingNumber(letters, current, { line, ch })
+        ch += t.current - current
         current = t.current
         if (t.value !== '') {
           tokens.push(t)
@@ -328,7 +311,8 @@ class Trie {
       }
       // process text wrapped with double quote
       {
-        const t = this.tryParsingText(letters, current)
+        const t = this.tryParsingText(letters, current, { line, ch })
+        ch += t.current - current
         current = t.current
         if (t.value !== '') {
           tokens.push(t)
@@ -337,7 +321,8 @@ class Trie {
       }
       // process other string
       {
-        const t = this.tryParsingString(letters, current)
+        const t = this.tryParsingString(letters, current, { line, ch })
+        ch += t.current - current
         current = t.current
         if (t.value !== '') {
           tokens.push(t)
@@ -346,7 +331,7 @@ class Trie {
       }
       counter++
       if (counter > letters.length * 2)
-        throw new Error('Oops! There may be an infinity loop')
+        throw new Error('Oops! There may be an infinity loop!')
     }
     return tokens
   }
@@ -398,4 +383,5 @@ export {
   TrieNode,
   createTrie,
   TokenizedValue,
+  Position,
 }

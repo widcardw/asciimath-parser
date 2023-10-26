@@ -276,7 +276,7 @@ function parenedArrayNode(tokens: TokenizedValue[], current: number, closingInde
   node.body.push(createParenOfFlatNodeFrom(token, true))
   current = readTokensToFlatNode(current + 1, closingIndex, tokens, node)
   if (current >= tokens.length)
-    throw new ParenError(`Read index out of range, index: ${current}`)
+    throw new ParenError(`Read index out of range at line: ${token.pos.line}, ch: ${token.pos.ch}.`)
 
   token = tokens[current]
   current++
@@ -818,7 +818,7 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): Walk
       break
     }
     default: {
-      throw new Error(`Unmatched token in walk ${token.value}`)
+      throw new Error(`Unmatched token \`${token.value}\` at line: ${token.pos.line}, ch: ${token.pos.ch}.`)
     }
   }
   // watch next token

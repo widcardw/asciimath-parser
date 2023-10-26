@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { AsciiMath } from '../src'
-
-const $_ = String.raw
+import { $_ } from './utils/string-raw'
 
 const examples = [
   {
