@@ -141,8 +141,7 @@ const passedExamples: Example[] = [
   {
     input: 'tex "\\LaTeX"',
     tex: '{ \\LaTeX }',
-    // TODO: is this ok?
-    mathml: '<mtext>\\LaTeX</mtext>',
+    mathml: '<tex>\\LaTeX</tex>',
   },
   {
     input: '""',
@@ -338,14 +337,12 @@ const passedExamples: Example[] = [
   {
     input: '[1, 2 | 3; 4, 5 | 6]',
     tex: '\\left[\\begin{array}{cc|c}1 & 2 & 3 \\\\ 4 & 5 & 6\\end{array}\\right]',
-    // TODO: missing pipe
-    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd><mtd><mn>3</mn></mtd></mtr><mtr><mtd><mn>4</mn></mtd><mtd><mn>5</mn></mtd><mtd><mn>6</mn></mtd></mtr></mtable><mo>]</mo></mrow>',
+    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd><mtd style="border-left:1px solid"><mn>3</mn></mtd></mtr><mtr><mtd><mn>4</mn></mtd><mtd><mn>5</mn></mtd><mtd style="border-left:1px solid"><mn>6</mn></mtd></mtr></mtable><mo>]</mo></mrow>',
   },
   {
     input: '[1, 2 | 3; 4 | 5, 6]',
     tex: '\\left[\\begin{array}{c|c|c}1 & 2 & 3 \\\\ 4 & 5 & 6\\end{array}\\right]',
-    // TODO: missing pipe
-    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd><mtd><mn>3</mn></mtd></mtr><mtr><mtd><mn>4</mn></mtd><mtd><mn>5</mn></mtd><mtd><mn>6</mn></mtd></mtr></mtable><mo>]</mo></mrow>',
+    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd style="border-left:1px solid"><mn>2</mn></mtd><mtd style="border-left:1px solid"><mn>3</mn></mtd></mtr><mtr><mtd><mn>4</mn></mtd><mtd style="border-left:1px solid"><mn>5</mn></mtd><mtd style="border-left:1px solid"><mn>6</mn></mtd></mtr></mtable><mo>]</mo></mrow>',
   },
   {
     input: '[a, b; [1, 2; 3, 4], d]',
@@ -355,26 +352,27 @@ const passedExamples: Example[] = [
   {
     input: '[|a, b; c,d]',
     tex: '\\left[\\begin{array}{|cc}a & b \\\\ c & d\\end{array}\\right]',
-    // TODO: missing pipe
-    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>]</mo></mrow>',
+    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd style="border-left:1px solid"><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd style="border-left:1px solid"><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>]</mo></mrow>',
   },
   {
     input: '[a, b|; c,d]',
     tex: '\\left[\\begin{array}{cc|}a & b \\\\ c & d\\end{array}\\right]',
-    // TODO: missing pipe
-    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>]</mo></mrow>',
+    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd style="border-right:1px solid"><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd style="border-right:1px solid"><mi>d</mi></mtd></mtr></mtable><mo>]</mo></mrow>',
   },
   {
     input: '[|a, b|; c,d]',
     tex: '\\left[\\begin{array}{|cc|}a & b \\\\ c & d\\end{array}\\right]',
-    // TODO: missing pipe
-    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>]</mo></mrow>',
+    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd style="border-left:1px solid"><mi>a</mi></mtd><mtd style="border-right:1px solid"><mi>b</mi></mtd></mtr><mtr><mtd style="border-left:1px solid"><mi>c</mi></mtd><mtd style="border-right:1px solid"><mi>d</mi></mtd></mtr></mtable><mo>]</mo></mrow>',
+  },
+  {
+    input: '[|a | b|; c,d]',
+    tex: '\\left[\\begin{array}{|c|c|}a & b \\\\ c & d\\end{array}\\right]',
+    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd style="border-left:1px solid"><mi>a</mi></mtd><mtd style="border-left:1px solid;border-right:1px solid"><mi>b</mi></mtd></mtr><mtr><mtd style="border-left:1px solid"><mi>c</mi></mtd><mtd style="border-left:1px solid;border-right:1px solid"><mi>d</mi></mtd></mtr></mtable><mo>]</mo></mrow>',
   },
   {
     input: '[|hline 1| 2|; hline 3, 4; hline]',
     tex: '\\left[\\begin{array}{|c|c|}\\hline 1 & 2 \\\\ \\hline 3 & 4 \\\\ \\hline\\end{array}\\right]',
-    // TODO: missing hline
-    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd><mrow><mrow></mrow><mn>1</mn></mrow></mtd><mtd><mn>2</mn></mtd></mtr><mtr><mtd><mrow><mrow></mrow><mn>3</mn></mrow></mtd><mtd><mn>4</mn></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr></mtable><mo>]</mo></mrow>',
+    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd style="border-left:1px solid;border-top:1px solid"><mrow><hline></hline><mn>1</mn></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid"><mn>2</mn></mtd></mtr><mtr><mtd style="border-left:1px solid;border-top:1px solid;border-bottom:1px solid"><mrow><hline></hline><mn>3</mn></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid;border-bottom:1px solid"><mn>4</mn></mtd></mtr></mtable><mo>]</mo></mrow>',
   },
   {
     input: '"\\\\abc"',
@@ -416,8 +414,7 @@ const passedExamples: Example[] = [
   {
     input: '[hline|a|b|;]',
     tex: '\\left[\\begin{array}{|c|c|}\\hline a & b \\\\ \\end{array}\\right]',
-    // TODO: missing hline
-    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd><mrow><mrow></mrow><mi>a</mi></mrow></mtd><mtd><mi>b</mi></mtd></mtr></mtable><mo>]</mo></mrow>',
+    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd style="border-left:1px solid;border-top:1px solid"><mrow><hline></hline><mi>a</mi></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid"><mi>b</mi></mtd></mtr></mtable><mo>]</mo></mrow>',
   },
   {
     input: `{:
@@ -428,8 +425,7 @@ const passedExamples: Example[] = [
   --
 :}`,
     tex: '\\left.\\begin{array}{|c|c|}\\hline a & b \\\\ \\hline c & d \\\\ \\hline\\end{array}\\right.',
-    // TODO: missing hline
-    mathml: '',
+    mathml: '<mrow><mtable><mtr><mtd style="border-left:1px solid;border-top:1px solid"><mrow><hline></hline><mi>a</mi></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid"><mi>b</mi></mtd></mtr><mtr><mtd style="border-left:1px solid;border-top:1px solid;border-bottom:1px solid"><mrow><hline></hline><mi>c</mi></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid;border-bottom:1px solid"><mi>d</mi></mtd></mtr></mtable></mrow>',
   },
   {
     input: '\uD83D\uDC40',
@@ -444,7 +440,6 @@ const passedExamples: Example[] = [
   {
     input: 'verb"114514\n1919810"',
     tex: '\\begin{aligned}\n& \\verb|114514|\\\\\n& \\verb|1919810|\n\\end{aligned}',
-    // TODO: verb
     mathml: `<mtext style="white-space:pre-wrap;text-align:left">114514
 1919810</mtext>`,
   },
@@ -466,7 +461,6 @@ int main() {
 & \verb|  return 0;|\\
 & \verb|}|
 \end{aligned}`,
-    // TODO: verb
     mathml: `<mtext style="white-space:pre-wrap;text-align:left">#include&lt;stdio.h&gt;
 int main() {
   if (a || b) printf(b);
