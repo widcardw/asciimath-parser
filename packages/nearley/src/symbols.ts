@@ -218,7 +218,7 @@ const symbols: Required<Symbols> = {
     'mid': { tex: '\\mid', mathml: { tag: 'mo', children: '\u2223' } },
 
     // misc tex command
-    '--': { alias: 'hline', tex: '\\hline' },
+    '--': { alias: 'hline', tex: '\\hline', mathml: { tag: 'mrow' } },
     '#': { tex: '\\displaystyle' },
 
     // math text
@@ -307,7 +307,7 @@ const symbols: Required<Symbols> = {
     hspace: { tex: '\\hspace{$1}', strip: true, mathml: { tag: 'mspace', attr: { width: '$1' }, children: '' } },
     text: { tex: '\\text{$1}', strip: true, mathml: { tag: 'mtext' } },
     tex: { tex: '{ $1 }', strip: true, mathml: { tag: 'mtext' } },
-    verb: { tex: '', mathml: { tag: 'mtext' } }, // 这里 tex 没有实际意义, verb 需特殊处理
+    verb: { tex: '', mathml: { tag: 'mtext', attr: { style: 'white-space:pre-wrap;text-align:left' } } }, // 这里 tex 没有实际意义, verb 需特殊处理
 
     // font style
     bb: { alias: 'mathbf', tex: '\\mathbf{ $1 }', mathml: { tag: 'mstyle', attr: { mathvariant: 'bold' } } },

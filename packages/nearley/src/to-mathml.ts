@@ -40,7 +40,7 @@ const initMathML = (symbols: Required<Symbols>) => {
     const mid = new MathVdom({ tag: 'mo', children: '\u2223' })
     const comma = new MathVdom({ tag: 'mo', children: ',' })
     value.forEach((item: Ast, index: number) => {
-      if (pipeIndex?.has(index))
+      if (pipeIndex?.[index])
         res.push(mid)
       else if (index > 0)
         res.push(comma)
@@ -50,7 +50,7 @@ const initMathML = (symbols: Required<Symbols>) => {
       else
         res.push(mathml)
     })
-    if (pipeIndex?.has(value.length))
+    if (pipeIndex?.[value.length])
       res.push(mid)
     if (!strip) {
       const lp = getMathml(symbols.lp[left] || symbols.pipe[left], left.value)
