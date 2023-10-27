@@ -407,7 +407,7 @@ const passedExamples: Example[] = [
   {
     input: 'hline\na && 111 && 333\n\nhline\nb && 222\n\nhline',
     tex: '\\begin{aligned}\\hline a && 111 && 333 \\\\ \\hline b && 222 \\\\ \\hline\\end{aligned}',
-    // TODO: support multiline in multiline
+    // TODO: support hline in multiline
     mathml: '<mtable><mtr><mtd style="border-top:1px solid"><mrow><mi>a</mi><mn>111</mn><mn>333</mn></mrow></mtd></mtr><mtr><mtd style="border-top:1px solid;border-bottom:1px solid"><mrow><mi>b</mi><mn>222</mn></mrow></mtd></mtr></mtable>',
   },
   {
