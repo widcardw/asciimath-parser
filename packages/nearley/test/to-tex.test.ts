@@ -16,7 +16,7 @@ export const traceLex = (input: string, lexer: Nearley.Lexer) => {
   return true
 }
 
-describe('test nearley', () => {
+describe('test nearley to-tex', () => {
   const am = new AmNearley.AsciiMath({ display: false })
   examples.forEach((item, index) => {
     // traceLex(item.input, am.lexer)

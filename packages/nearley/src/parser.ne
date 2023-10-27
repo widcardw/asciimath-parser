@@ -103,7 +103,7 @@ simple -> matrix {% id %} # 矩阵
   # 二元操作符
   | %opOAB _ simple _ simple {% d => ({ type: 'opOAB', value: d[0].value, $1: d[2], $2: d[4] }) %}
   # 文本
-  | %text %textEnd {%d => ({ type: 'text', value: d[1] ? d[1].value : '' }) %}
+  | %text %textEnd {%d => ({ type: 'text', value: d[1] ? d[1].value.slice(0, -1) : '' }) %}
   | %limits {% id %}
   | %align {% id %}
   | value {% id %}

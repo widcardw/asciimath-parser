@@ -23,7 +23,7 @@ describe('test error', () => {
 & \verb||\\
 & \verb|1  /|\\
 & \verb|   ^|\\
-& \verb|Unexpected opAOB token: "/"|
+& \verb|Unexpected opAOB token: "/".|
 \end{aligned}`)
   })
 })

@@ -2,7 +2,7 @@
 import type { StripType, Symbols, TokenTypes } from './symbols'
 import type { Ast } from './index'
 
-const initGenerator = (symbols: Required<Symbols>) => {
+const initTex = (symbols: Required<Symbols>) => {
   const genMatrix = (ast: Ast, strip = false) => {
     const { value, left, right, pipeIndex } = ast
     const maxCol = Math.max(...value.map((row: Ast[]) => row.length))
@@ -129,7 +129,7 @@ const initGenerator = (symbols: Required<Symbols>) => {
   }
 
   const escapeText = (str: string): string => {
-    return str.slice(0, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\')
+    return str.replace(/\\"/g, '"').replace(/\\\\/g, '\\')
   }
 
   const genText = (ast: Ast, strip = false) => {
@@ -151,36 +151,33 @@ const initGenerator = (symbols: Required<Symbols>) => {
 
     // 偏微分的分母部分
     let subStr
-    if (sub.type === 'paren') {
-      if (Array.isArray(sub.value[0]))
-        subStr = sub.value[0].map(genSubGroup).join('') // 这里不带指数
-      else
-        subStr = genSubGroup(sub.value[0]) + expStr // 这里带指数
-    }
-    else {
+    if (sub.type !== 'paren')
       subStr = genSubGroup(sub) + expStr // 这里带指数
-    }
+    else if (Array.isArray(sub.value[0]))
+      subStr = sub.value[0].map(genSubGroup).join('') // 这里不带指数
+    else
+      subStr = genSubGroup(sub.value[0]) + expStr // 这里带指数
 
     return `\\frac{ ${supStr} }{ ${subStr} }`
   }
 
-  const genPipe = (ast: Ast) => {
-    const { value, left, right } = ast
-    const res = toTex(value)
-    return [
-      '\\left',
-      symbols.pipe[left].tex,
-      res,
-      '\\right',
-      symbols.pipe[right].tex,
-    ].join('')
-  }
+  // const genPipe = (ast: Ast) => {
+  //   const { value, left, right } = ast
+  //   const res = toTex(value)
+  //   return [
+  //     '\\left',
+  //     symbols.pipe[left].tex,
+  //     res,
+  //     '\\right',
+  //     symbols.pipe[right].tex,
+  //   ].join('')
+  // }
 
   const genAm = (ast: Ast) => {
     const { value } = ast
     const aligned = value.length > 1
     const res = value.map((v: Ast) => toTex(v))
-    return aligned ? `\\begin{aligned}${res.join(' \\\\ ')}\\end{aligned}` : res[0]
+    return aligned ? `\\begin{aligned}${res.join(' \\\\ ')}\\end{aligned}` : (res[0] || '')
   }
 
   // const escapeTex = (tex: string): string => {
@@ -222,7 +219,7 @@ const initGenerator = (symbols: Required<Symbols>) => {
       case 'matrix': return genMatrix(ast, strip)
       case 'paren': return genParen(ast, strip)
       case 'text': return genText(ast, strip)
-      case 'pipe': return genPipe(ast)
+      // case 'pipe': return genPipe(ast)
       case 'number': case 'lp': case 'literal': case 'limits': case 'align':
         return ast.value
       case 'keyword': return symbols.keyword[ast.value].tex
@@ -241,4 +238,4 @@ const initGenerator = (symbols: Required<Symbols>) => {
   return toTex
 }
 
-export default initGenerator
+export default initTex
