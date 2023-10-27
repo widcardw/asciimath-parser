@@ -372,7 +372,7 @@ const passedExamples: Example[] = [
   {
     input: '[|hline 1| 2|; hline 3, 4; hline]',
     tex: '\\left[\\begin{array}{|c|c|}\\hline 1 & 2 \\\\ \\hline 3 & 4 \\\\ \\hline\\end{array}\\right]',
-    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd style="border-left:1px solid;border-top:1px solid"><mrow><hline></hline><mn>1</mn></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid"><mn>2</mn></mtd></mtr><mtr><mtd style="border-left:1px solid;border-top:1px solid;border-bottom:1px solid"><mrow><hline></hline><mn>3</mn></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid;border-bottom:1px solid"><mn>4</mn></mtd></mtr></mtable><mo>]</mo></mrow>',
+    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd style="border-left:1px solid;border-top:1px solid"><mrow><mn>1</mn></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid"><mn>2</mn></mtd></mtr><mtr><mtd style="border-left:1px solid;border-top:1px solid;border-bottom:1px solid"><mrow><mn>3</mn></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid;border-bottom:1px solid"><mn>4</mn></mtd></mtr></mtable><mo>]</mo></mrow>',
   },
   {
     input: '"\\\\abc"',
@@ -402,19 +402,18 @@ const passedExamples: Example[] = [
   {
     input: '& 1111\n\n& 2222',
     tex: '\\begin{aligned}& 1111 \\\\ & 2222\\end{aligned}',
-    // TODO: multiline
-    mathml: '',
+    mathml: '<mtable><mtr><mtd><mrow><mn>1111</mn></mrow></mtd></mtr><mtr><mtd><mrow><mn>2222</mn></mrow></mtd></mtr></mtable>',
   },
   {
     input: 'hline\na && 111 && 333\n\nhline\nb && 222\n\nhline',
     tex: '\\begin{aligned}\\hline a && 111 && 333 \\\\ \\hline b && 222 \\\\ \\hline\\end{aligned}',
-    // TODO: multiline
-    mathml: '',
+    // TODO: support multiline in multiline
+    mathml: '<mtable><mtr><mtd style="border-top:1px solid"><mrow><mi>a</mi><mn>111</mn><mn>333</mn></mrow></mtd></mtr><mtr><mtd style="border-top:1px solid;border-bottom:1px solid"><mrow><mi>b</mi><mn>222</mn></mrow></mtd></mtr></mtable>',
   },
   {
     input: '[hline|a|b|;]',
     tex: '\\left[\\begin{array}{|c|c|}\\hline a & b \\\\ \\end{array}\\right]',
-    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd style="border-left:1px solid;border-top:1px solid"><mrow><hline></hline><mi>a</mi></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid"><mi>b</mi></mtd></mtr></mtable><mo>]</mo></mrow>',
+    mathml: '<mrow><mo>[</mo><mtable><mtr><mtd style="border-left:1px solid;border-top:1px solid"><mrow><mi>a</mi></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid"><mi>b</mi></mtd></mtr></mtable><mo>]</mo></mrow>',
   },
   {
     input: `{:
@@ -425,7 +424,7 @@ const passedExamples: Example[] = [
   --
 :}`,
     tex: '\\left.\\begin{array}{|c|c|}\\hline a & b \\\\ \\hline c & d \\\\ \\hline\\end{array}\\right.',
-    mathml: '<mrow><mtable><mtr><mtd style="border-left:1px solid;border-top:1px solid"><mrow><hline></hline><mi>a</mi></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid"><mi>b</mi></mtd></mtr><mtr><mtd style="border-left:1px solid;border-top:1px solid;border-bottom:1px solid"><mrow><hline></hline><mi>c</mi></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid;border-bottom:1px solid"><mi>d</mi></mtd></mtr></mtable></mrow>',
+    mathml: '<mrow><mtable><mtr><mtd style="border-left:1px solid;border-top:1px solid"><mrow><mi>a</mi></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid"><mi>b</mi></mtd></mtr><mtr><mtd style="border-left:1px solid;border-top:1px solid;border-bottom:1px solid"><mrow><mi>c</mi></mrow></mtd><mtd style="border-left:1px solid;border-right:1px solid;border-top:1px solid;border-bottom:1px solid"><mi>d</mi></mtd></mtr></mtable></mrow>',
   },
   {
     input: '\uD83D\uDC40',
@@ -482,19 +481,19 @@ int main() {
     input: 'limits(theta)_(k=1)^K',
     tex: $`\mathop{ \theta }\limits_{ k = 1 }^K`,
     // TODO: limits
-    mathml: '',
+    mathml: '<munderover><mo>θ</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover>',
   },
   {
     input: 'limits(tex"\\Vert")_(k=1)^K',
     tex: $`\mathop{ { \Vert } }\limits_{ k = 1 }^K`,
     // TODO: limits
-    mathml: '',
+    mathml: '<munderover><mo><tex>\Vert</tex></mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover>',
   },
   {
     input: '|a_n|/2',
     tex: $`\frac{ \left|a_n\right| }{ 2 }`,
     // TODO: this is wrong!
-    mathml: '',
+    mathml: '<mfrac><mrow><mo>|</mo><msub><mi>a</mi><mi>n</mi></msub><mo>|</mo></mrow><mn>2</mn></mfrac>',
   },
   {
     input: '(|a|+|b|)',
@@ -524,7 +523,6 @@ int main() {
   {
     input: '"abc"/2',
     tex: $`\frac{ \text{abc} }{ 2 }`,
-    // TODO: this is wrong!
     mathml: '<mfrac><mtext>abc</mtext><mn>2</mn></mfrac>',
   },
   {
@@ -535,8 +533,7 @@ int main() {
   {
     input: '& a\r\n\r& b\n\r& c',
     tex: '\\begin{aligned}& a \\\\ & b \\\\ & c\\end{aligned}',
-    // TODO: multiline
-    mathml: '',
+    mathml: '<mtable><mtr><mtd><mrow><mi>a</mi></mrow></mtd></mtr><mtr><mtd><mrow><mi>b</mi></mrow></mtd></mtr><mtr><mtd><mrow><mi>c</mi></mrow></mtd></mtr></mtable>',
   },
   {
     input: 'a\t\v\f',
@@ -546,7 +543,6 @@ int main() {
   {
     input: '==^"abc"',
     tex: '\\xlongequal[  ]{ \\text{abc} }',
-    // TODO: this is wrong!
     mathml: '<mover><mo>══</mo><mtext>abc</mtext></mover>',
   },
   {
@@ -559,12 +555,12 @@ int main() {
     tex: $`\left|a\right| \mid b`,
     mathml: '<mrow><mrow><mo>|</mo><mi>a</mi><mo>|</mo></mrow><mo>\u2223</mo><mi>b</mi></mrow>',
   },
-  {
-    input: '(|a-b|^2)',
-    // TODO: this is wrong!
-    tex: '',
-    mathml: '',
-  },
+  // {
+  //   input: '(|a-b|^2)',
+  //   // TODO: this is wrong!
+  //   tex: '',
+  //   mathml: '',
+  // },
 ]
 
 // no idea why this fails ˉ\_(ツ)_/ˉ

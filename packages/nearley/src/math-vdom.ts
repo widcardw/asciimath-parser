@@ -23,6 +23,8 @@ export class MathVdom implements IMathVdom {
 
   toString(): string {
     const { tag, attr = {}, children = '' } = this
+    if (!tag)
+      return ''
     const attrStr = Object.entries(attr).map(([key, value]) => ` ${key}="${value}"`).join('')
     const childrenStr = typeof children === 'string' ? children : children.map(child => child.toString()).join('')
     return `<${tag}${attrStr}>${childrenStr}</${tag}>`

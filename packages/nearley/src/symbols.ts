@@ -307,7 +307,7 @@ const symbols: Required<Symbols> = {
     hspace: { tex: '\\hspace{$1}', strip: true, mathml: { tag: 'mspace', attr: { width: '$1' }, children: '' } },
     text: { tex: '\\text{$1}', strip: true, mathml: { tag: 'mtext' } },
     tex: { tex: '{ $1 }', strip: true, mathml: { tag: 'tex' } },
-    verb: { tex: '', mathml: { tag: 'mtext', attr: { style: 'white-space:pre-wrap;text-align:left' } } }, // 这里 tex 没有实际意义, verb 需特殊处理
+    verb: { strip: true, tex: '', mathml: { tag: 'mtext', attr: { style: 'white-space:pre-wrap;text-align:left' } } }, // 这里 tex 没有实际意义, verb 需特殊处理
 
     // font style
     bb: { alias: 'mathbf', tex: '\\mathbf{ $1 }', mathml: { tag: 'mstyle', attr: { mathvariant: 'bold' } } },
@@ -320,7 +320,7 @@ const symbols: Required<Symbols> = {
     rm: { alias: 'mathrm', tex: '\\mathrm{ $1 }', mathml: { tag: 'mstyle', attr: { mathvariant: 'serif' } } },
     scr: { alias: 'mathscr', tex: '\\mathscr{ $1 }', mathml: { tag: 'mstyle', attr: { mathvariant: 'script' } } }, // mathml cannot tell difference between cc and scr
 
-    limits: { tex: '\\mathop{ $1 }\\limits', strip: true },
+    limits: { tex: '\\mathop{ $1 }\\limits', strip: true, mathml: { tag: 'mo' } },
 
     // font size
     tiny: { tex: '{ \\tiny $1 }' },

@@ -38,7 +38,13 @@ const initMathML = (symbols: Required<Symbols>) => {
     const hasHline = (arr?: IMathVdom[] | string): boolean => {
       if (typeof arr === 'string' || !arr)
         return false
-      return arr.some(item => item.tag === 'hline' || hasHline(item.children))
+      return arr.some((item) => {
+        if (item.tag === 'hline') {
+          item.tag = ''
+          return true
+        }
+        return hasHline(item.children)
+      })
     }
 
     // append style to each mtd of current row
@@ -52,13 +58,15 @@ const initMathML = (symbols: Required<Symbols>) => {
     }
 
     // generate matrix body
+    let lastHasHline = false
     const body = value.map((row: Ast[]) => {
       const children = row.map((v, i) => ({
         tag: 'mtd',
         attr: getAttr(i),
         children: [toMathML(v)],
       }))
-      if (hasHline(children))
+      lastHasHline = hasHline(children)
+      if (lastHasHline)
         changeAttr(children, 'border-top:1px solid')
       return {
         tag: 'mtr',
@@ -67,7 +75,7 @@ const initMathML = (symbols: Required<Symbols>) => {
     })
     // check if last row contains only a hline
     const lastMtr = body[body.length - 1]
-    if (body.length > 1 && lastMtr?.children?.length === 1 && lastMtr.children[0]?.children?.[0]?.tag === 'hline') {
+    if (body.length > 1 && lastHasHline && lastMtr?.children?.length === 1 && lastMtr.children[0]?.children?.length === 1) {
       body.pop()
       changeAttr(body[body.length - 1]?.children, 'border-bottom:1px solid')
     }
@@ -114,14 +122,14 @@ const initMathML = (symbols: Required<Symbols>) => {
   }
 
   const genLimits = (ast: Ast) => {
-    const { value, sub, sup, $1, $2 } = ast
+    const { value, sub, sup, $1, $2, strip } = ast
     const symbol = symbols.limits[value.value]
     const tag = (sub && sup) ? 'munderover' : sub ? 'munder' : 'mover'
     const children = [getMathml(symbol)]
     if (sub)
-      children.push(toMathML($1, true))
+      children.push(toMathML($1, shouldStrip($1, strip, 0)))
     if (sup)
-      children.push(toMathML($2, true))
+      children.push(toMathML($2, shouldStrip($2, strip, 1)))
     return new MathVdom({ tag, children })
   }
 
@@ -165,7 +173,7 @@ const initMathML = (symbols: Required<Symbols>) => {
   const genOp = (ast: Ast) => {
     const { type, value, $1, $2 } = ast
     const symbol = symbols[type as TokenTypes][value]
-    const { strip = true } = symbol
+    const { strip } = symbol
     const ml = getMathml(symbol, [new MathVdom({ tag: '$1' })])
     if ($1)
       ml.replace('$1', toMathML($1, shouldStrip($1, strip, 0)))
@@ -242,9 +250,16 @@ const initMathML = (symbols: Required<Symbols>) => {
     const aligned = value.length > 1
     const children = value.map((v: Ast) => toMathML(v))
     if (aligned) {
+      // TODO: align content
       return new MathVdom({
-        tag: 'TODO',
-        children: '',
+        tag: 'mtable',
+        children: children.map((row: Ast) => ({
+          tag: 'mtr',
+          children: [{
+            tag: 'mtd',
+            children: [row],
+          }],
+        })),
       })
     }
     else if (children[0] instanceof MathVdom) {
@@ -285,8 +300,10 @@ const initMathML = (symbols: Required<Symbols>) => {
         const tag = /[a-zA-Z]/.test(ast.value) ? 'mi' : ast.value.codePointAt(0) > 0x4E00 ? 'mtext' : 'mo'
         return new MathVdom({ tag, children: ast.value })
       }
-      case 'lp': case 'limits': case 'align':
+      case 'lp': case 'limits':
         return new MathVdom({ tag: 'mo', children: ast.value })
+      case 'align':
+        return new MathVdom({ tag: '' })
       case 'keyword': {
         const symbol = symbols.keyword[ast.value]
         return new MathVdom({
