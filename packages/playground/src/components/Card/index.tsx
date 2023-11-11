@@ -5,7 +5,7 @@ import katex from 'katex'
 import { EditorView } from 'codemirror'
 import { placeholder } from '@codemirror/view'
 import { autocompletion, closeBrackets } from '@codemirror/autocomplete'
-import type { AsciiMathCore, AsciiMathNearley } from '../../asciimath'
+import { AsciiMathCore, AsciiMathNearley } from '../../asciimath'
 import { myCompletion } from './getCompletion'
 
 import './index.css'
@@ -20,6 +20,7 @@ const Card: Component<{
 }> = (props) => {
   const [amStr, setAmStr] = createSignal('')
   const [tex, setTex] = createSignal('')
+  const [mathml, setMathml] = createSignal('')
   // const [amCopied, setAmCopied] = createSignal(false)
   // const [texCopied, setTexCopied] = createSignal(false)
   const kHtml = createMemo(() => katex.renderToString(tex(), {
@@ -30,8 +31,10 @@ const Card: Component<{
   // const asciiCompletion = getCompletion()
   const [el1, setEl1] = createSignal<HTMLDivElement>()
   const [el2, setEl2] = createSignal<HTMLDivElement>()
+  const [el3, setEl3] = createSignal<HTMLDivElement>()
   let amEditor: EditorView | null = null
   let texEditor: EditorView | null = null
+  let mathmlEditor: EditorView | null = null
 
   const amStrUpdated = useDebounceFn(() => {
     setAmStr(amEditor?.state.doc.toString() || '')
@@ -39,10 +42,20 @@ const Card: Component<{
     texEditor?.dispatch({
       changes: { from: 0, to: texEditor.state.doc.length, insert: tex() },
     })
+    if (props.am instanceof AsciiMathNearley) {
+      setMathml(props.am.toMathML(amStr()).toString())
+      mathmlEditor?.dispatch({
+        changes: { from: 0, to: mathmlEditor.state.doc.length, insert: mathml() },
+      })
+    }
   }, 1000)
 
   const texAreaUpdated = useDebounceFn(() => {
     setTex(texEditor?.state.doc.toString() || '')
+  }, 1000)
+
+  const mathmlAreaUpdated = useDebounceFn(() => {
+    setMathml(mathmlEditor?.state.doc.toString() || '')
   }, 1000)
 
   createEffect(async () => {
@@ -85,37 +98,51 @@ const Card: Component<{
         ],
       })
     }
+
+    if (!mathmlEditor) {
+      mathmlEditor = new EditorView({
+        parent: el3(),
+        extensions: [
+          closeBrackets(),
+          EditorView.lineWrapping,
+          placeholder('Input MathML here...'),
+          EditorView.updateListener.of((update) => {
+            if (!update.changes.empty)
+              mathmlAreaUpdated()
+          }),
+        ],
+      })
+    }
   })
 
   onCleanup(() => {
     amEditor?.destroy()
     texEditor?.destroy()
+    mathmlEditor?.destroy()
   })
 
   return (
     <div class="card">
-      <div style={{ position: 'relative' }}>
-        {/* <textarea
-          class="input-area"
-          placeholder="Input Asciimath here"
-          onInput={useDebounceFn(inputAmCb, 800)}
-          onKeyDown={keydownHandlerAm}
-        />
-        {amCopied() && <div class="copied">Copied!</div>} */}
-        <div class="input-area" ref={r => setEl1(r)} />
-      </div>
-      <div style={{ position: 'relative' }}>
-        {/* <textarea
-          class="input-area"
-          placeholder="Input KaTeX here"
-          value={tex()}
-          onInput={useDebounceFn(inputTexCb, 800)}
-          onKeyDown={keydownHandlerTex}
-        />
-        {texCopied() && <div class="copied">Copied!</div>} */}
-        <div class="input-area" ref={r => setEl2(r)} />
-      </div>
+      {/* <textarea
+        class="input-area"
+        placeholder="Input Asciimath here"
+        onInput={useDebounceFn(inputAmCb, 800)}
+        onKeyDown={keydownHandlerAm}
+      />
+      {amCopied() && <div class="copied">Copied!</div>} */}
+      <div class="input-area" ref={r => setEl1(r)} />
+      {/* <textarea
+        class="input-area"
+        placeholder="Input KaTeX here"
+        value={tex()}
+        onInput={useDebounceFn(inputTexCb, 800)}
+        onKeyDown={keydownHandlerTex}
+      />
+      {texCopied() && <div class="copied">Copied!</div>} */}
+      <div class="input-area" ref={r => setEl2(r)} />
+      <div class="input-area" ref={r => setEl3(r)} />
       <div class="display" innerHTML={kHtml()} />
+      <div class="display" innerHTML={mathml()}></div>
     </div>
   )
 }

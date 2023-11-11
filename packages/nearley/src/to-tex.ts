@@ -227,7 +227,7 @@ const initTex = (symbols: Required<Symbols>) => {
       case 'opOA': case 'opAO': case 'opOAB': case 'opAOB': return genOp(ast)
       case 'part': return genPart(ast)
       case 'am': return genAm(ast)
-      case 'verb': return genVerb(ast)
+      // case 'verb': return genVerb(ast)
       default: {
         console.error(ast)
         throw new Error('cannot parse')

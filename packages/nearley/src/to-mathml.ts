@@ -15,15 +15,75 @@ const initMathML = (symbols: Required<Symbols>) => {
     return ml
   }
 
-  // TODO: 矩阵对齐、矩阵横、竖线
   const genMatrix = (ast: Ast, strip = false) => {
     const { value, left, right, pipeIndex } = ast
     if (value[value.length - 1]?.filter(Boolean)?.length === 0)
       value.pop() // 移除尾部空行
+    const maxCol = Math.max(...value.map((row: Ast[]) => row.length))
+
+    // TODO: 分段函数表达式向左对齐, 其它情况居中对齐
+    // const alignType = (left.value === '{' && right.value === ':}') ? 'l' : 'c'
+
+    // generate left/right border
+    const getAttr = (i: number) => {
+      const styles = []
+      if (pipeIndex?.[i])
+        styles.push('border-left:1px solid')
+      if (i === maxCol - 1 && pipeIndex?.[maxCol])
+        styles.push('border-right:1px solid')
+      return styles.length ? { style: styles.join(';') } : undefined
+    }
+
+    // check if current row has a hline command
+    const hasHline = (arr?: IMathVdom[] | string): boolean => {
+      if (typeof arr === 'string' || !arr)
+        return false
+      return arr.some((item) => {
+        if (item.tag === 'hline') {
+          item.tag = ''
+          return true
+        }
+        return hasHline(item.children)
+      })
+    }
+
+    // append style to each mtd of current row
+    const changeAttr = (arr: IMathVdom[] | undefined, style: string) => {
+      arr?.forEach((item) => {
+        if (item.attr)
+          item.attr.style = `${item.attr.style};${style}`
+        else
+          item.attr = { style }
+      })
+    }
+
+    // generate matrix body
+    let lastHasHline = false
     const body = value.map((row: Ast[]) => {
-      return { tag: 'mtr', children: row.map(v => ({ tag: 'mtd', children: [toMathML(v)] })) }
+      const children = row.map((v, i) => ({
+        tag: 'mtd',
+        attr: getAttr(i),
+        children: [toMathML(v)],
+      }))
+      lastHasHline = hasHline(children)
+      if (lastHasHline)
+        changeAttr(children, 'border-top:1px solid')
+      return {
+        tag: 'mtr',
+        children,
+      }
     })
-    const res = new MathVdom({ tag: 'mtable', children: body })
+    // check if last row contains only a hline
+    const lastMtr = body[body.length - 1]
+    if (body.length > 1 && lastHasHline && lastMtr?.children?.length === 1 && lastMtr.children[0]?.children?.length === 1) {
+      body.pop()
+      changeAttr(body[body.length - 1]?.children, 'border-bottom:1px solid')
+    }
+    const res = new MathVdom({
+      tag: 'mtable',
+      // attr: { style: 'border-collapse:collapse' },
+      children: body,
+    })
     if (strip)
       return res
     const children = [res]
@@ -62,14 +122,14 @@ const initMathML = (symbols: Required<Symbols>) => {
   }
 
   const genLimits = (ast: Ast) => {
-    const { value, sub, sup, $1, $2 } = ast
+    const { value, sub, sup, $1, $2, strip } = ast
     const symbol = symbols.limits[value.value]
     const tag = (sub && sup) ? 'munderover' : sub ? 'munder' : 'mover'
     const children = [getMathml(symbol)]
     if (sub)
-      children.push(toMathML($1, true))
+      children.push(toMathML($1, shouldStrip($1, strip, 0)))
     if (sup)
-      children.push(toMathML($2, true))
+      children.push(toMathML($2, shouldStrip($2, strip, 1)))
     return new MathVdom({ tag, children })
   }
 
@@ -112,11 +172,8 @@ const initMathML = (symbols: Required<Symbols>) => {
 
   const genOp = (ast: Ast) => {
     const { type, value, $1, $2 } = ast
-    // TODO
-    // if (value === 'verb')
-    //   return genVerb(ast)
     const symbol = symbols[type as TokenTypes][value]
-    const { strip = true } = symbol
+    const { strip } = symbol
     const ml = getMathml(symbol, [new MathVdom({ tag: '$1' })])
     if ($1)
       ml.replace('$1', toMathML($1, shouldStrip($1, strip, 0)))
@@ -126,7 +183,11 @@ const initMathML = (symbols: Required<Symbols>) => {
   }
 
   const escapeText = (str: string) => {
-    return str.replace(/\\"/g, '"').replace(/\\\\/g, '\\')
+    return str.replace(/\\"/g, '"')
+      .replace(/\\\\/g, '\\')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
   }
 
   const genText = (ast: Ast, strip = false) => {
@@ -189,9 +250,16 @@ const initMathML = (symbols: Required<Symbols>) => {
     const aligned = value.length > 1
     const children = value.map((v: Ast) => toMathML(v))
     if (aligned) {
+      // TODO: align content
       return new MathVdom({
-        tag: 'TODO',
-        children: '',
+        tag: 'mtable',
+        children: children.map((row: Ast) => ({
+          tag: 'mtr',
+          children: [{
+            tag: 'mtd',
+            children: [row],
+          }],
+        })),
       })
     }
     else if (children[0] instanceof MathVdom) {
@@ -232,22 +300,22 @@ const initMathML = (symbols: Required<Symbols>) => {
         const tag = /[a-zA-Z]/.test(ast.value) ? 'mi' : ast.value.codePointAt(0) > 0x4E00 ? 'mtext' : 'mo'
         return new MathVdom({ tag, children: ast.value })
       }
-      case 'lp': case 'limits': case 'align':
+      case 'lp': case 'limits':
         return new MathVdom({ tag: 'mo', children: ast.value })
+      case 'align':
+        return new MathVdom({ tag: '' })
       case 'keyword': {
         const symbol = symbols.keyword[ast.value]
         return new MathVdom({
           tag: symbol.mathml?.tag || 'mtext',
           attr: symbol.mathml?.attr,
-          children: symbol.mathml?.children || ast.value,
+          children: symbol.mathml?.children ?? ast.value,
         })
       }
       case 'subsup': return genSubSup(ast)
       case 'opOA': case 'opAO': case 'opOAB': case 'opAOB': return genOp(ast)
       case 'part': return genPart(ast)
       case 'am': return genAm(ast)
-      // TODO
-      // case 'verb': return genVerb(ast)
       default: {
         console.error(ast)
         throw new Error('cannot parse')
