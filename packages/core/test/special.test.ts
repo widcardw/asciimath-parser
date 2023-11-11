@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest'
 import { parser } from '../src/parser'
 import { codegen } from '../src/codegen'
 import { createTrie } from '../src/trie'
-import { AsciiMath } from '../src'
+import { AsciiMath, TokenTypes } from '../src'
+import type { PR } from './utils/remove-position'
+import { removeTex } from './utils/remove-position'
+import { flat, root, u } from './utils/build-node'
+import { removeValue } from './utils/removeValue'
 
 describe('special cases', () => {
   const am = new AsciiMath({ display: false })
@@ -29,7 +33,7 @@ describe('special cases', () => {
 describe('matrix', () => {
   const am = new AsciiMath({ display: false })
   it('should parse matrix without right paren', () => {
-    expect(am.toTex('[[a,b;c,d]')).toMatchSnapshot()
+    expect(am.toTex('[[a,b;c,d]')).toMatchInlineSnapshot('"\\\\left[ \\\\left[ \\\\begin{array}{cc} a & b \\\\\\\\ c & d \\\\end{array} \\\\right] \\\\right."')
   })
 })
 
@@ -45,9 +49,12 @@ describe('backslash', () => {
   it('should parse backslash', () => {
     const trie = createTrie()
     const tokens = trie.tryParsingAll('\\')
-    expect(tokens).toMatchSnapshot()
+    expect(removeTex(structuredClone(tokens))).toEqual<PR[]>([{ value: '\\', isKeyWord: false, type: TokenTypes.StringLiteral }])
     const ast = parser(tokens)
-    expect(ast).toMatchSnapshot()
+    expect(ast).toEqual({
+      body: [{ tex: '\\', type: 'Const', value: '\\' }],
+      type: 'Root',
+    })
     expect(codegen(ast)).toMatchInlineSnapshot('"\\\\"')
   })
 })

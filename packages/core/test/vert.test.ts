@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { parser } from '../src/parser'
+import { AlignDirection, parser } from '../src/parser'
 import { codegen } from '../src/codegen'
 import { createTrie } from '../src/trie'
-import { AsciiMath } from '../src'
+import { AsciiMath, TokenTypes } from '../src'
+import type { PR } from './utils/remove-position'
+import { removeTex } from './utils/remove-position'
+import { flat, mat, root, u } from './utils/build-node'
+import { removeValue } from './utils/removeValue'
 
 const c1 = '||a,b;c,d||'
 
@@ -10,9 +14,24 @@ describe('left and right vert', () => {
   it('should generate left and right vert', () => {
     const trie = createTrie()
     const tokens = trie.tryParsingAll(c1)
-    expect(tokens).toMatchSnapshot()
+    expect(removeTex(structuredClone(tokens))).toEqual<PR[]>([
+      { isKeyWord: true, type: TokenTypes.Paren, value: '||' },
+      { isKeyWord: false, type: TokenTypes.StringLiteral, value: 'a' },
+      { isKeyWord: true, type: TokenTypes.Split, value: ',' },
+      { isKeyWord: false, type: TokenTypes.StringLiteral, value: 'b' },
+      { isKeyWord: true, type: TokenTypes.Split, value: ';' },
+      { isKeyWord: false, type: TokenTypes.StringLiteral, value: 'c' },
+      { isKeyWord: true, type: TokenTypes.Split, value: ',' },
+      { isKeyWord: false, type: TokenTypes.StringLiteral, value: 'd' },
+      { isKeyWord: true, type: TokenTypes.Paren, value: '||' },
+    ])
     const ast = parser(tokens)
-    expect(ast).toMatchSnapshot()
+    expect(removeValue(ast)).toEqual(root(
+      mat([
+        [flat(u('a')), flat(u('b'))],
+        [flat(u('c')), flat(u('d'))],
+      ], { l: '\\Vert', r: '\\Vert' }),
+    ))
   })
 
   it('should not generate left and right vert', () => {

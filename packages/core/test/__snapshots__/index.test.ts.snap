@@ -1,5 +1,0 @@
-// Vitest Snapshot v1
-
-exports[`asciimath > should parse integrals 1`] = `"\\\\displaystyle{ \\\\int _{ 0 } ^{ + \\\\infty } \\\\text{e} ^{ {-x } } {\\\\text{d}x} = 1 }"`;
-
-exports[`codegen xlongequal > should generate xlongequal 1`] = `"\\\\displaystyle{ \\\\xlongequal[ 123 ]{ 456 } }"`;

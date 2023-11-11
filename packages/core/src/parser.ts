@@ -295,7 +295,7 @@ function parenStartedNoClosingNode(tokens: TokenizedValue[], current: number) {
   node.body.push({ type: NodeTypes.Const, value: token.value, tex: `\\left${token.tex}` } as ConstNode)
   current = readTokensToFlatNode(current + 1, tokens.length, tokens, node)
   // maybe it's better to add a hidden closing bracket
-  node.body.push({ type: NodeTypes.Const, value: token.value, tex: '\\right.' } as ConstNode)
+  node.body.push({ type: NodeTypes.Const, value: '.', tex: '\\right.' } as ConstNode)
   return { node, current }
 }
 
@@ -865,9 +865,25 @@ function parser(tokens: TokenizedValue[]) {
 export {
   NodeTypes,
   Node,
+  ConstNode,
   ChildNode,
+  FlatNode,
   RootNode,
+  ParamOneNode,
+  ParamTwoNode,
   AlignDirection,
   MatrixNode,
   parser,
+}
+
+export {
+  createConstNode,
+  createDeriUpperNode,
+  createFlatNode,
+  createMatrixNode,
+  createParamOneNode,
+  createParamTwoNode,
+  createParenOfFlatNodeFrom,
+  createRootNode,
+  createSingleBarNode,
 }
