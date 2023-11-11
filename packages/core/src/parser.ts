@@ -276,7 +276,7 @@ function parenedArrayNode(tokens: TokenizedValue[], current: number, closingInde
   node.body.push(createParenOfFlatNodeFrom(token, true))
   current = readTokensToFlatNode(current + 1, closingIndex, tokens, node)
   if (current >= tokens.length)
-    throw new ParenError(`Read index out of range, index: ${current}`)
+    throw new ParenError(`Read index out of range at line: ${token.pos.line}, ch: ${token.pos.ch}.`)
 
   token = tokens[current]
   current++
@@ -295,7 +295,7 @@ function parenStartedNoClosingNode(tokens: TokenizedValue[], current: number) {
   node.body.push({ type: NodeTypes.Const, value: token.value, tex: `\\left${token.tex}` } as ConstNode)
   current = readTokensToFlatNode(current + 1, tokens.length, tokens, node)
   // maybe it's better to add a hidden closing bracket
-  node.body.push({ type: NodeTypes.Const, value: token.value, tex: '\\right.' } as ConstNode)
+  node.body.push({ type: NodeTypes.Const, value: '.', tex: '\\right.' } as ConstNode)
   return { node, current }
 }
 
@@ -818,7 +818,7 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): Walk
       break
     }
     default: {
-      throw new Error(`Unmatched token in walk ${token.value}`)
+      throw new Error(`Unmatched token \`${token.value}\` at line: ${token.pos.line}, ch: ${token.pos.ch}.`)
     }
   }
   // watch next token
@@ -865,9 +865,25 @@ function parser(tokens: TokenizedValue[]) {
 export {
   NodeTypes,
   Node,
+  ConstNode,
   ChildNode,
+  FlatNode,
   RootNode,
+  ParamOneNode,
+  ParamTwoNode,
   AlignDirection,
   MatrixNode,
   parser,
+}
+
+export {
+  createConstNode,
+  createDeriUpperNode,
+  createFlatNode,
+  createMatrixNode,
+  createParamOneNode,
+  createParamTwoNode,
+  createParenOfFlatNodeFrom,
+  createRootNode,
+  createSingleBarNode,
 }

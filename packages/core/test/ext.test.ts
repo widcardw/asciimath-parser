@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { AsciiMath, TokenTypes } from '../src'
-
-const $_ = String.raw
+import { $_ } from './utils/string-raw'
 
 describe('extend tokens in asciimath', () => {
   const am = new AsciiMath({
