@@ -198,7 +198,7 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
   // inside a matrix
   while (current < end) {
     token = tokens[current]
-    if (token.value === ',') {
+    if (token.type === TokenTypes.Split && token.value === ',') {
       if (tempNode) {
         tempArr.push(tempNode)
         tempNode = null
@@ -209,7 +209,7 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
       ++current
       continue
     }
-    else if (token.value === ';' || token.tex === '\\\\') {
+    else if (token.type === TokenTypes.Split && (token.value === ';' || token.tex === '\\\\')) {
       if (tempNode) {
         tempArr.push(tempNode)
         tempNode = null

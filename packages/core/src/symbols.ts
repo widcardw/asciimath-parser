@@ -263,6 +263,7 @@ const SYMBOLMAP: Map<string, SymbolValueType> = new Map([
   ['bar', { type: TokenTypes.OperatorOA, tex: '\\bar{ $1 }' }],
   ['vec', { type: TokenTypes.OperatorOA, tex: '\\vec{ $1 }' }],
   ['Vec', { type: TokenTypes.OperatorOA, tex: '\\overrightarrow{ $1 }' }],
+  ['Aec', { type: TokenTypes.OperatorOA, tex: '\\overleftarrow{ $1 }' }],
   ['tilde', { type: TokenTypes.OperatorOA, tex: '\\tilde{ $1 }' }],
   ['Tilde', { type: TokenTypes.OperatorOA, tex: '\\widetilde{ $1 }' }],
   ['dot', { type: TokenTypes.OperatorOA, tex: '\\dot{ $1 }' }],
