@@ -48,7 +48,7 @@ describe('sup and div', () => {
 describe('`op A` and `sup`', () => {
   const am = new AsciiMath()
   it('should render `op A` first', () => {
-    expect(am.toTex('abs(a)^3')).toBe($_`\displaystyle{ \left|a\right| ^{ 3 } }`)
+    expect(am.toTex('abs(a)^3')).toBe($_`\displaystyle{ \left| a \right| ^{ 3 } }`)
   })
 })
 

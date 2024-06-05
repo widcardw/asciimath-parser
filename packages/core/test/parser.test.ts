@@ -246,7 +246,7 @@ describe('parse expression like sup and sub', () => {
   it('should parse an `abs` expression', () => {
     expect(removeValue(parser(trie.tryParsingAll('abs xayz')))).toEqual(
       root(
-        opOA('\\left|$1\\right|', u('x')),
+        opOA('\\left| $1 \\right|', u('x')),
         u('a'),
         u('y'),
         u('z'),

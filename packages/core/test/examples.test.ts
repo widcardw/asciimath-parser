@@ -129,7 +129,7 @@ const examples = [
   },
   {
     i: 'abs(x)',
-    o: $_`\left|x\right|`,
+    o: $_`\left| x \right|`,
   },
   {
     i: '{ a | b }',

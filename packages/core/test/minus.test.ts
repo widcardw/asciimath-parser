@@ -88,7 +88,7 @@ describe('minus with other operators', () => {
   })
 
   it('should parse abs', () => {
-    expect(am.toTex('abs -x')).toBe($_`\left|{-x }\right|`)
+    expect(am.toTex('abs -x')).toBe($_`\left| {-x } \right|`)
   })
 
   it('should parse integral', () => {
