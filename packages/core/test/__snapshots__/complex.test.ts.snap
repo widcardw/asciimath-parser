@@ -1,6 +1,6 @@
 // Vitest Snapshot v1
 
-exports[`obsidian-asciimath #26 > may fall into infinite loop 1`] = `
+exports[`obsidian-asciimath #26 > should not fall into infinite loop 1`] = `
 [
   {
     "isKeyWord": true,
@@ -342,7 +342,7 @@ exports[`obsidian-asciimath #26 > may fall into infinite loop 1`] = `
 ]
 `;
 
-exports[`obsidian-asciimath #26 > may fall into infinite loop 2`] = `
+exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
 {
   "body": [
     {
