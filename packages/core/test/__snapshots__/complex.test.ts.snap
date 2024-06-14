@@ -1,0 +1,686 @@
+// Vitest Snapshot v1
+
+exports[`obsidian-asciimath #26 > may fall into infinite loop 1`] = `
+[
+  {
+    "isKeyWord": true,
+    "type": "LParen",
+    "value": "{",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Const",
+    "value": "EE",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorA",
+    "value": "cc",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "P",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "isKeyWord": false,
+    "type": "NumberLiteral",
+    "value": "4",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Const",
+    "value": "in",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Const",
+    "value": "RR",
+  },
+  {
+    "isKeyWord": true,
+    "type": "LParen",
+    "value": "[",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "X",
+  },
+  {
+    "isKeyWord": true,
+    "type": "RParen",
+    "value": "]",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Const",
+    "value": "\\\\;",
+  },
+  {
+    "isKeyWord": false,
+    "type": "Text",
+    "value": "t.q.",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Const",
+    "value": "\\\\;",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Const",
+    "value": "AA",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "n",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Const",
+    "value": "in",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Const",
+    "value": "NN",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Split",
+    "value": ",",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "D",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "isKeyWord": true,
+    "type": "LParen",
+    "value": "(",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorA",
+    "value": "cc",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "L",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "isKeyWord": false,
+    "type": "NumberLiteral",
+    "value": "1",
+  },
+  {
+    "isKeyWord": true,
+    "type": "RParen",
+    "value": ")",
+  },
+  {
+    "isKeyWord": true,
+    "type": "LParen",
+    "value": "(",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "n",
+  },
+  {
+    "isKeyWord": true,
+    "type": "RParen",
+    "value": ")",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Const",
+    "value": "*",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "D",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "isKeyWord": true,
+    "type": "LParen",
+    "value": "(",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorA",
+    "value": "cc",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "L",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "isKeyWord": false,
+    "type": "NumberLiteral",
+    "value": "2",
+  },
+  {
+    "isKeyWord": true,
+    "type": "RParen",
+    "value": ")",
+  },
+  {
+    "isKeyWord": true,
+    "type": "LParen",
+    "value": "(",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "n",
+  },
+  {
+    "isKeyWord": true,
+    "type": "RParen",
+    "value": ")",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Align",
+    "value": "
+
+",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Const",
+    "value": "<=",
+  },
+  {
+    "isKeyWord": true,
+    "type": "LParen",
+    "value": "(",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorA",
+    "value": "cc",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "P",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "isKeyWord": false,
+    "type": "NumberLiteral",
+    "value": "4",
+  },
+  {
+    "isKeyWord": true,
+    "type": "LParen",
+    "value": "(",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "n",
+  },
+  {
+    "isKeyWord": true,
+    "type": "RParen",
+    "value": ")",
+  },
+  {
+    "isKeyWord": true,
+    "type": "RParen",
+    "value": ")",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorSup",
+    "value": "^",
+  },
+  {
+    "isKeyWord": false,
+    "type": "NumberLiteral",
+    "value": "2",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "=",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorA",
+    "value": "cc",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "P",
+  },
+  {
+    "isKeyWord": true,
+    "type": "OperatorSup",
+    "value": "_",
+  },
+  {
+    "isKeyWord": false,
+    "type": "NumberLiteral",
+    "value": "5",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Const",
+    "value": "in",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Const",
+    "value": "RR",
+  },
+  {
+    "isKeyWord": true,
+    "type": "LParen",
+    "value": "[",
+  },
+  {
+    "isKeyWord": false,
+    "type": "StringLiteral",
+    "value": "X",
+  },
+  {
+    "isKeyWord": true,
+    "type": "RParen",
+    "value": "]",
+  },
+  {
+    "isKeyWord": true,
+    "type": "Split",
+    "value": ";",
+  },
+  {
+    "isKeyWord": true,
+    "type": "RParen",
+    "value": ":}",
+  },
+]
+`;
+
+exports[`obsidian-asciimath #26 > may fall into infinite loop 2`] = `
+{
+  "body": [
+    {
+      "alignment": "l",
+      "dividerIndices": [],
+      "lparen": "\\\\left\\\\lbrace",
+      "params": [
+        [
+          {
+            "body": [
+              {
+                "tex": "\\\\exists",
+                "type": "Const",
+              },
+              {
+                "body": [
+                  {
+                    "params": {
+                      "tex": "P",
+                      "type": "Const",
+                    },
+                    "tex": "\\\\mathcal{ $1 }",
+                    "type": "ParamOne",
+                  },
+                  {
+                    "params": {
+                      "tex": "4",
+                      "type": "Const",
+                    },
+                    "tex": "_{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+              {
+                "tex": "\\\\in",
+                "type": "Const",
+              },
+              {
+                "tex": "\\\\mathbb{R}",
+                "type": "Const",
+              },
+              {
+                "body": [
+                  {
+                    "tex": "\\\\left[",
+                    "type": "Const",
+                  },
+                  {
+                    "tex": "X",
+                    "type": "Const",
+                  },
+                  {
+                    "tex": "\\\\right]",
+                    "type": "Const",
+                  },
+                ],
+                "type": "Flat",
+              },
+              {
+                "tex": "\\\\;",
+                "type": "Const",
+              },
+              {
+                "tex": "\\\\text{t.q.}",
+                "type": "Const",
+              },
+              {
+                "tex": "\\\\;",
+                "type": "Const",
+              },
+              {
+                "tex": "\\\\forall",
+                "type": "Const",
+              },
+              {
+                "tex": "n",
+                "type": "Const",
+              },
+              {
+                "tex": "\\\\in",
+                "type": "Const",
+              },
+              {
+                "tex": "\\\\mathbb{N}",
+                "type": "Const",
+              },
+            ],
+            "type": "Flat",
+          },
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "tex": "D",
+                    "type": "Const",
+                  },
+                  {
+                    "params": {
+                      "body": [
+                        {
+                          "body": [
+                            {
+                              "params": {
+                                "tex": "L",
+                                "type": "Const",
+                              },
+                              "tex": "\\\\mathcal{ $1 }",
+                              "type": "ParamOne",
+                            },
+                            {
+                              "params": {
+                                "tex": "1",
+                                "type": "Const",
+                              },
+                              "tex": "_{ $1 }",
+                              "type": "ParamOne",
+                            },
+                          ],
+                          "type": "Flat",
+                        },
+                      ],
+                      "type": "Flat",
+                    },
+                    "tex": "_{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+              {
+                "body": [
+                  {
+                    "tex": "\\\\left(",
+                    "type": "Const",
+                  },
+                  {
+                    "tex": "n",
+                    "type": "Const",
+                  },
+                  {
+                    "tex": "\\\\right)",
+                    "type": "Const",
+                  },
+                ],
+                "type": "Flat",
+              },
+              {
+                "tex": "\\\\cdot",
+                "type": "Const",
+              },
+              {
+                "body": [
+                  {
+                    "tex": "D",
+                    "type": "Const",
+                  },
+                  {
+                    "params": {
+                      "body": [
+                        {
+                          "body": [
+                            {
+                              "params": {
+                                "tex": "L",
+                                "type": "Const",
+                              },
+                              "tex": "\\\\mathcal{ $1 }",
+                              "type": "ParamOne",
+                            },
+                            {
+                              "params": {
+                                "tex": "2",
+                                "type": "Const",
+                              },
+                              "tex": "_{ $1 }",
+                              "type": "ParamOne",
+                            },
+                          ],
+                          "type": "Flat",
+                        },
+                      ],
+                      "type": "Flat",
+                    },
+                    "tex": "_{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+              {
+                "body": [
+                  {
+                    "tex": "\\\\left(",
+                    "type": "Const",
+                  },
+                  {
+                    "tex": "n",
+                    "type": "Const",
+                  },
+                  {
+                    "tex": "\\\\right)",
+                    "type": "Const",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+        [
+          {
+            "body": [
+              {
+                "tex": "\\\\leqslant",
+                "type": "Const",
+              },
+              {
+                "body": [
+                  {
+                    "tex": "\\\\left(",
+                    "type": "Const",
+                  },
+                  {
+                    "body": [
+                      {
+                        "params": {
+                          "tex": "P",
+                          "type": "Const",
+                        },
+                        "tex": "\\\\mathcal{ $1 }",
+                        "type": "ParamOne",
+                      },
+                      {
+                        "params": {
+                          "tex": "4",
+                          "type": "Const",
+                        },
+                        "tex": "_{ $1 }",
+                        "type": "ParamOne",
+                      },
+                    ],
+                    "type": "Flat",
+                  },
+                  {
+                    "body": [
+                      {
+                        "tex": "\\\\left(",
+                        "type": "Const",
+                      },
+                      {
+                        "tex": "n",
+                        "type": "Const",
+                      },
+                      {
+                        "tex": "\\\\right)",
+                        "type": "Const",
+                      },
+                    ],
+                    "type": "Flat",
+                  },
+                  {
+                    "tex": "\\\\right)",
+                    "type": "Const",
+                  },
+                  {
+                    "params": {
+                      "tex": "2",
+                      "type": "Const",
+                    },
+                    "tex": "^{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+              {
+                "tex": "=",
+                "type": "Const",
+              },
+              {
+                "body": [
+                  {
+                    "params": {
+                      "tex": "P",
+                      "type": "Const",
+                    },
+                    "tex": "\\\\mathcal{ $1 }",
+                    "type": "ParamOne",
+                  },
+                  {
+                    "params": {
+                      "tex": "5",
+                      "type": "Const",
+                    },
+                    "tex": "_{ $1 }",
+                    "type": "ParamOne",
+                  },
+                ],
+                "type": "Flat",
+              },
+              {
+                "tex": "\\\\in",
+                "type": "Const",
+              },
+              {
+                "tex": "\\\\mathbb{R}",
+                "type": "Const",
+              },
+              {
+                "body": [
+                  {
+                    "tex": "\\\\left[",
+                    "type": "Const",
+                  },
+                  {
+                    "tex": "X",
+                    "type": "Const",
+                  },
+                  {
+                    "tex": "\\\\right]",
+                    "type": "Const",
+                  },
+                ],
+                "type": "Flat",
+              },
+            ],
+            "type": "Flat",
+          },
+        ],
+      ],
+      "rparen": "\\\\right.",
+      "type": "Matrix",
+    },
+  ],
+  "type": "Root",
+}
+`;
