@@ -571,6 +571,16 @@ int main() {
     tex: '',
     mathml: '',
   },
+  {
+    input: 'a_+', // user should write a_(+) instead
+    tex: '\\text{Error: unexpected end of input}',
+    mathml: '<mtext>Error: unexpected end of input</mtext>',
+  },
+  {
+    input: 'a\n\n',
+    tex: 'a',
+    mathml: '<mi>a</mi>',
+  },
 ]
 
 // no idea why this fails ˉ\_(ツ)_/ˉ

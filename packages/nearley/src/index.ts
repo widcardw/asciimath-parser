@@ -144,7 +144,7 @@ class AsciiMath {
   toTex(code: string, config: ToTexConfig = {}): string {
     this.parser.restore(this.initState)
     try {
-      this.parse(code)
+      this.parse(code.trim())
       const res = this.genTex(this.parser.results)
       return (config.display ?? this.display) ? `\\displaystyle{ ${res} }` : res
     }
@@ -166,7 +166,7 @@ class AsciiMath {
   public toMathML(code: string, config: ToTexConfig = {}): MathVdom {
     this.parser.restore(this.initState)
     try {
-      this.parse(code)
+      this.parse(code.trim())
       const res = this.genMathML(this.parser.results)
       if (config.display ?? this.display) {
         res.attr = res.attr || {}
