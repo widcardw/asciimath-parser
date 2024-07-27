@@ -39,15 +39,14 @@ dist/
 
 
 # Before grammar is done
-
 bindings/
 src
-.editorconfig
-.gitattributes
-binding.gyp
-Cargo.toml
+# .editorconfig
+# .gitattributes
+# binding.gyp
+# Cargo.toml
 file.txt
-Makefile
-Package.swift
-pyproject.toml
-setup.py
+# Makefile
+# Package.swift
+# pyproject.toml
+# setup.py
