@@ -39,8 +39,8 @@ dist/
 
 
 # Before grammar is done
-bindings/
-src
+# bindings/
+# src
 # .editorconfig
 # .gitattributes
 # binding.gyp
