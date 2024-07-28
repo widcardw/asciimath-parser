@@ -69,16 +69,16 @@ class Trie {
 
     let root = this._root
 
-    ;([...key]).forEach((ch, i) => {
-      const idx = this.c2i(ch)
-      if (typeof idx === 'undefined')
-        throw new Error(`key \`${ch}\` not in key set`)
-      if (root._nextNode[idx] === null)
-        root._nextNode[idx] = new TrieNode(this._n)
-      root = root._nextNode[idx]!
-      if (i === key.length - 1)
-        root._end = true
-    })
+      ; ([...key]).forEach((ch, i) => {
+        const idx = this.c2i(ch)
+        if (typeof idx === 'undefined')
+          throw new Error(`key \`${ch}\` not in key set`)
+        if (root._nextNode[idx] === null)
+          root._nextNode[idx] = new TrieNode(this._n)
+        root = root._nextNode[idx]!
+        if (i === key.length - 1)
+          root._end = true
+      })
   }
 
   public search(word: string): boolean {
@@ -184,7 +184,7 @@ class Trie {
     }
     if (value.length >= 2)
       return { value, isKeyWord: true, current, pos, tex: '\\\\', type: TokenTypes.Align }
-    else
+    
       return { value: '', isKeyWord: false, current, pos, tex: '', type: TokenTypes.None }
   }
 
@@ -382,6 +382,6 @@ export {
   Trie,
   TrieNode,
   createTrie,
-  TokenizedValue,
-  Position,
+  type TokenizedValue,
+  type Position,
 }

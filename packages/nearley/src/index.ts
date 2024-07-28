@@ -1,18 +1,18 @@
 import Nearley from 'nearley'
 import initGrammar from './grammar.js'
 import initLexer from './lexer.js'
+import type { MathVdom } from './math-vdom.js'
 import type { Symbols } from './symbols.js'
 import initSymbols from './symbols.js'
-import initTex from './to-tex.js'
-import type { MathVdom } from './math-vdom.js'
 import initMathML from './to-mathml.js'
+import initTex from './to-tex.js'
 
 export type Ast = any
 type ReplaceLaw = [RegExp | string, string | ((substring: string, ...args: any[]) => string)]
 
 enum ErrorCode {
-  syntaxError,
-  otherError,
+  syntaxError = 0,
+  otherError = 1,
 }
 interface ToTexConfig {
   display?: boolean
@@ -104,6 +104,7 @@ class AsciiMath {
     this.throws = throws
     this.replaceBeforeTokenizing = replaceBeforeTokenizing
     const allSymbols = initSymbols(symbols)
+    // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
     const lexer = this.lexer = initLexer(allSymbols)
     const grammar = initGrammar(lexer)
     const compiledGrammar = Nearley.Grammar.fromCompiled(grammar)
@@ -122,7 +123,7 @@ class AsciiMath {
     if (this.parser.results.length === 0) {
       throw new Error('unexpected end of input')
     }
-    else if (this.parser.results.length > 1) {
+    if (this.parser.results.length > 1) {
       console.error(this.parser.results)
       throw new Error('ambiguous parse')
     }
@@ -157,9 +158,8 @@ class AsciiMath {
           $1: { value: message },
         })
       }
-      else { // ErrorCode.otherError
-        return `\\text{${message}}`
-      }
+      // ErrorCode.otherError
+      return `\\text{${message}}`
     }
   }
 
@@ -183,17 +183,16 @@ class AsciiMath {
           $1: { value: message },
         })
       }
-      else { // ErrorCode.otherError
-        return this.genMathML({
-          type: 'text',
-          value: message,
-        })
-      }
+      // ErrorCode.otherError
+      return this.genMathML({
+        type: 'text',
+        value: message,
+      })
     }
   }
 }
 
 export {
   AsciiMath,
-  AsciiMathConfig,
+  type AsciiMathConfig,
 }

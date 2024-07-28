@@ -82,7 +82,7 @@ function createConstNode(arg?: TokenizedValue | string) {
       tex: arg,
     }
   }
-  let tex
+  let tex: string
   if (arg.type === TokenTypes.Text) {
     tex = arg.tex.replace(/^(\\quad)?(.+?)(\\quad)?$/, (_match, $1, $2, $3) => {
       return `${$1 || ''}\\text{${$2}}${$3 || ''}`
@@ -156,16 +156,14 @@ function readParenedExpression2(tokens: TokenizedValue[], current: number): {
   if (closingIndex === -1) {
     return parenStartedNoClosingNode(tokens, current)
   }
-  else {
-    if (semiIndex === -1 || semiIndex > closingIndex) {
-      // process the expression as an array
-      return parenedArrayNode(tokens, current, closingIndex)
-    }
-    else {
-      // process the expression as a matrix
-      return generateMatrixNode(tokens, current, closingIndex)
-    }
+
+  if (semiIndex === -1 || semiIndex > closingIndex) {
+    // process the expression as an array
+    return parenedArrayNode(tokens, current, closingIndex)
   }
+
+  // process the expression as a matrix
+  return generateMatrixNode(tokens, current, closingIndex)
 }
 
 function supportHlineFirstMatrix(tokens: TokenizedValue[], current: number) {
@@ -209,7 +207,7 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
       ++current
       continue
     }
-    else if ((token.type === TokenTypes.Split && token.value === ';') || (token.type === TokenTypes.Align && token.tex === '\\\\')) {
+    if ((token.type === TokenTypes.Split && token.value === ';') || (token.type === TokenTypes.Align && token.tex === '\\\\')) {
       if (tempNode) {
         tempArr.push(tempNode)
         tempNode = null
@@ -220,7 +218,7 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
       supportHlineFirstMatrix(tokens, current)
       continue
     }
-    else if (token.type === TokenTypes.Paren) {
+    if (token.type === TokenTypes.Paren) {
       if (tempNode) {
         tempArr.push(tempNode)
         tempNode = null
@@ -679,7 +677,7 @@ function createDeriUpperNode(operator: string, sup: ChildNode | null, fn: ChildN
 }
 
 function insertOperatorsForDenominator(node: FlatNode, operator: string): FlatNode {
-  return createFlatNode(node.body.map(v => [createConstNode(operator), v]).flat())
+  return createFlatNode(node.body.flatMap(v => [createConstNode(operator), v]))
 }
 
 function getPartialDerivativeExpressionNode(tokens: TokenizedValue[], current: number): WalkResult {
@@ -864,15 +862,15 @@ function parser(tokens: TokenizedValue[]) {
 
 export {
   NodeTypes,
-  Node,
-  ConstNode,
-  ChildNode,
-  FlatNode,
-  RootNode,
-  ParamOneNode,
-  ParamTwoNode,
+  type Node,
+  type ConstNode,
+  type ChildNode,
+  type FlatNode,
+  type RootNode,
+  type ParamOneNode,
+  type ParamTwoNode,
   AlignDirection,
-  MatrixNode,
+  type MatrixNode,
   parser,
 }
 

@@ -128,6 +128,6 @@ class AsciiMath {
 
 export {
   AsciiMath,
-  AsciiMathConfig,
+  type AsciiMathConfig,
   TokenTypes,
 }
