@@ -5,6 +5,8 @@ import { amc, amn } from '../../asciimath'
 import { Card } from '../Card'
 import './index.css'
 
+const [enableDisplay, setEnableDisplay] = createSignal(false)
+
 const Badge: Component = () => {
   return (
     <div style={{
@@ -47,13 +49,17 @@ const CardList: Component = () => {
             </button>
           )}
         </For>
+        <label>
+          <input style="scale: 0" type="checkbox" onChange={e => setEnableDisplay(e.target.checked)} checked={enableDisplay()} />
+          <span style={{'color': enableDisplay() ? 'var(--theme-accent)' : ''}}>{enableDisplay() ? 'displayMode on' : 'displayMode off'}</span>
+        </label>
         {/* <div style={{ flex: 1 }} />
         <div style={{ opacity: 0.5 }}><kbd>⌘</kbd> <kbd>K</kbd> to copy</div> */}
       </div>
       <For each={items()}>
         {(_item, i) => (
           <div class="mb-4 w-full flex-no">
-            <Card am={am()} />
+            <Card am={am()} display={enableDisplay()} />
             <button
               style={{ 'font-family': 'KaTeX_Main' }}
               onClick={() => setItems(p => [...p.slice(0, i()), ...p.slice(i() + 1)])}

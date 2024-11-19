@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { createEffect, createMemo, createSignal, onCleanup } from 'solid-js'
+import { createEffect, createMemo, createSignal, on, onCleanup, splitProps } from 'solid-js'
 import { useDebounceFn } from 'solidjs-use'
 import katex from 'katex'
 import { EditorView } from 'codemirror'
@@ -17,6 +17,7 @@ type TextAreaKeydownEvent = KeyboardEvent & {
 
 const Card: Component<{
   am: AsciiMathCore | AsciiMathNearley
+  display?: boolean
 }> = (props) => {
   const [amStr, setAmStr] = createSignal('')
   const [tex, setTex] = createSignal('')
@@ -35,7 +36,7 @@ const Card: Component<{
 
   const amStrUpdated = useDebounceFn(() => {
     setAmStr(amEditor?.state.doc.toString() || '')
-    setTex(props.am.toTex(amStr()))
+    setTex(props.am.toTex(amStr(), { display: props.display === false ? false : true }))
     texEditor?.dispatch({
       changes: { from: 0, to: texEditor.state.doc.length, insert: tex() },
     })
@@ -44,6 +45,8 @@ const Card: Component<{
   const texAreaUpdated = useDebounceFn(() => {
     setTex(texEditor?.state.doc.toString() || '')
   }, 1000)
+
+  createEffect(on(() => props.display, amStrUpdated))
 
   createEffect(async () => {
     if (!amEditor) {
@@ -56,6 +59,9 @@ const Card: Component<{
           EditorView.updateListener.of((update) => {
             if (!update.changes.empty)
               amStrUpdated()
+          }),
+          EditorView.theme({
+            "&.cm-focused": { outline: "none" },
           }),
         ],
         // dispatch: (tr) => {
@@ -76,6 +82,9 @@ const Card: Component<{
           EditorView.updateListener.of((update) => {
             if (!update.changes.empty)
               texAreaUpdated()
+          }),
+          EditorView.theme({
+            "&.cm-focused": { outline: "none" },
           }),
           // EditorView.inputHandler.of((view, from, to, text, insert) => {
           //   view.dispatch(insert())
