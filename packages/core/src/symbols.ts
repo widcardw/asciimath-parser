@@ -361,5 +361,5 @@ const SYMBOLMAP: Map<string, SymbolValueType> = new Map([
 export {
   TokenTypes,
   SYMBOLMAP,
-  SymbolValueType,
+  type SymbolValueType,
 }

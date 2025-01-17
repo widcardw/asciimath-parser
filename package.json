@@ -29,13 +29,9 @@
   },
   "devDependencies": {
     "@antfu/ni": "^0.19.0",
-    "@widcardw/eslint-config": "^0.3.1",
+    "@biomejs/biome": "1.8.3",
     "bumpp": "^8.2.1",
-    "eslint": "^8.32.0",
     "ts-dedent": "^2.2.0",
     "typescript": "^5.0.0"
-  },
-  "eslintConfig": {
-    "extends": "@widcardw"
   }
 }
