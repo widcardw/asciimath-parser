@@ -77,18 +77,18 @@ describe('matrix with empty el', () => {
     ])
     expect(removeValue(ast)).toEqual(
       root(mat([
-        [flat(u('1')), flat(u('0')), flat(u('\\cdots')), flat(u('0'))],
+        [u('1'), u('0'), u('\\cdots'), u('0')],
         [
-          flat(flat(u('s'), sup('_', u('1')))), // not proper here
-          flat(flat(u('b'), sup('_', u('11')))),
-          flat(u('\\cdots')),
-          flat(flat(u('b'), sup('_', flat(u('1'), u('n')))))],
-        [flat(u('\\vdots')), flat(u('\\vdots')), u(''), flat(u('\\vdots'))],
+          flat(u('s'), sup('_', u('1'))),
+          flat(u('b'), sup('_', u('11'))),
+          u('\\cdots'),
+          flat(u('b'), sup('_', flat(u('1'), u('n'))))],
+        [u('\\vdots'), u('\\vdots'), u(''), u('\\vdots')],
         [
-          flat(flat(u('s'), sup('_', u('n')))),
-          flat(flat(u('b'), sup('_', flat(u('n'), u('1'))))),
-          flat(u('\\cdots')),
-          flat(flat(u('b'), sup('_', flat(u('n'), u('n'))))),
+          flat(u('s'), sup('_', u('n'))),
+          flat(u('b'), sup('_', flat(u('n'), u('1')))),
+          u('\\cdots'),
+          flat(u('b'), sup('_', flat(u('n'), u('n')))),
         ],
       ])),
     )
@@ -115,8 +115,8 @@ describe('centered matrix with no braces', () => {
     expect(removeValue(ast)).toEqual(
       root(
         mat([
-          [flat(u('a')), flat(u('b'))],
-          [flat(u('c')), flat(u('d'))],
+          [u('a'), u('b')],
+          [u('c'), u('d')],
         ], { l: '.', r: '.' }),
       ),
     )
@@ -158,9 +158,9 @@ describe('grid like matrix', () => {
     ])
     expect(removeValue(ast)).toEqual(
       root(mat([
-        [flat(u('\\hline'), u('a')), flat(u('b'))],
-        [flat(u('\\hline'), u('c')), flat(u('d'))],
-        [flat(u('\\hline'))],
+        [flat(u('\\hline'), u('a')), u('b')],
+        [flat(u('\\hline'), u('c')), u('d')],
+        [u('\\hline')],
       ], { l: '.', r: '.', dividerIndices: [0, 1, 2] })),
     )
     expect(codegen(ast)).toBe($_`\left. \begin{array}{|c|c|} \hline a & b \\ \hline c & d \\ \hline \end{array} \right.`)
@@ -188,7 +188,7 @@ describe('hline of matrix', () => {
     ])
     expect(removeValue(ast)).toEqual(
       root(mat([
-        [flat(u('\\hline'), u('a')), flat(u('b'))],
+        [flat(u('\\hline'), u('a')), u('b')],
       ], { l: '.', r: '.', dividerIndices: [0, 1, 2] })),
     )
     expect(codegen(ast)).toBe($_`\left. \begin{array}{|c|c|} \hline a & b \end{array} \right.`)
@@ -231,9 +231,9 @@ describe('hline of matrix', () => {
     // The example here is wrong.
     expect(removeValue(ast)).toEqual(
       root(mat([
-        [flat(u('\\hline'), u('a')), flat(u('b'))],
-        [flat(u('\\hline'), u('\\hline')), flat(u('c')), flat(u('d'))],
-        [flat(u('\\hline'))],
+        [flat(u('\\hline'), u('a')), u('b')],
+        [flat(u('\\hline'), u('\\hline')), u('c'), u('d')],
+        [u('\\hline')],
       ], { l: '.', r: '.', dividerIndices: [0, 1, 1, 1] })), // This is wrong!
     )
     expect(output).toBe($_`\left. \begin{array}{|c|c|c|} \hline a & b \\ \hline \hline & c & d \\ \hline \end{array} \right.`)

@@ -23,9 +23,9 @@
     "b:cli": "cd packages/cli && nr build",
     "b:nearley": "cd packages/nearley && nr nearley && nr build",
     "b:playground": "nr b:core && nr b:nearley && cd packages/playground && nr build",
-    "t:core": "cd packages/core && nr test --run",
+    "t:core": "cd packages/core && nr test",
     "t:core-cov": "cd packages/core && nr cov",
-    "t:nearley": "cd packages/nearley && nr test --run"
+    "t:nearley": "cd packages/nearley && nr test"
   },
   "devDependencies": {
     "@antfu/ni": "^23.2.0",

@@ -7,6 +7,7 @@ import type { PR } from './utils/remove-position'
 import { removeTex } from './utils/remove-position'
 import { flat, opOA, root, sup, u } from './utils/build-node'
 import { removeValue } from './utils/removeValue'
+import { $_ } from './utils/string-raw'
 
 describe('asciimath', () => {
   it('should parse integrals', () => {
@@ -34,6 +35,6 @@ describe('asciimath', () => {
       u('\\text{dx}'),
     ))
     const res = codegen(ast)
-    expect(res).toMatchInlineSnapshot('"\\\\int \\\\text{e} ^{ {-x } } \\\\text{dx}"')
+    expect(res).toBe($_`\int \text{e} ^{ {-x } } \text{dx}`)
   })
 })

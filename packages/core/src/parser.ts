@@ -87,8 +87,7 @@ function createConstNode(arg?: TokenizedValue | string) {
     tex = arg.tex.replace(/^(\\quad)?(.+?)(\\quad)?$/, (_match, $1, $2, $3) => {
       return `${$1 || ''}\\text{${$2}}${$3 || ''}`
     })
-  }
-  else {
+  } else {
     tex = arg.tex
   }
   return {
@@ -101,14 +100,13 @@ function createConstNode(arg?: TokenizedValue | string) {
 function createFlatNode(): FlatNode
 function createFlatNode(n: Exclude<ChildNode, FlatNode>): FlatNode
 function createFlatNode(n: ChildNode[]): FlatNode
-function createFlatNode(n?: Exclude<ChildNode, FlatNode> | ChildNode[]): FlatNode {
+function createFlatNode(
+  n?: Exclude<ChildNode, FlatNode> | ChildNode[],
+): FlatNode {
   let body: ChildNode[] = []
   if (n) {
-    if (Array.isArray(n))
-      body = n
-
-    else
-      body.push(n)
+    if (Array.isArray(n)) body = n
+    else body.push(n)
   }
 
   return {
@@ -144,11 +142,33 @@ function createParamTwoNode(): ParamTwoNode {
   }
 }
 
-function createParenOfFlatNodeFrom(token: TokenizedValue, left: boolean): ConstNode {
-  return { type: NodeTypes.Const, value: token.value, tex: `\\${left ? 'left' : 'right'}${token.tex}` }
+function createParenOfFlatNodeFrom(
+  token: TokenizedValue,
+  left: boolean,
+): ConstNode {
+  return {
+    type: NodeTypes.Const,
+    value: token.value,
+    tex: `\\${left ? 'left' : 'right'}${token.tex}`,
+  }
 }
 
-function readParenedExpression2(tokens: TokenizedValue[], current: number): {
+function trimRedundantFlat(node: FlatNode): ChildNode {
+  if (node.type !== NodeTypes.Flat) {
+    // console.warn('The function `trimRedudantFlat` only receives Flat node, got', node.type)
+    return node
+  }
+  if (node.body.length === 1) {
+    if (node.body[0].type !== NodeTypes.Flat) return node.body[0]
+    return trimRedundantFlat(node.body[0])
+  }
+  return node
+}
+
+function readParenedExpression2(
+  tokens: TokenizedValue[],
+  current: number,
+): {
   node: MatrixNode | FlatNode
   current: number
 } {
@@ -173,17 +193,22 @@ function supportHlineFirstMatrix(tokens: TokenizedValue[], current: number) {
   // | a | b |;
   // --
   // :}
-  if (current + 1 >= tokens.length)
-    return
+  if (current + 1 >= tokens.length) return
   const t0 = tokens[current]
   const t1 = tokens[current + 1]
-  if (t0.type === TokenTypes.Const
-    && t0.tex === '\\hline'
-    && t1.type === TokenTypes.Paren)
+  if (
+    t0.type === TokenTypes.Const &&
+    t0.tex === '\\hline' &&
+    t1.type === TokenTypes.Paren
+  )
     [tokens[current], tokens[current + 1]] = [t1, t0]
 }
 
-function generateMatrixNode(tokens: TokenizedValue[], current: number, end: number) {
+function generateMatrixNode(
+  tokens: TokenizedValue[],
+  current: number,
+  end: number,
+) {
   let token = tokens[current]
   const node = createMatrixNode()
   const dividerIndices = new Set<number>()
@@ -198,18 +223,20 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
     token = tokens[current]
     if (token.type === TokenTypes.Split && token.value === ',') {
       if (tempNode) {
-        tempArr.push(tempNode)
+        tempArr.push(trimRedundantFlat(tempNode))
         tempNode = null
-      }
-      else {
+      } else {
         tempArr.push(createConstNode())
       }
       ++current
       continue
     }
-    if ((token.type === TokenTypes.Split && token.value === ';') || (token.type === TokenTypes.Align && token.tex === '\\\\')) {
+    if (
+      (token.type === TokenTypes.Split && token.value === ';') ||
+      (token.type === TokenTypes.Align && token.tex === '\\\\')
+    ) {
       if (tempNode) {
-        tempArr.push(tempNode)
+        tempArr.push(trimRedundantFlat(tempNode))
         tempNode = null
       }
       node.params.push(tempArr)
@@ -220,7 +247,7 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
     }
     if (token.type === TokenTypes.Paren) {
       if (tempNode) {
-        tempArr.push(tempNode)
+        tempArr.push(trimRedundantFlat(tempNode))
         tempNode = null
       }
       dividerIndices.add(tempArr.length)
@@ -228,10 +255,12 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
       continue
     }
     tempNode = createFlatNode()
-    while (current < end
-      && token.type !== TokenTypes.Split
-      && token.type !== TokenTypes.Paren
-      && token.type !== TokenTypes.Align) {
+    while (
+      current < end &&
+      token.type !== TokenTypes.Split &&
+      token.type !== TokenTypes.Paren &&
+      token.type !== TokenTypes.Align
+    ) {
       const walkRes = walk(tokens, current)
       current = walkRes.current
       tempNode.body.push(walkRes.node)
@@ -241,6 +270,7 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
   // for those cases that the matrix only contains one line
   // or the last line of the matrix does not contains a semicolon
   if (tempNode) {
+    tempNode = trimRedundantFlat(tempNode)
     tempArr.push(tempNode)
     tempNode = null
   }
@@ -266,22 +296,32 @@ function generateMatrixNode(tokens: TokenizedValue[], current: number, end: numb
   return { node, current }
 }
 
-class ParenError extends Error { }
+class ParenError extends Error {}
 
-function parenedArrayNode(tokens: TokenizedValue[], current: number, closingIndex: number) {
+function parenedArrayNode(
+  tokens: TokenizedValue[],
+  current: number,
+  closingIndex: number,
+) {
   let token = tokens[current]
   const node = createFlatNode()
   node.body.push(createParenOfFlatNodeFrom(token, true))
   current = readTokensToFlatNode(current + 1, closingIndex, tokens, node)
   if (current >= tokens.length)
-    throw new ParenError(`Read index out of range at line: ${token.pos.line}, ch: ${token.pos.ch}.`)
+    throw new ParenError(
+      `Read index out of range at line: ${token.pos.line}, ch: ${token.pos.ch}.`,
+    )
 
   token = tokens[current]
   current++
   node.body.push(createParenOfFlatNodeFrom(token, false))
-  if ((node.body[0] as ConstNode).value === '{:' && (node.body[node.body.length - 1] as ConstNode).value === ':}') {
-    (node.body[0] as ConstNode).tex = '{';
-    (node.body[node.body.length - 1] as ConstNode).tex = '}'
+  // if the parened array is wrapped by {: and :}, then the left and right should be invisible symbols
+  if (
+    (node.body[0] as ConstNode).value === '{:' &&
+    (node.body[node.body.length - 1] as ConstNode).value === ':}'
+  ) {
+    ;(node.body[0] as ConstNode).tex = '{'
+    ;(node.body[node.body.length - 1] as ConstNode).tex = '}'
   }
   return { node, current }
 }
@@ -290,10 +330,18 @@ function parenStartedNoClosingNode(tokens: TokenizedValue[], current: number) {
   const token = tokens[current]
   // just process the expression as flat one
   const node = createFlatNode()
-  node.body.push({ type: NodeTypes.Const, value: token.value, tex: `\\left${token.tex}` } as ConstNode)
+  node.body.push({
+    type: NodeTypes.Const,
+    value: token.value,
+    tex: `\\left${token.tex}`,
+  } as ConstNode)
   current = readTokensToFlatNode(current + 1, tokens.length, tokens, node)
   // maybe it's better to add a hidden closing bracket
-  node.body.push({ type: NodeTypes.Const, value: '.', tex: '\\right.' } as ConstNode)
+  node.body.push({
+    type: NodeTypes.Const,
+    value: '.',
+    tex: '\\right.',
+  } as ConstNode)
   return { node, current }
 }
 
@@ -309,25 +357,24 @@ function findPairedClosingParen(current: number, tokens: TokenizedValue[]) {
     }
     if (stack.length === 0) {
       if (tokens[i].value === ';') {
-        if (semiIndex === -1)
-          semiIndex = i
+        if (semiIndex === -1) semiIndex = i
+      } else if (tokens[i].type === TokenTypes.RParen) {
+        if (closingIndex === -1) closingIndex = i
       }
-      else if (tokens[i].type === TokenTypes.RParen) {
-        if (closingIndex === -1)
-          closingIndex = i
-      }
-      if (semiIndex !== -1 && closingIndex !== -1)
-        break
-    }
-    else {
-      if (tokens[i].type === TokenTypes.RParen)
-        stack.pop()
+      if (semiIndex !== -1 && closingIndex !== -1) break
+    } else {
+      if (tokens[i].type === TokenTypes.RParen) stack.pop()
     }
   }
   return { closingIndex, semiIndex }
 }
 
-function findPairedBar(arr: TokenizedValue[], start: number, end: number, targetRight: string): {
+function findPairedBar(
+  arr: TokenizedValue[],
+  start: number,
+  end: number,
+  targetRight: string,
+): {
   semiIndex: number
   barIndex: number
 } {
@@ -345,35 +392,38 @@ function findPairedBar(arr: TokenizedValue[], start: number, end: number, target
       continue
     }
     // skip inner matrix
-    if (stack.length > 0)
-      continue
+    if (stack.length > 0) continue
     // bar start, rparen end
     // it means that the program cannot find paired bar
-    if (arr[i].type === TokenTypes.RParen)
-      break
+    if (arr[i].type === TokenTypes.RParen) break
     // it has semicolons, then recognize it as a matrix
     if (arr[i].value === ';') {
-      if (semiIndex === -1)
-        semiIndex = i
+      if (semiIndex === -1) semiIndex = i
     }
     // found the paired bar
     else if (arr[i].value === targetRight) {
-      if (barIndex === -1)
-        barIndex = i
+      if (barIndex === -1) barIndex = i
     }
-    if (semiIndex !== -1 && barIndex !== -1)
-      break
+    if (semiIndex !== -1 && barIndex !== -1) break
   }
   return { semiIndex, barIndex }
 }
 
-function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
+function readBarStartedExpressions(
+  tokens: TokenizedValue[],
+  current: number,
+): {
   node: ChildNode
   current: number
 } {
   let token = tokens[current]
   // in fact only `|` and `||` matches `TokenTypes.Paren`
-  const { semiIndex, barIndex } = findPairedBar(tokens, current + 1, tokens.length, token.value)
+  const { semiIndex, barIndex } = findPairedBar(
+    tokens,
+    current + 1,
+    tokens.length,
+    token.value,
+  )
 
   /**
    * case 1: not matrix
@@ -381,8 +431,7 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
    * for example `{ (x, y) | x^2 + y^2 <= 1 }`
    * then render as `\mid`
    */
-  if (barIndex === -1)
-    return createSingleBarNode(current, token)
+  if (barIndex === -1) return createSingleBarNode(current, token)
 
   // used as `abs`
   if (semiIndex === -1 || semiIndex > barIndex) {
@@ -419,10 +468,11 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
       switch (token.value) {
         case ',': {
           if (tempNode) {
+            if (tempNode.type === NodeTypes.Flat)
+              tempNode = trimRedundantFlat(tempNode)
             tempArr.push(tempNode)
             tempNode = null
-          }
-          else {
+          } else {
             tempArr.push(createConstNode())
           }
           break
@@ -430,6 +480,8 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
         case ';': {
           if (tempNode) {
             // the ownership of `tempNode` is passed to `tempArr`
+            if (tempNode.type === NodeTypes.Flat)
+              tempNode = trimRedundantFlat(tempNode)
             tempArr.push(tempNode)
             tempNode = null
           }
@@ -445,8 +497,7 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
     // get the elements of the matrix cells
     tempNode = createFlatNode()
     token = tokens[current]
-    while (current < barIndex
-      && token.type !== TokenTypes.Split) {
+    while (current < barIndex && token.type !== TokenTypes.Split) {
       const walkRes = walk(tokens, current)
       current = walkRes.current
       tempNode.body.push(walkRes.node)
@@ -454,6 +505,7 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
     }
   }
   if (tempNode) {
+    tempNode = trimRedundantFlat(tempNode)
     tempArr.push(tempNode)
     tempNode = null
   }
@@ -465,7 +517,12 @@ function readBarStartedExpressions(tokens: TokenizedValue[], current: number): {
   return { node, current }
 }
 
-function readTokensToFlatNode(current: number, end: number, tokens: TokenizedValue[], node: FlatNode) {
+function readTokensToFlatNode(
+  current: number,
+  end: number,
+  tokens: TokenizedValue[],
+  node: FlatNode,
+) {
   while (current < end) {
     const walkRes = walk(tokens, current)
     current = walkRes.current
@@ -474,7 +531,10 @@ function readTokensToFlatNode(current: number, end: number, tokens: TokenizedVal
   return current
 }
 
-function createSingleBarNode(current: number, token: TokenizedValue): { node: ChildNode; current: number } {
+function createSingleBarNode(
+  current: number,
+  token: TokenizedValue,
+): { node: ChildNode; current: number } {
   return {
     current: current + 1,
     node: {
@@ -488,17 +548,23 @@ function createSingleBarNode(current: number, token: TokenizedValue): { node: Ch
 function removeParenOfFlatExpr(node: FlatNode): FlatNode {
   const first = node.body[0]
   const last = node.body[node.body.length - 1]
-  if (first.type === NodeTypes.Const
-    && last.type === NodeTypes.Const
-    && (first as ConstNode).value === '('
-    && (last as ConstNode).value === ')') {
+  if (
+    first.type === NodeTypes.Const &&
+    last.type === NodeTypes.Const &&
+    (first as ConstNode).value === '(' &&
+    (last as ConstNode).value === ')'
+  ) {
     node.body.pop()
     node.body.shift()
   }
   return node
 }
 
-function lookForwardOperatorOptionalTwoParams(tokens: TokenizedValue[], current: number, token: TokenizedValue) {
+function lookForwardOperatorOptionalTwoParams(
+  tokens: TokenizedValue[],
+  current: number,
+  token: TokenizedValue,
+) {
   // cases for `-->_a^b` or `==_c^d`
   // they can have both `^` and `_`, either of them, none of them
   // so it is a little complex
@@ -537,28 +603,28 @@ function lookForwardOperatorOptionalTwoParams(tokens: TokenizedValue[], current:
   const node = createParamTwoNode()
   node.tex = token.tex
   node.params[0] = (() => {
-    if (p1Status === '^')
-      return p1
-    if (p2Status === '^')
-      return p2
+    if (p1Status === '^') return p1
+    if (p2Status === '^') return p2
     return createConstNode()
   })()
   node.params[1] = (() => {
-    if (p1Status === '_')
-      return p1
-    if (p2Status === '_')
-      return p2
+    if (p1Status === '_') return p1
+    if (p2Status === '_') return p2
     return createConstNode()
   })()
   return { node, current }
 }
 
-function preProcessOperatorSup(node: ChildNode, operator: TokenizedValue, tokens: TokenizedValue[], current: number): WalkResult {
+function preProcessOperatorSup(
+  node: ChildNode,
+  operator: TokenizedValue,
+  tokens: TokenizedValue[],
+  current: number,
+): WalkResult {
   let newNode: FlatNode
   if (node.type === NodeTypes.Flat) {
     newNode = node
-  }
-  else {
+  } else {
     newNode = createFlatNode()
     newNode.body.push(node)
   }
@@ -570,8 +636,7 @@ function preProcessOperatorSup(node: ChildNode, operator: TokenizedValue, tokens
   current = walkRes.current
   if (walkRes.node.type === NodeTypes.Flat) {
     walkRes.node = removeParenOfFlatExpr(walkRes.node)
-  }
-  else if (walkRes.node.type === NodeTypes.Matrix) {
+  } else if (walkRes.node.type === NodeTypes.Matrix) {
     const mat = walkRes.node
     if (mat.lparen.endsWith('(') && mat.rparen.endsWith(')')) {
       mat.lparen = ''
@@ -579,8 +644,11 @@ function preProcessOperatorSup(node: ChildNode, operator: TokenizedValue, tokens
     }
   }
   supNode.params = walkRes.node
+  if (supNode.params.type === NodeTypes.Flat) {
+    supNode.params = trimRedundantFlat(supNode.params)
+  }
   newNode.body.push(supNode)
-  node = newNode
+  node = trimRedundantFlat(newNode)
   return { node, current }
 }
 
@@ -594,22 +662,31 @@ function preProcessOperatorAO(node: ChildNode, nextToken: TokenizedValue) {
   return node
 }
 
-function preProcessOperatorAOB(node: ChildNode, operator: TokenizedValue, tokens: TokenizedValue[], current: number): WalkResult {
+function preProcessOperatorAOB(
+  node: ChildNode,
+  operator: TokenizedValue,
+  tokens: TokenizedValue[],
+  current: number,
+): WalkResult {
   const newNode = createParamTwoNode()
   if (node.type === NodeTypes.Flat)
-    node = removeParenOfFlatExpr(node)
+    node = trimRedundantFlat(removeParenOfFlatExpr(node))
   newNode.tex = operator.tex
   newNode.params[0] = node
   const walkRes = walk(tokens, current)
   current = walkRes.current
   if (walkRes.node.type === NodeTypes.Flat)
-    walkRes.node = removeParenOfFlatExpr(walkRes.node)
+    walkRes.node = trimRedundantFlat(removeParenOfFlatExpr(walkRes.node))
   newNode.params[1] = walkRes.node
   node = newNode
   return { node, current }
 }
 
-function getParamOneNode(tokens: TokenizedValue[], current: number, lookForward: boolean): { node: ParamOneNode; current: number } {
+function getParamOneNode(
+  tokens: TokenizedValue[],
+  current: number,
+  lookForward: boolean,
+): { node: ParamOneNode; current: number } {
   const node = createParamOneNode()
   const token = tokens[current]
   node.tex = token.tex
@@ -617,23 +694,28 @@ function getParamOneNode(tokens: TokenizedValue[], current: number, lookForward:
   const walkRes = walk(tokens, current, lookForward)
   current = walkRes.current
   if (walkRes.node.type === NodeTypes.Flat)
-    walkRes.node = removeParenOfFlatExpr(walkRes.node)
+    walkRes.node = trimRedundantFlat(removeParenOfFlatExpr(walkRes.node))
 
   node.params = walkRes.node
   return { node, current }
 }
 
-function generateMinusNode(tokens: TokenizedValue[], current: number): { node: ChildNode; current: number } {
+function generateMinusNode(
+  tokens: TokenizedValue[],
+  current: number,
+): { node: ChildNode; current: number } {
   // the minus token
   const token = tokens[current]
   // the previous token is not `_`, `^` or some other operators
   // just throw `-` as a ConstNode
   if (current > 0) {
     const prevToken = tokens[current - 1]
-    if (prevToken.type !== TokenTypes.OperatorSup
-      && prevToken.type !== TokenTypes.OperatorOA
-      && prevToken.type !== TokenTypes.OperatorOAB
-      && prevToken.type !== TokenTypes.OperatorAOB)
+    if (
+      prevToken.type !== TokenTypes.OperatorSup &&
+      prevToken.type !== TokenTypes.OperatorOA &&
+      prevToken.type !== TokenTypes.OperatorOAB &&
+      prevToken.type !== TokenTypes.OperatorAOB
+    )
       return { node: createConstNode(token.value), current: current + 1 }
   }
   // operator is at the beginning
@@ -664,23 +746,34 @@ function generateMinusNode(tokens: TokenizedValue[], current: number): { node: C
   return { node, current }
 }
 
-function createDeriUpperNode(operator: string, sup: ChildNode | null, fn: ChildNode): ChildNode {
+function createDeriUpperNode(
+  operator: string,
+  sup: ChildNode | null,
+  fn: ChildNode,
+): ChildNode {
   const upperNode = createFlatNode()
   // partial or derivate
   upperNode.body.push(createConstNode(operator))
   // superscript
-  if (sup)
-    upperNode.body.push(sup)
+  if (sup) upperNode.body.push(sup)
   // function
   upperNode.body.push(fn)
   return upperNode
 }
 
-function insertOperatorsForDenominator(node: FlatNode, operator: string): FlatNode {
-  return createFlatNode(node.body.flatMap(v => [createConstNode(operator), v]))
+function insertOperatorsForDenominator(
+  node: FlatNode,
+  operator: string,
+): FlatNode {
+  return createFlatNode(
+    node.body.flatMap((v) => [createConstNode(operator), v]),
+  )
 }
 
-function getPartialDerivativeExpressionNode(tokens: TokenizedValue[], current: number): WalkResult {
+function getPartialDerivativeExpressionNode(
+  tokens: TokenizedValue[],
+  current: number,
+): WalkResult {
   const node = createParamTwoNode()
   let token = tokens[current]
   node.tex = '\\frac{ $1 }{ $2 }'
@@ -689,8 +782,7 @@ function getPartialDerivativeExpressionNode(tokens: TokenizedValue[], current: n
   let sup: ChildNode | null = null
   // find if there is any superscript
   current++
-  if (current >= tokens.length)
-    return { node, current }
+  if (current >= tokens.length) return { node, current }
 
   token = tokens[current]
   if (token.type === TokenTypes.OperatorSup) {
@@ -709,8 +801,7 @@ function getPartialDerivativeExpressionNode(tokens: TokenizedValue[], current: n
   node.params[0] = createDeriUpperNode(operator, sup, fnRes.node)
 
   // out of boundary
-  if (current >= tokens.length)
-    return { node, current }
+  if (current >= tokens.length) return { node, current }
 
   // pp^2 f (x y)
   //        ^^^^^
@@ -720,16 +811,14 @@ function getPartialDerivativeExpressionNode(tokens: TokenizedValue[], current: n
     underRes.node = removeParenOfFlatExpr(underRes.node)
     // generate `\partial x \patrial y`
     underRes.node = insertOperatorsForDenominator(underRes.node, operator)
-  }
-  else {
+  } else {
     // pp f x
     underRes.node = createFlatNode(underRes.node)
     // pp f x => (partial f) / (partial x)
     underRes.node.body.unshift(createConstNode(operator))
     // pp^2 f x => (partial^2 f) / (partial x^2)
     //   ^^   ^
-    if (sup)
-      underRes.node.body.push(sup)
+    if (sup) underRes.node.body.push(sup)
   }
   node.params[1] = underRes.node
 
@@ -741,9 +830,12 @@ interface WalkResult {
   current: number
 }
 
-function walk(tokens: TokenizedValue[], current: number, watchNext = true): WalkResult {
-  if (current >= tokens.length)
-    return { node: createConstNode(), current }
+function walk(
+  tokens: TokenizedValue[],
+  current: number,
+  watchNext = true,
+): WalkResult {
+  if (current >= tokens.length) return { node: createConstNode(), current }
   const token = tokens[current]
   let node: ChildNode
   switch (token.type) {
@@ -756,21 +848,21 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): Walk
       break
     }
     case TokenTypes.LParen: {
-      ({ node, current } = readParenedExpression2(tokens, current))
+      ;({ node, current } = readParenedExpression2(tokens, current))
       break
     }
     case TokenTypes.Paren: {
-      ({ node, current } = readBarStartedExpressions(tokens, current))
+      ;({ node, current } = readBarStartedExpressions(tokens, current))
       break
     }
     case TokenTypes.OperatorSup:
     case TokenTypes.OperatorOA: {
       // high priority, do not look forward
-      ({ node, current } = getParamOneNode(tokens, current, false))
+      ;({ node, current } = getParamOneNode(tokens, current, false))
       break
     }
     case TokenTypes.OperatorMinus: {
-      ({ node, current } = generateMinusNode(tokens, current))
+      ;({ node, current } = generateMinusNode(tokens, current))
       break
     }
     case TokenTypes.OperatorOAB: {
@@ -780,28 +872,34 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): Walk
       const param0 = walk(tokens, current)
       current = param0.current
       if (param0.node.type === NodeTypes.Flat)
-        param0.node = removeParenOfFlatExpr(param0.node)
+        param0.node = trimRedundantFlat(removeParenOfFlatExpr(param0.node))
       node.params[0] = param0.node
       const param1 = walk(tokens, current)
       current = param1.current
       if (param1.node.type === NodeTypes.Flat)
-        param1.node = removeParenOfFlatExpr(param1.node)
+        param1.node = trimRedundantFlat(removeParenOfFlatExpr(param1.node))
       node.params[1] = param1.node
       break
     }
     case TokenTypes.OperatorO2: {
       current++
       if (current >= tokens.length) {
-        node = createConstNode(`${token.tex.replace(/[\{\[] \$\d+ [\}\]]/g, '')}{}`)
+        node = createConstNode(
+          `${token.tex.replace(/[\{\[] \$\d+ [\}\]]/g, '')}{}`,
+        )
         break
       }
 
       // detect next token
-      ({ node, current } = lookForwardOperatorOptionalTwoParams(tokens, current, token))
+      ;({ node, current } = lookForwardOperatorOptionalTwoParams(
+        tokens,
+        current,
+        token,
+      ))
       break
     }
     case TokenTypes.OperatorPartial: {
-      ({ node, current } = getPartialDerivativeExpressionNode(tokens, current))
+      ;({ node, current } = getPartialDerivativeExpressionNode(tokens, current))
       break
     }
     case TokenTypes.Split:
@@ -816,7 +914,9 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): Walk
       break
     }
     default: {
-      throw new Error(`Unmatched token \`${token.value}\` at line: ${token.pos.line}, ch: ${token.pos.ch}.`)
+      throw new Error(
+        `Unmatched token \`${token.value}\` at line: ${token.pos.line}, ch: ${token.pos.ch}.`,
+      )
     }
   }
   // watch next token
@@ -826,7 +926,12 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): Walk
       const nextToken = tokens[current]
       switch (nextToken.type) {
         case TokenTypes.OperatorAOB: {
-          ({ node, current } = preProcessOperatorAOB(node, nextToken, tokens, current + 1))
+          ;({ node, current } = preProcessOperatorAOB(
+            node,
+            nextToken,
+            tokens,
+            current + 1,
+          ))
           break
         }
         case TokenTypes.OperatorAO: {
@@ -835,7 +940,12 @@ function walk(tokens: TokenizedValue[], current: number, watchNext = true): Walk
           break
         }
         case TokenTypes.OperatorSup: {
-          ({ node, current } = preProcessOperatorSup(node, nextToken, tokens, current + 1))
+          ;({ node, current } = preProcessOperatorSup(
+            node,
+            nextToken,
+            tokens,
+            current + 1,
+          ))
           break
         }
         default: {

@@ -10,7 +10,7 @@ import { removeValue } from './utils/removeValue'
 import { flat, lp, opOA, root, rp, sup, u } from './utils/build-node'
 
 describe('minus edge cases', () => {
-//   const am = new AsciiMath({ display: false })
+  //   const am = new AsciiMath({ display: false })
   it('should parse `e^-x`', () => {
     const code = 'e^-x'
     const trie = createTrie()
@@ -23,12 +23,7 @@ describe('minus edge cases', () => {
     ])
     const ast = parser(tokens)
     expect(removeValue(ast)).toEqual(
-      root(
-        flat(
-          u('e'),
-          sup('^', opOA('{-$1 }', u('x'))),
-        ),
-      ),
+      root(flat(u('e'), sup('^', opOA('{-$1 }', u('x'))))),
     )
     const res = codegen(ast)
     expect(res).toEqual('e ^{ {-x } }')
@@ -56,13 +51,9 @@ describe('minus edge cases', () => {
       root(
         flat(
           u('\\int'),
-          sup('_',
-            flat(
-              flat(
-                u('0'),
-                sup('_', u('-')),
-              ),
-            ),
+          sup(
+            '_',
+            flat(u('0'), sup('_', u('-'))),
           ),
         ),
         flat(lp('('), u('as'), u('d'), rp(')')),
@@ -118,11 +109,7 @@ describe('superscript with parens', () => {
           u('\\text{e}'),
           sup(
             '^',
-            opOA('{-$1 }',
-              flat(
-                lp('('), u('x'), u('+'), u('y'), rp(')'),
-              ),
-            ),
+            opOA('{-$1 }', flat(lp('('), u('x'), u('+'), u('y'), rp(')'))),
           ),
         ),
       ),
@@ -133,10 +120,20 @@ describe('superscript with parens', () => {
 
   it('should not remove the parens', () => {
     const am = new AsciiMath({ display: false })
-    expect(am.toTex('(-(x+y))/2')).toEqual($_`\frac{ - \left( x + y \right) }{ 2 }`)
-    expect(am.toTex('(x+y)/-(z+w)')).toEqual($_`\frac{ x + y }{ {-\left( z + w \right) } }`)
-    expect(am.toTex('(z-((x+y)-(w-q)))')).toEqual($_`\left( z - \left( \left( x + y \right) - \left( w - q \right) \right) \right)`)
-    expect(am.toTex('(z-((x+y)+(w+q)))')).toEqual($_`\left( z - \left( \left( x + y \right) + \left( w + q \right) \right) \right)`)
-    expect(am.toTex('a^-(b+c)+d-e^-(f-(g+h)-(i+j))')).toEqual($_`a ^{ {-\left( b + c \right) } } + d - e ^{ {-\left( f - \left( g + h \right) - \left( i + j \right) \right) } }`)
+    expect(am.toTex('(-(x+y))/2')).toEqual(
+      $_`\frac{ - \left( x + y \right) }{ 2 }`,
+    )
+    expect(am.toTex('(x+y)/-(z+w)')).toEqual(
+      $_`\frac{ x + y }{ {-\left( z + w \right) } }`,
+    )
+    expect(am.toTex('(z-((x+y)-(w-q)))')).toEqual(
+      $_`\left( z - \left( \left( x + y \right) - \left( w - q \right) \right) \right)`,
+    )
+    expect(am.toTex('(z-((x+y)+(w+q)))')).toEqual(
+      $_`\left( z - \left( \left( x + y \right) + \left( w + q \right) \right) \right)`,
+    )
+    expect(am.toTex('a^-(b+c)+d-e^-(f-(g+h)-(i+j))')).toEqual(
+      $_`a ^{ {-\left( b + c \right) } } + d - e ^{ {-\left( f - \left( g + h \right) - \left( i + j \right) \right) } }`,
+    )
   })
 })
