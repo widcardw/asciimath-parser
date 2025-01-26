@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`obsidian-asciimath #26 > should not fall into infinite loop 1`] = `
 [
@@ -60,7 +60,7 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 1`] = `
   {
     "isKeyWord": true,
     "type": "Const",
-    "value": "\\\\;",
+    "value": "\\;",
   },
   {
     "isKeyWord": false,
@@ -70,7 +70,7 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 1`] = `
   {
     "isKeyWord": true,
     "type": "Const",
-    "value": "\\\\;",
+    "value": "\\;",
   },
   {
     "isKeyWord": true,
@@ -348,13 +348,13 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
     {
       "alignment": "l",
       "dividerIndices": [],
-      "lparen": "\\\\left\\\\lbrace",
+      "lparen": "\\left\\lbrace",
       "params": [
         [
           {
             "body": [
               {
-                "tex": "\\\\exists",
+                "tex": "\\exists",
                 "type": "Const",
               },
               {
@@ -364,7 +364,7 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                       "tex": "P",
                       "type": "Const",
                     },
-                    "tex": "\\\\mathcal{ $1 }",
+                    "tex": "\\mathcal{ $1 }",
                     "type": "ParamOne",
                   },
                   {
@@ -379,17 +379,17 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                 "type": "Flat",
               },
               {
-                "tex": "\\\\in",
+                "tex": "\\in",
                 "type": "Const",
               },
               {
-                "tex": "\\\\mathbb{R}",
+                "tex": "\\mathbb{R}",
                 "type": "Const",
               },
               {
                 "body": [
                   {
-                    "tex": "\\\\left[",
+                    "tex": "\\left[",
                     "type": "Const",
                   },
                   {
@@ -397,26 +397,26 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                     "type": "Const",
                   },
                   {
-                    "tex": "\\\\right]",
+                    "tex": "\\right]",
                     "type": "Const",
                   },
                 ],
                 "type": "Flat",
               },
               {
-                "tex": "\\\\;",
+                "tex": "\\;",
                 "type": "Const",
               },
               {
-                "tex": "\\\\text{t.q.}",
+                "tex": "\\text{t.q.}",
                 "type": "Const",
               },
               {
-                "tex": "\\\\;",
+                "tex": "\\;",
                 "type": "Const",
               },
               {
-                "tex": "\\\\forall",
+                "tex": "\\forall",
                 "type": "Const",
               },
               {
@@ -424,11 +424,11 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                 "type": "Const",
               },
               {
-                "tex": "\\\\in",
+                "tex": "\\in",
                 "type": "Const",
               },
               {
-                "tex": "\\\\mathbb{N}",
+                "tex": "\\mathbb{N}",
                 "type": "Const",
               },
             ],
@@ -446,25 +446,20 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                     "params": {
                       "body": [
                         {
-                          "body": [
-                            {
-                              "params": {
-                                "tex": "L",
-                                "type": "Const",
-                              },
-                              "tex": "\\\\mathcal{ $1 }",
-                              "type": "ParamOne",
-                            },
-                            {
-                              "params": {
-                                "tex": "1",
-                                "type": "Const",
-                              },
-                              "tex": "_{ $1 }",
-                              "type": "ParamOne",
-                            },
-                          ],
-                          "type": "Flat",
+                          "params": {
+                            "tex": "L",
+                            "type": "Const",
+                          },
+                          "tex": "\\mathcal{ $1 }",
+                          "type": "ParamOne",
+                        },
+                        {
+                          "params": {
+                            "tex": "1",
+                            "type": "Const",
+                          },
+                          "tex": "_{ $1 }",
+                          "type": "ParamOne",
                         },
                       ],
                       "type": "Flat",
@@ -478,7 +473,7 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
               {
                 "body": [
                   {
-                    "tex": "\\\\left(",
+                    "tex": "\\left(",
                     "type": "Const",
                   },
                   {
@@ -486,14 +481,14 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                     "type": "Const",
                   },
                   {
-                    "tex": "\\\\right)",
+                    "tex": "\\right)",
                     "type": "Const",
                   },
                 ],
                 "type": "Flat",
               },
               {
-                "tex": "\\\\cdot",
+                "tex": "\\cdot",
                 "type": "Const",
               },
               {
@@ -506,25 +501,20 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                     "params": {
                       "body": [
                         {
-                          "body": [
-                            {
-                              "params": {
-                                "tex": "L",
-                                "type": "Const",
-                              },
-                              "tex": "\\\\mathcal{ $1 }",
-                              "type": "ParamOne",
-                            },
-                            {
-                              "params": {
-                                "tex": "2",
-                                "type": "Const",
-                              },
-                              "tex": "_{ $1 }",
-                              "type": "ParamOne",
-                            },
-                          ],
-                          "type": "Flat",
+                          "params": {
+                            "tex": "L",
+                            "type": "Const",
+                          },
+                          "tex": "\\mathcal{ $1 }",
+                          "type": "ParamOne",
+                        },
+                        {
+                          "params": {
+                            "tex": "2",
+                            "type": "Const",
+                          },
+                          "tex": "_{ $1 }",
+                          "type": "ParamOne",
                         },
                       ],
                       "type": "Flat",
@@ -538,7 +528,7 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
               {
                 "body": [
                   {
-                    "tex": "\\\\left(",
+                    "tex": "\\left(",
                     "type": "Const",
                   },
                   {
@@ -546,7 +536,7 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                     "type": "Const",
                   },
                   {
-                    "tex": "\\\\right)",
+                    "tex": "\\right)",
                     "type": "Const",
                   },
                 ],
@@ -560,13 +550,13 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
           {
             "body": [
               {
-                "tex": "\\\\leqslant",
+                "tex": "\\leqslant",
                 "type": "Const",
               },
               {
                 "body": [
                   {
-                    "tex": "\\\\left(",
+                    "tex": "\\left(",
                     "type": "Const",
                   },
                   {
@@ -576,7 +566,7 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                           "tex": "P",
                           "type": "Const",
                         },
-                        "tex": "\\\\mathcal{ $1 }",
+                        "tex": "\\mathcal{ $1 }",
                         "type": "ParamOne",
                       },
                       {
@@ -593,7 +583,7 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                   {
                     "body": [
                       {
-                        "tex": "\\\\left(",
+                        "tex": "\\left(",
                         "type": "Const",
                       },
                       {
@@ -601,14 +591,14 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                         "type": "Const",
                       },
                       {
-                        "tex": "\\\\right)",
+                        "tex": "\\right)",
                         "type": "Const",
                       },
                     ],
                     "type": "Flat",
                   },
                   {
-                    "tex": "\\\\right)",
+                    "tex": "\\right)",
                     "type": "Const",
                   },
                   {
@@ -633,7 +623,7 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                       "tex": "P",
                       "type": "Const",
                     },
-                    "tex": "\\\\mathcal{ $1 }",
+                    "tex": "\\mathcal{ $1 }",
                     "type": "ParamOne",
                   },
                   {
@@ -648,17 +638,17 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                 "type": "Flat",
               },
               {
-                "tex": "\\\\in",
+                "tex": "\\in",
                 "type": "Const",
               },
               {
-                "tex": "\\\\mathbb{R}",
+                "tex": "\\mathbb{R}",
                 "type": "Const",
               },
               {
                 "body": [
                   {
-                    "tex": "\\\\left[",
+                    "tex": "\\left[",
                     "type": "Const",
                   },
                   {
@@ -666,7 +656,7 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
                     "type": "Const",
                   },
                   {
-                    "tex": "\\\\right]",
+                    "tex": "\\right]",
                     "type": "Const",
                   },
                 ],
@@ -677,7 +667,7 @@ exports[`obsidian-asciimath #26 > should not fall into infinite loop 2`] = `
           },
         ],
       ],
-      "rparen": "\\\\right.",
+      "rparen": "\\right.",
       "type": "Matrix",
     },
   ],
