@@ -124,6 +124,15 @@ class AsciiMath {
       return `\\text{${String(e)}}`
     }
   }
+
+  toML(code: string, config: ToTexConfig): string {
+    try {
+      return ''
+    }
+    catch (e) {
+      return String(e)
+    }
+  }
 }
 
 export {
