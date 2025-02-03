@@ -2,14 +2,18 @@ import type { TokenizedValue } from '../../src/trie'
 
 type MaybeArray<T> = T | T[]
 
-type Omits<T, K extends string | string[]>
-= K extends string
-  ? Omit<T, K>
-  : K extends [infer F extends string]
-    ? Omit<T, F>
-    : K extends [infer F extends string, ...infer R extends string[]]
-      ? Omits<Omit<T, F>, R>
-      : {}
+type Omits<T, K extends string | string[]> = 
+  K extends string
+    ? Omit<T, K>
+    : K extends string[]
+      ? K extends [infer First, ...infer Rest]
+        ? First extends string
+          ? Rest extends string[]
+            ? Omits<Omit<T, First>, Rest>
+            : never
+          : never
+        : T
+      : never
 
 type PR = Omits<TokenizedValue, ['pos', 'current', 'tex']>
 
@@ -40,18 +44,16 @@ K extends Array<keyof T> extends Array<string>
     }
     return tokens as unknown as Omits<T, K>[]
   }
-  else {
-    for (const prop of props) {
-      if (Object.hasOwn(tokens, prop))
-        delete tokens[prop]
-    }
-    return tokens as unknown as Omits<T, K>
+  for (const prop of props) {
+    if (Object.hasOwn(tokens, prop))
+      delete tokens[prop]
   }
+  return tokens as unknown as Omits<T, K>
 }
 
 function removeTex(tokens: TokenizedValue): Omits<TokenizedValue, ['current', 'pos', 'tex']>
 function removeTex(tokens: TokenizedValue[]): Omits<TokenizedValue, ['current', 'pos', 'tex']>[]
-function removeTex(tokens: TokenizedValue | TokenizedValue[]) {
+function removeTex(tokens: TokenizedValue | TokenizedValue[]): Omits<TokenizedValue, ['current', 'pos', 'tex']> | Omits<TokenizedValue, ['current', 'pos', 'tex']>[] {
   if (Array.isArray(tokens))
     return removeProperties(tokens, ['current', 'pos', 'tex'])
   return removeProperties(tokens, ['current', 'pos', 'tex'])
