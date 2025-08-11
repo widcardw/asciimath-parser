@@ -1,10 +1,11 @@
-interface TitleType {
+interface I18nString {
   en: string
   zh: string
 }
 
 interface OneSymbolType {
-  title: TitleType
+  title: I18nString
+  desc?: I18nString
   symbols: string[]
   cols: number
 }
@@ -177,6 +178,7 @@ const symbols: SymbolType = {
     symbols: [
       'text(I\'m here)', 'tex"\\hbar"',
       'color(red)(abc)', '"hello world"',
+      'arg' ,'Arg', 'cyc', 
     ],
     cols: 2,
   },
@@ -203,6 +205,22 @@ const symbols: SymbolType = {
     ],
     cols: 2,
   },
+  chemistry: {
+    title: {
+      zh: '化学',
+      en: 'Chemistry',
+    },
+    desc: {
+      zh: '在 LaTeX 中加载 <code>mchm</code> 和 <code>chemfig</code> 包，以使用 <code>ce"H2SO4"</code> 等化学符号',
+      en: 'Please load package <code>mchm</code> and <code>chemfig</code> to use chemical symbols like <code>ce"H2SO4"</code>.',
+    },
+    symbols: [
+      'Ksp', 'Ka1', 'Ka2', 'Ka3',
+      'Ka', 'Kb', 'Kh1', 'Kh2',
+      'Kh3', 'Kh', 'Kw', 'pH', 'pOH',
+    ],
+    cols: 4,
+  },
   sugar: {
     title: {
       zh: '语法糖',
@@ -224,7 +242,7 @@ const displaySymbol = {
 }
 
 interface OneExampleType {
-  theme: TitleType
+  theme: I18nString
   code: string
 }
 
@@ -369,7 +387,7 @@ const spaces = {
 }
 
 export type {
-  TitleType,
+  I18nString as TitleType,
   OneSymbolType,
   OneExampleType,
 }

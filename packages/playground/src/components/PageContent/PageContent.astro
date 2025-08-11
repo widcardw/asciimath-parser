@@ -1,25 +1,25 @@
 ---
-import type { Frontmatter } from "../../config";
 import type { MarkdownHeading } from "astro";
-import { getLanguageFromURL } from "../../languages";
-import LanguageSelect from "../LanguageSelect/LanguageSelect";
-import ThemeToggle from "../ThemeToggle/ThemeToggleButton";
-import { Shield } from "../Shield/Shield";
-import { CardList } from "../CardList";
 import { Code } from "astro/components";
-import { SymbolTable } from "../SymbolTable";
+import type { Frontmatter } from "../../config";
+import { getLanguageFromURL } from "../../languages";
+import { amcToDomDisplay } from "../../utils/am-to-dom";
+import { titles } from "../../utils/i18n";
 import {
+  type TitleType,
   alignedSection,
   displaySymbol,
   examples,
   symbols,
-  type TitleType,
 } from "../../utils/symbols";
-import { titles } from "../../utils/i18n";
-import { ExampleTable } from "../ExampleTable";
+import { CardList } from "../CardList";
 import { DisplayMode } from "../DisplayMode";
-import { amcToDomDisplay } from "../../utils/am-to-dom";
+import { ExampleTable } from "../ExampleTable";
+import LanguageSelect from "../LanguageSelect/LanguageSelect";
+import { Shield } from "../Shield/Shield";
 import { SpaceSymbols } from "../SpaceSymbols";
+import { SymbolTable } from "../SymbolTable";
+import ThemeToggle from "../ThemeToggle/ThemeToggleButton";
 
 type Props = {
   frontmatter: Frontmatter;
@@ -75,6 +75,7 @@ function t(title: TitleType) {
       Object.values(symbols).map((s) => (
         <>
           <h3>{t(s.title)}</h3>
+          {s.desc && (<blockquote set:html={t(s.desc)} />)}
           <SymbolTable
             symbols={s.symbols}
             cols={s.cols}

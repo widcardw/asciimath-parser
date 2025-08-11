@@ -26,8 +26,8 @@
     "build": "tsup"
   },
   "devDependencies": {
-    "bumpp": "^8.2.1",
+    "bumpp": "^10.2.2",
     "cac": "^6.7.14",
-    "tsup": "^6.5.0"
+    "tsup": "^8.5.0"
   }
 }

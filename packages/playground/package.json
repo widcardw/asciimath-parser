@@ -13,22 +13,22 @@
 		"snippet": "esno src/scripts/build-snippets.ts"
 	},
 	"dependencies": {
-		"@astrojs/solid-js": "^4.3.0",
-		"astro": "^4.10.2",
-		"solid-js": "^1.8.17"
+		"@astrojs/solid-js": "^5.1.0",
+		"astro": "^5.12.9",
+		"solid-js": "^1.9.8"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.24.7",
-		"@codemirror/autocomplete": "^6.16.2",
-		"@codemirror/state": "^6.4.1",
-		"@codemirror/view": "^6.28.1",
+		"@babel/core": "^7.28.0",
+		"@codemirror/autocomplete": "^6.18.6",
+		"@codemirror/state": "^6.5.2",
+		"@codemirror/view": "^6.38.1",
 		"@types/katex": "^0.16.7",
-		"@types/node": "^20.14.2",
-		"codemirror": "^6.0.1",
-		"esno": "^4.7.0",
-		"katex": "^0.16.10",
-		"rehype-katex": "^7.0.0",
-		"remark-gfm": "^4.0.0",
+		"@types/node": "^20.19.10",
+		"codemirror": "^6.0.2",
+		"esno": "^4.8.0",
+		"katex": "^0.16.22",
+		"rehype-katex": "^7.0.1",
+		"remark-gfm": "^4.0.1",
 		"remark-math": "^6.0.0",
 		"solidjs-use": "^2.3.0"
 	}
