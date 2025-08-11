@@ -347,6 +347,7 @@ const SYMBOLMAP: Map<string, SymbolValueType> = new Map([
   [':}', { type: TokenTypes.RParen, tex: '.' }],
   // can be used as det or a single bar
   ['|', { type: TokenTypes.Paren, tex: '|' }],
+  ['mid', { type: TokenTypes.Const, tex: '\\mid' }],
 
   // ['"', { type: TokenTypes.Paren, tex: '\\text{ $1 }' }],
 
