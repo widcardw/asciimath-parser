@@ -96,6 +96,8 @@ const SYMBOLMAP: Map<string, SymbolValueType> = new Map([
   ['uuu', { type: TokenTypes.Const, tex: '\\bigcup' }],
   ['!=', { type: TokenTypes.Const, tex: '\\ne' }],
   ['lt', { type: TokenTypes.Const, tex: '<' }],
+  ['<<', { type: TokenTypes.Const, tex: '\\ll' }],
+  ['>>', { type: TokenTypes.Const, tex: '\\gg' }],
   ['<=', { type: TokenTypes.Const, tex: '\\leqslant' }],
   ['le', { type: TokenTypes.Const, tex: '\\le' }],
   ['gt', { type: TokenTypes.Const, tex: '>' }],
