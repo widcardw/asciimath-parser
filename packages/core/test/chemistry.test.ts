@@ -8,7 +8,7 @@ describe('extend chemistry in asciimath', () => {
   })
 
   it('should read ce', () => {
-    expect(am.toTex('ce"H2SO4"')).toBe($_`{\ce H2SO4 }`)
+    expect(am.toTex('ce"H2SO4"')).toBe($_`\ce{H2SO4}`)
     expect(am.toTex('pH')).toBe($_`\mathrm{pH}`)
   })
 })

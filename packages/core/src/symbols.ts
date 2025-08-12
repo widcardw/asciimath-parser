@@ -375,7 +375,7 @@ const SYMBOLMAP: Map<string, SymbolValueType> = new Map([
   ['o5', { type: TokenTypes.Const, tex: '\u2464' }],
   ['o6', { type: TokenTypes.Const, tex: '\u2465' }],
 
-  ['ce', { type: TokenTypes.OperatorOA, tex: '{\\ce $1 }', eatNext: true }],
+  ['ce', { type: TokenTypes.OperatorOA, tex: '\\ce{$1}', eatNext: true }],
   ['Ksp', { type: TokenTypes.Const, tex: 'K_{\\text{sp}}' }],
   ['Ka1', { type: TokenTypes.Const, tex: 'K_{\\text{a}_1}' }],
   ['Ka2', { type: TokenTypes.Const, tex: 'K_{\\text{a}_2}' }],
