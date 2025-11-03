@@ -22,4 +22,16 @@ describe('obsidian-asciimath #26', () => {
     expect(removeValue(ast)).toMatchSnapshot()
     expect(output).toBe($_`\left\lbrace \begin{array}{ll} \exists \mathcal{ P } _{ 4 } \in \mathbb{R} \left[ X \right] \; \text{t.q.} \; \forall n \in \mathbb{N} & D _{ \mathcal{ L } _{ 1 } } \left( n \right) \cdot D _{ \mathcal{ L } _{ 2 } } \left( n \right) \\ \leqslant \left( \mathcal{ P } _{ 4 } \left( n \right) \right) ^{ 2 } = \mathcal{ P } _{ 5 } \in \mathbb{R} \left[ X \right] \end{array} \right.`)
   })
+
+  it.fails('may fall into infiniti loop #30', () => {
+    const formula = dedent`
+    {
+    2x + y &= 7;
+    x - y = 5
+    :}`
+    const trie = createTrie()
+    const tokens = trie.tryParsingAll(formula)
+    const ast = parser(tokens)
+    const output = codegen(ast)
+  })
 })

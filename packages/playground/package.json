@@ -13,20 +13,20 @@
 		"snippet": "esno src/scripts/build-snippets.ts"
 	},
 	"dependencies": {
-		"@astrojs/solid-js": "^5.1.0",
-		"astro": "^5.12.9",
-		"solid-js": "^1.9.8"
+		"@astrojs/solid-js": "^5.1.2",
+		"astro": "^5.15.3",
+		"solid-js": "^1.9.10"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.28.0",
-		"@codemirror/autocomplete": "^6.18.6",
+		"@babel/core": "^7.28.5",
+		"@codemirror/autocomplete": "^6.19.1",
 		"@codemirror/state": "^6.5.2",
-		"@codemirror/view": "^6.38.1",
+		"@codemirror/view": "^6.38.6",
 		"@types/katex": "^0.16.7",
-		"@types/node": "^20.19.10",
+		"@types/node": "^22.19.0",
 		"codemirror": "^6.0.2",
 		"esno": "^4.8.0",
-		"katex": "^0.16.22",
+		"katex": "^0.16.25",
 		"rehype-katex": "^7.0.1",
 		"remark-gfm": "^4.0.1",
 		"remark-math": "^6.0.0",

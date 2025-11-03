@@ -219,6 +219,8 @@ function generateMatrixNode(
   supportHlineFirstMatrix(tokens, current)
   token = tokens[current]
   // inside a matrix
+  let insideCounter = 0
+  const prevCur = current
   while (current < end) {
     token = tokens[current]
     if (token.type === TokenTypes.Split && token.value === ',') {
@@ -265,6 +267,10 @@ function generateMatrixNode(
       current = walkRes.current
       tempNode.body.push(walkRes.node)
       token = tokens[current]
+    }
+    insideCounter++
+    if (insideCounter > end - prevCur + 10) {
+      throw new Error(`Caught potential infinit loop in matrix parser! Cannot consume token \`${token.value}\` in ${insideCounter} loops (maybe greater than the token length)!`)
     }
   }
   // for those cases that the matrix only contains one line
