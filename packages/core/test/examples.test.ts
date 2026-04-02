@@ -109,7 +109,7 @@ const examples = [
   },
   {
     i: 'dy/dx, ("d"r)/("d"theta), f\'\'(x)',
-    o: $_`\frac{ {\text{d}y} }{ {\text{d}x} } , \frac{ \text{d} r }{ \text{d} \theta } , f ^{\prime\prime} \left( x \right)`,
+    o: $_`\frac{ {\text{d}y} }{ {\text{d}x} } , \frac{ \text{d} r }{ \text{d} \theta } , f '' \left( x \right)`,
   },
   {
     i: 'ddfx , dd^2 f x , ddot x',
@@ -164,8 +164,8 @@ const examples = [
     o: $_`- \frac{ a + b - c }{ 2 }`,
   },
   {
-    i: 'f\'_(+) (x)',
-    o: $_`f ^{\prime} _{ + } \left( x \right)`,
+    i: "f'_(+) (x)",
+    o: $_`f ' _{ + } \left( x \right)`,
   },
   {
     i: 'a^2 choose b^2',

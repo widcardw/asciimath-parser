@@ -38,7 +38,7 @@ describe('codegen align', () => {
   const trie = createTrie()
   it('should generate aligend environment', () => {
     expect(codegen(parser(trie.tryParsingAll('varphi(x) & = Phi\'(x) \n\n & = 1/(sqrt(2pi) sigma) "e"^(- ((x-mu)^2)/(2sigma^2))'))))
-      .toBe($_`\begin{aligned}\varphi \left( x \right) & = \Phi ^{\prime} \left( x \right) \\ & = \frac{ 1 }{ \sqrt{ 2 \pi } \sigma } \text{e} ^{ - \frac{ \left( x - \mu \right) ^{ 2 } }{ 2 \sigma ^{ 2 } } }\end{aligned}`)
+      .toBe($_`\begin{aligned}\varphi \left( x \right) & = \Phi ' \left( x \right) \\ & = \frac{ 1 }{ \sqrt{ 2 \pi } \sigma } \text{e} ^{ - \frac{ \left( x - \mu \right) ^{ 2 } }{ 2 \sigma ^{ 2 } } }\end{aligned}`)
   })
 })
 

@@ -58,4 +58,29 @@ describe('sup sub', () => {
     const res = codegen(ast)
     expect(res).toMatchInlineSnapshot('"x ^{ {+x _{ x } } }"')
   })
+
+  it('should make single quote as is', () => {
+    const code = "x'^(D)"
+    const trie = createTrie()
+    const tokens = trie.tryParsingAll(code)
+    expect(removeTex(structuredClone(tokens))).toEqual<PR[]>([
+      { isKeyWord: false, type: TokenTypes.StringLiteral, value: 'x' },
+      { isKeyWord: true, type: TokenTypes.Const, value: "'" },
+      { isKeyWord: true, type: TokenTypes.OperatorSup, value: '^' },
+      { isKeyWord: true, type: TokenTypes.LParen, value: '(' },
+      { isKeyWord: false, type: TokenTypes.StringLiteral, value: 'D' },
+      { isKeyWord: true, type: TokenTypes.RParen, value: ')' },
+    ])
+    const ast = parser(tokens)
+    expect(removeValue(ast)).toEqual(root(
+      u('x'),
+      flat(
+        u("'"),
+        u(TokenTypes.OperatorSup, {
+          tex: "^{ $1 }",
+          param: u("D")
+        }),
+      ),
+    ))
+  })
 })
