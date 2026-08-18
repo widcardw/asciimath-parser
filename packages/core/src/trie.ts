@@ -38,6 +38,12 @@ const createConstToken: GeneTokenFn = (config) => {
 
 interface TrieOptions {
   /**
+   * @default false
+   * When `true`, a single line feed is treated as a line break (`\\`).
+   * By default asciimath requires a blank line (two line feeds).
+   */
+  singleNewlineBreak?: boolean
+  /**
    * Symbol table for this instance. Defaults to the shared `SYMBOLMAP`.
    */
   symbolMap?: Map<string, SymbolValueType>
@@ -48,9 +54,11 @@ class Trie {
   private _char_to_index: Map<string, number> = new Map()
   private _n: number
   private _symbolMap?: Map<string, SymbolValueType>
+  private _newlineThreshold: number
 
   public constructor(nodes: string[], options: TrieOptions = {}) {
     this._symbolMap = options.symbolMap
+    this._newlineThreshold = options.singleNewlineBreak ? 1 : 2
     if (nodes.length === 0)
       throw new Error('Cannot create Trie since the length of nodes is 0')
 
@@ -191,7 +199,7 @@ class Trie {
       pos.line++
       pos.ch = 0
     }
-    if (value.length >= 2)
+    if (value.length >= this._newlineThreshold)
       return { value, isKeyWord: true, current, pos, tex: '\\\\', type: TokenTypes.Align }
     
       return { value: '', isKeyWord: false, current, pos, tex: '', type: TokenTypes.None }
@@ -357,6 +365,7 @@ class TrieNode {
 function createTrie(config: {
   // extConst?: Array<[string, string]>
   symbols?: Array<[string, SymbolValueType]> | Record<string, SymbolValueType>
+  singleNewlineBreak?: boolean
 } = {}) {
   const charset: Set<string> = new Set([])
   // Copy rather than mutate the shared map, so that symbol overrides stay
@@ -377,7 +386,10 @@ function createTrie(config: {
   const chars = Array.from(charset)
   chars.push(' ')
 
-  const trie = new Trie(chars, { symbolMap })
+  const trie = new Trie(chars, {
+    symbolMap,
+    singleNewlineBreak: config.singleNewlineBreak,
+  })
   for (const k of symbolMap.keys())
     trie.insert(k)
 
