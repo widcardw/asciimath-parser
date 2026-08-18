@@ -36,12 +36,21 @@ const createConstToken: GeneTokenFn = (config) => {
   return { value, isKeyWord: false, current, pos, tex: value, type: TokenTypes.Const }
 }
 
+interface TrieOptions {
+  /**
+   * Symbol table for this instance. Defaults to the shared `SYMBOLMAP`.
+   */
+  symbolMap?: Map<string, SymbolValueType>
+}
+
 class Trie {
   private _root: TrieNode
   private _char_to_index: Map<string, number> = new Map()
   private _n: number
+  private _symbolMap?: Map<string, SymbolValueType>
 
-  public constructor(nodes: string[]) {
+  public constructor(nodes: string[], options: TrieOptions = {}) {
+    this._symbolMap = options.symbolMap
     if (nodes.length === 0)
       throw new Error('Cannot create Trie since the length of nodes is 0')
 
@@ -136,7 +145,7 @@ class Trie {
     }
     const ret = (() => {
       if (isKeyWord)
-        return SYMBOLMAP.get(value)!
+        return (this._symbolMap ?? SYMBOLMAP).get(value)!
       return { tex: value, type: TokenTypes.StringLiteral }
     })()
     return { value, isKeyWord, current, ...ret, pos }
@@ -350,29 +359,26 @@ function createTrie(config: {
   symbols?: Array<[string, SymbolValueType]> | Record<string, SymbolValueType>
 } = {}) {
   const charset: Set<string> = new Set([])
+  // Copy rather than mutate the shared map, so that symbol overrides stay
+  // scoped to the AsciiMath instance that asked for them.
+  const symbolMap = new Map(SYMBOLMAP)
   if (config.symbols) {
-    if (Array.isArray(config.symbols)) {
-      config.symbols.forEach(([k, v]) => {
-        if (k.length === 0)
-          throw new Error(`Cannot insert empty token! Token value: ${v}`)
-        SYMBOLMAP.set(k, v)
-      })
-    }
-    else {
-      Object.entries(config.symbols).forEach(([k, v]) => {
-        if (k.length === 0)
-          throw new Error(`Cannot insert empty token! Token value: ${v}`)
-        SYMBOLMAP.set(k, v)
-      })
-    }
+    const entries = Array.isArray(config.symbols)
+      ? config.symbols
+      : Object.entries(config.symbols)
+    entries.forEach(([k, v]) => {
+      if (k.length === 0)
+        throw new Error(`Cannot insert empty token! Token value: ${v}`)
+      symbolMap.set(k, v)
+    })
   }
-  for (const k of SYMBOLMAP.keys())
+  for (const k of symbolMap.keys())
     [...k].forEach(i => charset.add(i))
   const chars = Array.from(charset)
   chars.push(' ')
 
-  const trie = new Trie(chars)
-  for (const k of SYMBOLMAP.keys())
+  const trie = new Trie(chars, { symbolMap })
+  for (const k of symbolMap.keys())
     trie.insert(k)
 
   return trie
@@ -380,6 +386,7 @@ function createTrie(config: {
 
 export {
   Trie,
+  type TrieOptions,
   TrieNode,
   createTrie,
   type TokenizedValue,
