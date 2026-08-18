@@ -405,5 +405,6 @@ Trie {
       null,
     ],
   },
+  "_symbolMap": undefined,
 }
 `;
