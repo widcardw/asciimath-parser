@@ -47,6 +47,23 @@ interface AsciiMathConfig {
    * ```
    */
   replaceBeforeTokenizing?: ReplaceLaw[]
+  /**
+   * @default 'aligned'
+   * LaTeX environment used to wrap a multiline expression.
+   * Set to `'gather*'` for centred, non-aligned display.
+   */
+  multilineEnv?: string
+  /**
+   * @default false
+   * Treat a single line feed as a line break. By default asciimath
+   * requires a blank line (two line feeds) to break a line.
+   */
+  singleNewlineBreak?: boolean
+  /**
+   * @default true
+   * Render an unpaired `|` as `\mid`. Set to `false` to emit it verbatim.
+   */
+  barAsMid?: boolean
 }
 
 interface RestrictedAmConfig extends Required<AsciiMathConfig> {
@@ -69,6 +86,9 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
         String.fromCodePoint($1[0] === 'x' ? `0${$1}` : $1),
       ],
     ],
+    multilineEnv: 'aligned',
+    singleNewlineBreak: false,
+    barAsMid: true,
   }
   if (typeof config?.display !== 'undefined')
     defaultConfig.display = config.display
@@ -84,6 +104,12 @@ function resolveConfig(config?: AsciiMathConfig): RestrictedAmConfig {
   }
   if (config?.replaceBeforeTokenizing?.length)
     defaultConfig.replaceBeforeTokenizing.push(...config.replaceBeforeTokenizing)
+  if (typeof config?.multilineEnv !== 'undefined')
+    defaultConfig.multilineEnv = config.multilineEnv
+  if (typeof config?.singleNewlineBreak !== 'undefined')
+    defaultConfig.singleNewlineBreak = config.singleNewlineBreak
+  if (typeof config?.barAsMid !== 'undefined')
+    defaultConfig.barAsMid = config.barAsMid
 
   return defaultConfig
 }
@@ -92,11 +118,22 @@ class AsciiMath {
   private trie: Trie
   private display: boolean
   private replaceLaws: ReplaceLaw[]
+  private multilineEnv: string
+  private barAsMid: boolean
   constructor(config?: AsciiMathConfig) {
-    const { display, symbols, replaceBeforeTokenizing: replaceBeforeParsing } = resolveConfig(config)
-    this.trie = createTrie({ symbols })
+    const {
+      display,
+      symbols,
+      replaceBeforeTokenizing: replaceBeforeParsing,
+      multilineEnv,
+      singleNewlineBreak,
+      barAsMid,
+    } = resolveConfig(config)
+    this.trie = createTrie({ symbols, singleNewlineBreak })
     this.display = display
     this.replaceLaws = replaceBeforeParsing
+    this.multilineEnv = multilineEnv
+    this.barAsMid = barAsMid
   }
 
   toTex(code: string, config?: ToTexConfig): string {
@@ -108,7 +145,9 @@ class AsciiMath {
       let res = codegen(
         parser(
           this.trie.tryParsingAll(code),
+          { barAsMid: this.barAsMid },
         ),
+        { multilineEnv: this.multilineEnv },
       )
       if (typeof config?.display === 'undefined') {
         if (this.display)

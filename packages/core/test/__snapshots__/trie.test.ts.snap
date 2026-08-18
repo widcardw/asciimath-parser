@@ -32,6 +32,7 @@ Trie {
     " " => 26,
   },
   "_n": 27,
+  "_newlineThreshold": 2,
   "_root": TrieNode {
     "_end": false,
     "_nextNode": [
@@ -405,5 +406,6 @@ Trie {
       null,
     ],
   },
+  "_symbolMap": undefined,
 }
 `;

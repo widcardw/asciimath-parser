@@ -546,7 +546,7 @@ function createSingleBarNode(
     node: {
       type: NodeTypes.Const,
       value: token.value,
-      tex: token.tex === '|' ? '\\mid' : token.tex,
+      tex: parserOptions.barAsMid && token.tex === '|' ? '\\mid' : token.tex,
     },
   }
 }
@@ -963,7 +963,25 @@ function walk(
   return { node, current }
 }
 
-function parser(tokens: TokenizedValue[]) {
+interface ParserOptions {
+  /**
+   * @default true
+   * Render an unpaired `|` as `\\mid`. When `false` it is emitted verbatim.
+   */
+  barAsMid?: boolean
+}
+
+const defaultParserOptions: Required<ParserOptions> = { barAsMid: true }
+
+/**
+ * Module-scoped because `walk` recurses through ~30 call sites; threading the
+ * options object through all of them would be a far larger diff for no gain.
+ * `parser` is synchronous and non-reentrant, so this is safe.
+ */
+let parserOptions: Required<ParserOptions> = defaultParserOptions
+
+function parser(tokens: TokenizedValue[], options: ParserOptions = {}) {
+  parserOptions = { ...defaultParserOptions, ...options }
   const root = createRootNode()
   let current = 0
 
@@ -988,6 +1006,7 @@ export {
   AlignDirection,
   type MatrixNode,
   parser,
+  type ParserOptions,
 }
 
 export {

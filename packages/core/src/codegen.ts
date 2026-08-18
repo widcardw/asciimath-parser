@@ -1,6 +1,15 @@
 import type { ChildNode, MatrixNode, RootNode } from './parser'
 import { NodeTypes } from './parser'
 
+interface CodegenOptions {
+  /**
+   * @default 'aligned'
+   * The LaTeX environment used to wrap a multiline expression
+   * (one that contains `&` or a line break).
+   */
+  multilineEnv?: string
+}
+
 function getArrayBoundary(node: MatrixNode) {
   const div = node.dividerIndices
   let beginArray = '\\begin{array}'
@@ -36,39 +45,42 @@ function getArrayBoundary(node: MatrixNode) {
   return [beginArray, '\\end{array}']
 }
 
-function codegen(node: ChildNode | RootNode): string {
+function codegen(node: ChildNode | RootNode, options: CodegenOptions = {}): string {
+  const env = options.multilineEnv ?? 'aligned'
+  const gen = (n: ChildNode | RootNode) => codegen(n, options)
   switch (node.type) {
     case NodeTypes.Const: {
       return node.tex
     }
     case NodeTypes.Root: {
-      let res = node.body.map(codegen).join(' ')
+      let res = node.body.map(gen).join(' ')
       if (node.body.find(n => n.type === NodeTypes.Const && (n.value === '&' || n.tex === '\\\\')))
-        res = `\\begin{aligned}${res}\\end{aligned}`
+        res = `\\begin{${env}}${res}\\end{${env}}`
       return res
     }
     case NodeTypes.Flat: {
-      return node.body.map(codegen).join(' ')
+      return node.body.map(gen).join(' ')
     }
     case NodeTypes.Matrix: {
       const [arrayBegin, arrayEnd] = getArrayBoundary(node)
       return [
         node.lparen,
         arrayBegin,
-        node.params.map(i => i.map(codegen).join(' & ')).join(' \\\\ '),
+        node.params.map(i => i.map(gen).join(' & ')).join(' \\\\ '),
         arrayEnd,
         node.rparen,
       ].join(' ')
     }
     case NodeTypes.ParamOne: {
-      return node.tex.replace('$1', codegen(node.params))
+      return node.tex.replace('$1', gen(node.params))
     }
     case NodeTypes.ParamTwo: {
-      return node.tex.replace('$1', codegen(node.params[0])).replace('$2', codegen(node.params[1]))
+      return node.tex.replace('$1', gen(node.params[0])).replace('$2', gen(node.params[1]))
     }
   }
 }
 
 export {
   codegen,
+  type CodegenOptions,
 }
